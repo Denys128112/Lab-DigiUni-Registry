@@ -13,7 +13,6 @@ public class UniversityService {
         this.departments = new ArrayList<>();
     }
 
-    // --- Університет ---
     public void createUniversity(String name, String shortName, int year) {
         this.university = new University(name, shortName, year);
     }
@@ -22,7 +21,6 @@ public class UniversityService {
         return university;
     }
 
-    // --- Факультети ---
     public void addFaculty(Faculty faculty) {
         if (faculty != null) {
             faculties.add(faculty);
@@ -46,7 +44,6 @@ public class UniversityService {
         return faculties.remove(faculty);
     }
 
-    // --- Кафедри ---
     public void addDepartment(Department department) {
         if (department != null) {
             departments.add(department);
