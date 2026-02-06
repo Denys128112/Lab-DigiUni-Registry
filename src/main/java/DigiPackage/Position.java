@@ -6,5 +6,6 @@ public enum Position {
     Senior_lecturer,
     Docent,
     Profesor,
-    Head_of_department
+    Head_of_department,
+    Dean
 }
