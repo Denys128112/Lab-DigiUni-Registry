@@ -1,54 +1,52 @@
 package DigiPackage;
 
 public class University {
-    private String name;
+    private String fullName;
     private String shortName;
     private int foundingYear;
+    private String city;
+    private String address;
 
-    public University(String name, String shortName, int foundingYear) {
-        setName(name);
+    public University(String fullName, String shortName, int foundingYear, String city, String address) {
+        setFullName(fullName);
         setShortName(shortName);
         setFoundingYear(foundingYear);
+        setCity(city);
+        setAddress(address);
     }
 
-    public String getName() {
-        return name;
+    public String getFullName() { return fullName; }
+    public void setFullName(String fullName) {
+        if (fullName != null && !fullName.trim().isEmpty()) this.fullName = fullName;
+        else throw new IllegalArgumentException("Full name cannot be empty");
     }
 
-    public void setName(String name) {
-        if (name != null && !name.trim().isEmpty()) {
-            this.name = name;
-        } else {
-            throw new IllegalArgumentException("Назва університету не може бути порожньою");
-        }
-    }
-
-    public String getShortName() {
-        return shortName;
-    }
-
+    public String getShortName() { return shortName; }
     public void setShortName(String shortName) {
-        if (shortName != null && !shortName.trim().isEmpty()) {
-            this.shortName = shortName;
-        } else {
-            throw new IllegalArgumentException("Абревіатура не може бути порожньою");
-        }
+        if (shortName != null && !shortName.trim().isEmpty()) this.shortName = shortName;
+        else throw new IllegalArgumentException("Short name cannot be empty");
     }
 
-    public int getFoundingYear() {
-        return foundingYear;
-    }
-
+    public int getFoundingYear() { return foundingYear; }
     public void setFoundingYear(int foundingYear) {
-        if (foundingYear > 1600 && foundingYear < 2026) {
-            this.foundingYear = foundingYear;
-        } else {
-            throw new IllegalArgumentException("Некоректний рік заснування");
-        }
+        if (foundingYear > 1600 && foundingYear < 2026) this.foundingYear = foundingYear;
+        else throw new IllegalArgumentException("Invalid founding year");
+    }
+
+    public String getCity() { return city; }
+    public void setCity(String city) {
+        if (city != null && !city.trim().isEmpty()) this.city = city;
+        else throw new IllegalArgumentException("City cannot be empty");
+    }
+
+    public String getAddress() { return address; }
+    public void setAddress(String address) {
+        if (address != null && !address.trim().isEmpty()) this.address = address;
+        else throw new IllegalArgumentException("Address cannot be empty");
     }
 
     @Override
     public String toString() {
-        return "University: " + name + " (" + shortName + "), Засновано: " + foundingYear;
+        return fullName + " (" + shortName + "), Founded: " + foundingYear + ", Address: " + city + ", " + address;
     }
 }
