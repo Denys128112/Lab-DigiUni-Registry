@@ -3,14 +3,12 @@ package DigiPackage;
 public class University {
     private String fullName;
     private String shortName;
-    private int foundingYear;
     private String city;
     private String address;
 
-    public University(String fullName, String shortName, int foundingYear, String city, String address) {
+    public University(String fullName, String shortName, String city, String address) {
         setFullName(fullName);
         setShortName(shortName);
-        setFoundingYear(foundingYear);
         setCity(city);
         setAddress(address);
     }
@@ -27,12 +25,6 @@ public class University {
         else throw new IllegalArgumentException("Short name cannot be empty");
     }
 
-    public int getFoundingYear() { return foundingYear; }
-    public void setFoundingYear(int foundingYear) {
-        if (foundingYear > 1600 && foundingYear < 2026) this.foundingYear = foundingYear;
-        else throw new IllegalArgumentException("Invalid founding year");
-    }
-
     public String getCity() { return city; }
     public void setCity(String city) {
         if (city != null && !city.trim().isEmpty()) this.city = city;
@@ -47,6 +39,6 @@ public class University {
 
     @Override
     public String toString() {
-        return fullName + " (" + shortName + "), Founded: " + foundingYear + ", Address: " + city + ", " + address;
+        return "University: " + fullName + " (" + shortName + "), City: " + city + ", Address: " + address;
     }
 }

@@ -3,6 +3,7 @@ package DigiPackage;
 public class UniversityService {
     private University university;
 
+    // Використання масивів (вимога партнера)
     private Faculty[] faculties = new Faculty[50];
     private int facultyCount = 0;
 
@@ -12,8 +13,8 @@ public class UniversityService {
     public UniversityService() {
     }
 
-    public void createUniversity(String fullName, String shortName, int year, String city, String address) {
-        this.university = new University(fullName, shortName, year, city, address);
+    public void createUniversity(String fullName, String shortName, String city, String address) {
+        this.university = new University(fullName, shortName, city, address);
     }
 
     public University getUniversity() {
@@ -30,15 +31,6 @@ public class UniversityService {
         }
     }
 
-    public Faculty getFacultyByCode(String code) {
-        for (int i = 0; i < facultyCount; i++) {
-            if (faculties[i].getCode().equalsIgnoreCase(code)) {
-                return faculties[i];
-            }
-        }
-        return null;
-    }
-
     public Faculty[] getFaculties() {
         Faculty[] result = new Faculty[facultyCount];
         for (int i = 0; i < facultyCount; i++) {
@@ -46,7 +38,7 @@ public class UniversityService {
         }
         return result;
     }
-    
+
     public void addDepartment(Department d) {
         if (d == null) return;
         if (departmentCount < departments.length) {
