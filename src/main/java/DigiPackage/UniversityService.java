@@ -3,7 +3,6 @@ package DigiPackage;
 public class UniversityService {
     private University university;
 
-    // Використання масивів (вимога партнера)
     private Faculty[] faculties = new Faculty[50];
     private int facultyCount = 0;
 
