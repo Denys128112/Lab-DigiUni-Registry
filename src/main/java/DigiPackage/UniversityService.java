@@ -1,69 +1,58 @@
 package DigiPackage;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class UniversityService {
     private University university;
-    private List<Faculty> faculties;
-    private List<Department> departments;
+
+    private Faculty[] faculties = new Faculty[50];
+    private int facultyCount = 0;
+
+    private Department[] departments = new Department[100];
+    private int departmentCount = 0;
 
     public UniversityService() {
-        this.faculties = new ArrayList<>();
-        this.departments = new ArrayList<>();
     }
 
-    public void createUniversity(String name, String shortName, int year) {
-        this.university = new University(name, shortName, year);
+    public void createUniversity(String fullName, String shortName, String city, String address) {
+        this.university = new University(fullName, shortName, city, address);
     }
 
     public University getUniversity() {
         return university;
     }
 
-    public void addFaculty(Faculty faculty) {
-        if (faculty != null) {
-            faculties.add(faculty);
+    public void addFaculty(Faculty f) {
+        if (f == null) return;
+        if (facultyCount < faculties.length) {
+            faculties[facultyCount] = f;
+            facultyCount++;
+        } else {
+            System.out.println("Error: Faculty storage is full.");
         }
     }
 
-    public List<Faculty> getFaculties() {
-        return faculties;
-    }
-
-    public Faculty getFacultyByName(String name) {
-        for (Faculty f : faculties) {
-            if (f.getName().equalsIgnoreCase(name)) {
-                return f;
-            }
+    public Faculty[] getFaculties() {
+        Faculty[] result = new Faculty[facultyCount];
+        for (int i = 0; i < facultyCount; i++) {
+            result[i] = faculties[i];
         }
-        return null;
+        return result;
     }
 
-    public boolean removeFaculty(Faculty faculty) {
-        return faculties.remove(faculty);
-    }
-
-    public void addDepartment(Department department) {
-        if (department != null) {
-            departments.add(department);
+    public void addDepartment(Department d) {
+        if (d == null) return;
+        if (departmentCount < departments.length) {
+            departments[departmentCount] = d;
+            departmentCount++;
+        } else {
+            System.out.println("Error: Department storage is full.");
         }
     }
 
-    public List<Department> getDepartments() {
-        return departments;
-    }
-
-    public Department getDepartmentByName(String name) {
-        for (Department d : departments) {
-            if (d.getName().equalsIgnoreCase(name)) {
-                return d;
-            }
+    public Department[] getDepartments() {
+        Department[] result = new Department[departmentCount];
+        for (int i = 0; i < departmentCount; i++) {
+            result[i] = departments[i];
         }
-        return null;
-    }
-
-    public boolean removeDepartment(Department department) {
-        return departments.remove(department);
+        return result;
     }
 }
