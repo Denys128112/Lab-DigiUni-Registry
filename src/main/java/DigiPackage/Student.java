@@ -32,12 +32,18 @@ public class Student extends Person {
     private boolean verifyidOfRecordBook(String rb) {
         if(rb==null || rb.length() != 11)
             return false;
-        if(!Character.isLetter(rb.charAt(0))&&rb.charAt(1)!=' '&rb.charAt(8)!=' '&&(rb.charAt(9)!='б'||rb.charAt(9)!='м')&&rb.charAt(10)!='п')
-            return false;
-        for (int i = 2; i < rb.length(); i++) {
-            if(!Character.isLetter(rb.charAt(i))&&rb.charAt(4)!='/')
-                return false;
+        if (!Character.isLetter(rb.charAt(0))) return false;
+        if (rb.charAt(1) != ' ') return false;
+        if (rb.charAt(5) != '/') return false;
+        if (rb.charAt(8) != ' ') return false;
+        char type = rb.charAt(9);
+        if (type != 'б' && type != 'м') return false;
+
+        if (rb.charAt(10) != 'п') return false;
+        for (int i : new int[]{2, 3, 4, 6, 7}) {
+            if (!Character.isDigit(rb.charAt(i))) return false;
         }
+
         return true;
     }
 
