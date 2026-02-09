@@ -104,7 +104,7 @@ public class ConsoleProgram implements Searching{
     }
 
     private static void createDepartment() {
-        System.out.println("\n--- СТВОРЕННЯ КАФЕДРИ ---");
+        System.out.println("\n--- СТВОРЕННЯ КАФЕДРИ --");
 
         Teacher head = null;
         if (teachers[0] != null) {
