@@ -38,6 +38,27 @@ public class UniversityService {
         return result;
     }
 
+    public boolean removeFaculty(String code) {
+        for (int i = 0; i < facultyCount; i++) {
+            if (faculties[i].getCode().equalsIgnoreCase(code)) {
+                faculties[i] = faculties[facultyCount - 1];
+                faculties[facultyCount - 1] = null;
+                facultyCount--;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Faculty getFacultyByCode(String code) {
+        for (int i = 0; i < facultyCount; i++) {
+            if (faculties[i] != null && faculties[i].getCode().equalsIgnoreCase(code)) {
+                return faculties[i];
+            }
+        }
+        return null;
+    }
+
     public void addDepartment(Department d) {
         if (d == null) return;
         if (departmentCount < departments.length) {
@@ -55,4 +76,26 @@ public class UniversityService {
         }
         return result;
     }
+
+    public boolean removeDepartment(String code) {
+        for (int i = 0; i < departmentCount; i++) {
+            if (departments[i].getCode().equalsIgnoreCase(code)) {
+                departments[i] = departments[departmentCount - 1];
+                departments[departmentCount - 1] = null;
+                departmentCount--;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Department getDepartmentByCode(String code) {
+        for (int i = 0; i < departmentCount; i++) {
+            if (departments[i] != null && departments[i].getCode().equalsIgnoreCase(code)) {
+                return departments[i];
+            }
+        }
+        return null;
+    }
 }
+
