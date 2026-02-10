@@ -41,6 +41,7 @@ public class ConsoleProgram implements Searching{
 
     private static void crud() {
         while (true) {
+            System.out.println("--- CRUD ОПЕРАЦІЇ ---");
             System.out.println("1. Створити");
             System.out.println("2. Редагувати");
             System.out.println("3. Видалити");
@@ -49,7 +50,7 @@ public class ConsoleProgram implements Searching{
             int operation = getIntInput("Ваш вибір", 0, 3);
             if (operation == 0) return;
 
-            System.out.println("\n--- ОБЕРІТЬ СУТНІСТЬ ---");
+            System.out.println("--- ОБЕРІТЬ СУТНІСТЬ ---");
             System.out.println("1. Факультет");
             System.out.println("2. Кафедра");
             System.out.println("3. Студент");
@@ -79,7 +80,7 @@ public class ConsoleProgram implements Searching{
     }
 
     private static void createFaculty() {
-        System.out.println("\n--- СТВОРЕННЯ ФАКУЛЬТЕТУ ---");
+        System.out.println("--- СТВОРЕННЯ ФАКУЛЬТЕТУ ---");
 
         Teacher dean = null;
         if (teachers[0] != null) {
@@ -89,22 +90,26 @@ public class ConsoleProgram implements Searching{
             return;
         }
 
-        String code = getValidatedInput("Введіть код", "^[A-Za-z0-9]+$", "Код має містити тільки літери та цифри (наприклад: FI)");
-        String name = getValidatedInput("Введіть назву", "^[A-Za-zAz-яА-ЯІіЇїЄєҐґ'\\s\\-]+$", "Назва має містити літери (наприклад: Факультет Інформатики)");
-        String shortName = getValidatedInput("Введіть абревіатуру", "^[A-Za-zAz-яА-ЯІіЇїЄєҐґ]+$", "Абревіатура має бути без пробілів (наприклад: ФІ)");
-        String contacts = getValidatedInput("Введіть контакти", "^.+$", "Контакти не можуть бути порожніми");
+        while (true) {
+            try {
+                String code = getStringInput("Введіть код");
+                String name = getStringInput("Введіть назву");
+                String shortName = getStringInput("Введіть абревіатуру");
+                String contacts = getStringInput("Введіть контакти");
 
-        try {
-            Faculty f = new Faculty(code, name, shortName, dean, contacts);
-            service.addFaculty(f);
-            System.out.println("Факультет успішно створено");
-        } catch (Exception e) {
-            System.out.println("Помилка створення: " + e.getMessage());
+                Faculty f = new Faculty(code, name, shortName, dean, contacts);
+                service.addFaculty(f);
+                System.out.println("Факультет успішно створено");
+                return;
+            } catch (Exception e) {
+                System.out.println("Помилка: " + e.getMessage());
+                System.out.println("Спробуйте ще раз.");
+            }
         }
     }
 
     private static void createDepartment() {
-        System.out.println("\n--- СТВОРЕННЯ КАФЕДРИ --");
+        System.out.println("--- СТВОРЕННЯ КАФЕДРИ ---");
 
         Teacher head = null;
         if (teachers[0] != null) {
@@ -114,123 +119,140 @@ public class ConsoleProgram implements Searching{
             return;
         }
 
-        String fCode = "";
         while (true) {
-            fCode = getValidatedInput("Введіть код факультету", "^[A-Za-z0-9]+$", "Код має містити тільки літери та цифри");
-            if (service.getFacultyByCode(fCode) != null) break;
-            System.out.println("Факультет з таким кодом не знайдено. Спробуйте ще раз.");
-        }
-        Faculty f = service.getFacultyByCode(fCode);
+            try {
+                String fCode = getStringInput("Введіть код факультету");
+                Faculty f = service.getFacultyByCode(fCode);
+                if (f == null) {
+                    System.out.println("Помилка: Факультет не знайдено.");
+                    continue;
+                }
 
-        String code = getValidatedInput("Введіть код кафедри", "^[A-Za-z0-9]+$", "Код має містити тільки літери та цифри (наприклад: MATH)");
-        String name = getValidatedInput("Введіть назву", "^[A-Za-zAz-яА-ЯІіЇїЄєҐґ'\\s\\-]+$", "Назва має містити літери");
-        String loc = getValidatedInput("Введіть локацію", "^.+$", "Локація не може бути порожньою");
+                String code = getStringInput("Введіть код кафедри");
+                String name = getStringInput("Введіть назву");
+                String loc = getStringInput("Введіть локацію");
 
-        try {
-            Department d = new Department(code, name, f, head, loc);
-            service.addDepartment(d);
-            System.out.println("Кафедру успішно створено");
-        } catch (Exception e) {
-            System.out.println("Помилка створення: " + e.getMessage());
+                Department d = new Department(code, name, f, head, loc);
+                service.addDepartment(d);
+                System.out.println("Кафедру успішно створено");
+                return;
+            } catch (Exception e) {
+                System.out.println("Помилка: " + e.getMessage());
+                System.out.println("Спробуйте ще раз.");
+            }
         }
     }
 
     private static void createStudent() {
-        System.out.println("\n--- ДОДАВАННЯ СТУДЕНТА ---");
+        System.out.println("--- ДОДАВАННЯ СТУДЕНТА ---");
 
-        String id = getValidatedInput("Введіть ID", "^[A-Za-z0-9]+$", "ID має містити літери або цифри");
-        String name = getValidatedInput("Введіть ПІБ", "^[A-Za-zAz-яА-ЯІіЇїЄєҐґ']+\\s[A-Za-zAz-яА-ЯІіЇїЄєҐґ']+\\s[A-Za-zAz-яА-ЯІіЇїЄєҐґ']+$", "ПІБ має складатись з 3 слів через пробіл (Прізвище Ім'я По-батькові)");
-        String dob = getValidatedInput("Введіть дату народження", "^\\d{2}\\.\\d{2}\\.\\d{4}$", "Формат дати має бути дд.мм.рррр (наприклад 01.01.2005)");
-        String email = getValidatedInput("Введіть Email", "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", "Некоректний формат email");
-        String phone = getValidatedInput("Введіть телефон", "^\\+?\\d{10,13}$", "Телефон має містити цифри (наприклад +380991234567)");
-        String rb = getValidatedInput("Введіть номер залікової", "^.{11}$", "Номер залікової має містити рівно 11 символів (наприклад: А 1234/56 бп)");
+        while (true) {
+            try {
+                String id = getStringInput("Введіть ID");
+                String name = getStringInput("Введіть ПІБ");
+                String dob = getStringInput("Введіть дату народження");
+                String email = getStringInput("Введіть Email");
+                String phone = getStringInput("Введіть телефон");
+                String rb = getStringInput("Введіть номер залікової");
 
-        int course = getIntInput("Введіть курс (1-6)", 1, 6);
-        String group = getValidatedInput("Введіть групу", "^[A-Za-zА-Яа-я]+-\\d+$", "Група має бути у форматі Літери-Цифра (наприклад IPZ-1)");
-        int year = getIntInput("Введіть рік вступу (2019-2026)", 2019, 2026);
+                int course = getIntInput("Введіть курс (1-6)", 1, 6);
+                String group = getStringInput("Введіть групу");
+                int year = getIntInput("Введіть рік вступу", 1900, 2100);
 
-        System.out.println("Оберіть форму навчання: 1. Бюджет 2. Контракт");
-        int fChoice = getIntInput("Ваш вибір", 1, 2);
-        FormOfStudy form = (fChoice == 1) ? FormOfStudy.Budget : FormOfStudy.Contract;
+                System.out.println("Оберіть форму навчання: 1. Бюджет 2. Контракт");
+                int fChoice = getIntInput("Ваш вибір", 1, 2);
+                FormOfStudy form = (fChoice == 1) ? FormOfStudy.Budget : FormOfStudy.Contract;
 
-        System.out.println("Оберіть статус: 1. Навчається 2. Академ 3. Відрахований");
-        int sChoice = getIntInput("Ваш вибір", 1, 3);
-        Status status = Status.Studying;
-        if (sChoice == 2) status = Status.Academic_vacation;
-        if (sChoice == 3) status = Status.Expelled;
+                System.out.println("Оберіть статус: 1. Навчається 2. Академ 3. Відрахований");
+                int sChoice = getIntInput("Ваш вибір", 1, 3);
+                Status status = Status.Studying;
+                if (sChoice == 2) status = Status.Academic_vacation;
+                if (sChoice == 3) status = Status.Expelled;
 
-        try {
-            Student st = new Student(id, name, dob, email, phone, rb, course, group, year, form, status);
+                Student st = new Student(id, name, dob, email, phone, rb, course, group, year, form, status);
 
-            boolean added = false;
-            for (int i = 0; i < student.length; i++) {
-                if (student[i] == null) {
-                    student[i] = st;
-                    added = true;
-                    System.out.println("Студента успішно додано");
-                    break;
+                boolean added = false;
+                for (int i = 0; i < student.length; i++) {
+                    if (student[i] == null) {
+                        student[i] = st;
+                        added = true;
+                        System.out.println("Студента успішно додано");
+                        return;
+                    }
                 }
-            }
-            if (!added) System.out.println("Помилка: Масив студентів переповнений");
+                if (!added) {
+                    System.out.println("Помилка: Масив студентів переповнений");
+                    return;
+                }
 
-        } catch (IllegalArgumentException e) {
-            System.out.println("Помилка логіки сутності: " + e.getMessage());
+            } catch (IllegalArgumentException e) {
+                System.out.println("Помилка валідації: " + e.getMessage());
+                System.out.println("Спробуйте ще раз ввести коректні дані.");
+            } catch (Exception e) {
+                System.out.println("Помилка: " + e.getMessage());
+            }
         }
     }
 
     private static void createTeacher() {
-        System.out.println("\n--- ДОДАВАННЯ ВИКЛАДАЧА ---");
+        System.out.println("--- ДОДАВАННЯ ВИКЛАДАЧА ---");
 
-        String id = getValidatedInput("Введіть ID", "^[A-Za-z0-9]+$", "ID має містити літери або цифри");
-        String name = getValidatedInput("Введіть ПІБ", "^[A-Za-zAz-яА-ЯІіЇїЄєҐґ']+\\s[A-Za-zAz-яА-ЯІіЇїЄєҐґ']+\\s[A-Za-zAz-яА-ЯІіЇїЄєҐґ']+$", "ПІБ має складатись з 3 слів через пробіл");
-        String dob = getValidatedInput("Введіть дату народження", "^\\d{2}\\.\\d{2}\\.\\d{4}$", "Формат дати має бути дд.мм.рррр");
-        String email = getValidatedInput("Введіть Email", "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", "Некоректний формат email");
-        String phone = getValidatedInput("Введіть телефон", "^\\+?\\d{10,13}$", "Телефон має містити цифри");
+        while (true) {
+            try {
+                String id = getStringInput("Введіть ID");
+                String name = getStringInput("Введіть ПІБ");
+                String dob = getStringInput("Введіть дату народження");
+                String email = getStringInput("Введіть Email");
+                String phone = getStringInput("Введіть телефон");
 
-        System.out.println("Посада: 1. Асистент 2. Доцент");
-        int p = getIntInput("Ваш вибір", 1, 2);
-        Position position = (p == 1) ? Position.Assistant : Position.Docent;
+                System.out.println("Посада: 1. Асистент 2. Доцент");
+                int p = getIntInput("Ваш вибір", 1, 2);
+                Position position = (p == 1) ? Position.Assistant : Position.Docent;
 
-        System.out.println("Науковий ступінь: 1. Немає 2. Кандидат наук (PHD)");
-        int d = getIntInput("Ваш вибір", 1, 2);
-        ScientificDegree degree = (d == 1) ? ScientificDegree.None : ScientificDegree.PHD;
+                System.out.println("Науковий ступінь: 1. Немає 2. Кандидат наук (PHD)");
+                int d = getIntInput("Ваш вибір", 1, 2);
+                ScientificDegree degree = (d == 1) ? ScientificDegree.None : ScientificDegree.PHD;
 
-        System.out.println("Вчене звання: 1. Немає 2. Доцент");
-        int t = getIntInput("Ваш вибір", 1, 2);
-        AcademicTitle title = (t == 1) ? AcademicTitle.None : AcademicTitle.Docent;
+                System.out.println("Вчене звання: 1. Немає 2. Доцент");
+                int t = getIntInput("Ваш вибір", 1, 2);
+                AcademicTitle title = (t == 1) ? AcademicTitle.None : AcademicTitle.Docent;
 
-        String dateEnter = getValidatedInput("Введіть дату прийняття на роботу", "^\\d{2}\\.\\d{2}\\.\\d{4}$", "Формат дати має бути дд.мм.рррр");
+                String dateEnter = getStringInput("Введіть дату прийняття на роботу");
 
-        double rate = 1.0;
-        int workload = 600;
+                double rate = 1.0;
+                int workload = 600;
 
-        try {
-            Teacher teacher = new Teacher(id, name, dob, email, phone, position, degree, title, dateEnter, rate, workload);
+                Teacher teacher = new Teacher(id, name, dob, email, phone, position, degree, title, dateEnter, rate, workload);
 
-            boolean added = false;
-            for (int i = 0; i < teachers.length; i++) {
-                if (teachers[i] == null) {
-                    teachers[i] = teacher;
-                    for (int j = 0; j < persons.length; j++) {
-                        if (persons[j] == null) {
-                            persons[j] = teacher;
-                            break;
+                boolean added = false;
+                for (int i = 0; i < teachers.length; i++) {
+                    if (teachers[i] == null) {
+                        teachers[i] = teacher;
+                        for (int j = 0; j < persons.length; j++) {
+                            if (persons[j] == null) {
+                                persons[j] = teacher;
+                                break;
+                            }
                         }
+                        added = true;
+                        System.out.println("Викладача успішно додано");
+                        return;
                     }
-                    added = true;
-                    System.out.println("Викладача успішно додано");
-                    break;
                 }
-            }
-            if (!added) System.out.println("Помилка: Масив викладачів переповнений");
+                if (!added) {
+                    System.out.println("Помилка: Масив викладачів переповнений");
+                    return;
+                }
 
-        } catch (IllegalArgumentException e) {
-            System.out.println("Помилка логіки сутності: " + e.getMessage());
+            } catch (IllegalArgumentException e) {
+                System.out.println("Помилка валідації: " + e.getMessage());
+                System.out.println("Спробуйте ще раз ввести коректні дані.");
+            }
         }
     }
 
     private static void updateFaculty() {
-        String code = getValidatedInput("Введіть код факультету для редагування", "^.+$", "Код не може бути порожнім");
+        String code = getStringInput("Введіть код факультету для редагування");
         Faculty f = service.getFacultyByCode(code);
         if (f != null) {
             System.out.println("Знайдено: " + f);
@@ -251,7 +273,7 @@ public class ConsoleProgram implements Searching{
     }
 
     private static void deleteFaculty() {
-        String code = getValidatedInput("Введіть код факультету для видалення", "^.+$", "Код не може бути порожнім");
+        String code = getStringInput("Введіть код факультету для видалення");
         if (service.removeFaculty(code)) {
             System.out.println("Факультет видалено");
         } else {
@@ -260,7 +282,7 @@ public class ConsoleProgram implements Searching{
     }
 
     private static void updateDepartment() {
-        String code = getValidatedInput("Введіть код кафедри для редагування", "^.+$", "Код не може бути порожнім");
+        String code = getStringInput("Введіть код кафедри для редагування");
         Department d = service.getDepartmentByCode(code);
         if (d != null) {
             System.out.println("Знайдено: " + d);
@@ -274,7 +296,7 @@ public class ConsoleProgram implements Searching{
     }
 
     private static void deleteDepartment() {
-        String code = getValidatedInput("Введіть код кафедри для видалення", "^.+$", "Код не може бути порожнім");
+        String code = getStringInput("Введіть код кафедри для видалення");
         if (service.removeDepartment(code)) {
             System.out.println("Кафедру видалено");
         } else {
@@ -282,16 +304,9 @@ public class ConsoleProgram implements Searching{
         }
     }
 
-    private static String getValidatedInput(String prompt, String regex, String errorMessage) {
-        while (true) {
-            System.out.print(prompt + ": ");
-            String input = sc.nextLine();
-            if (input.matches(regex)) {
-                return input;
-            } else {
-                System.out.println("Помилка формату: " + errorMessage);
-            }
-        }
+    private static String getStringInput(String prompt) {
+        System.out.print(prompt + ": ");
+        return sc.nextLine();
     }
 
     private static int getIntInput(String prompt, int min, int max) {
