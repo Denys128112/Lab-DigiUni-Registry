@@ -13,7 +13,30 @@ public class ConsoleProgram implements Searching {
     static UniversityService service = new UniversityService();
 
     public static void main(String[] args) {
+        initTestData(); // Ініціалізуємо дані перед запуском
         run();
+    }
+
+    private static void initTestData() {
+        try {
+            service.createUniversity("Національний університет «Києво-Могилянська академія»","НАУКМА","Київ"," вулиця Григорія Сковороди, 2, Київ, 04655");
+            Student student1 = new Student("001","Сковорода Григорій Савич","07.12.2005","skovoroda@gmail.com","+380000000001","A 000/01 бп",3,"ІПЗ-3",2023,FormOfStudy.Budget,Status.Studying);
+            Student student2 = new Student("002","Колісник Денис Максимович","02.10.2007","kolisnyk@gmail.com","+380633155000","A 120/20 бп",1,"ІПЗ-1",2025,FormOfStudy.Budget,Status.Studying);
+            student[0]=student1;
+            student[1]=student2;
+            Teacher teacher1= new Teacher("D01","Глибовець Андрій Миколайович","25.10.1985","a.glybovets@ukma.edu.ua","+380444636985",Position.Dean,ScientificDegree.Doctor_of_science,AcademicTitle.None,"30.05.2019",1.0,1000);
+            Teacher teacher2= new Teacher("D02","Малашонок Геннадій Іванович","10.08.1985","malashanok@ukma.edu.ua","+380444257723",Position.Head_of_department,ScientificDegree.Doctor_of_science,AcademicTitle.None,"10.04.2015",1.0,600);
+            Teacher teacher3=new Teacher("D03","Пєчкурова Олена Миколаївна","01.01.1999","pyechkurova@ukma.edu.ua","+380441234567",Position.Senior_lecturer,ScientificDegree.None,AcademicTitle.Docent,"02.02.2002",1.0,500);
+            teachers[0]=teacher1;
+            teachers[1]=teacher2;
+            teachers[2]=teacher3;
+            Faculty faculty1=new Faculty("F00","Факультет Інформатики","ФІ",teacher1,"https://www.fin.ukma.edu.ua/contacts");
+            service.addFaculty(faculty1);
+            Department department1=new Department("D00","Кафедра Мережних Технологій",faculty1,teacher2,"Кабінет: 1-204");
+            service.addDepartment(department1);
+        } catch (Exception e) {
+            System.out.println("Помилка ініціалізації даних: " + e.getMessage());
+        }
     }
 
     private static void run() {
@@ -25,9 +48,7 @@ public class ConsoleProgram implements Searching {
 
     private static void mainMenu() {
         System.out.println("Доступні операції 1)CRUD операції 2)Пошуки 3)Звіти");
-        System.out.print("Оберіть операцію:");
-        int choice = sc.nextInt();
-        sc.nextInt();
+        int choice = getIntInput("Оберіть операцію",1,3);
         switch (choice) {
             case 1:
                 crud();
@@ -51,7 +72,7 @@ public class ConsoleProgram implements Searching {
             System.out.println("4. Читати");
             System.out.println("0. Назад");
 
-            int operation = getIntInput("Ваш вибір", 0, 3);
+            int operation = getIntInput("Ваш вибір", 0, 4);
             if (operation == 0) return;
 
             System.out.println("\n--- ОБЕРІТЬ СУТНІСТЬ ---");
@@ -59,8 +80,14 @@ public class ConsoleProgram implements Searching {
             System.out.println("2. Кафедра");
             System.out.println("3. Студент");
             System.out.println("4. Викладач");
-
-            int entity = getIntInput("Ваш вибір", 1, 4);
+            int entity;
+            if (operation==4){
+                System.out.println("5. Університет");
+                entity = getIntInput("Ваш вибір", 1, 5);
+            }
+            else {
+                entity = getIntInput("Ваш вибір", 1, 4);
+            }
 
             switch (operation) {
                 case 1:
@@ -81,9 +108,67 @@ public class ConsoleProgram implements Searching {
                     else if (entity == 3) deleteStudent();
                     else if (entity == 4) deleteTeacher();
                     break;
+                    case 4:
+                        if (entity == 1) readFaculty();
+                        else if (entity == 2) readDepartment();
+                        else if (entity == 3) readStudent();
+                        else if (entity == 4) readTeacher();
+                        else if (entity == 5) service.getUniversity();
+                        break;
             }
         }
     }
+
+    private static void readFaculty() {
+        System.out.println("\n--- СПИСОК ФАКУЛЬТЕТІВ ---");
+        Faculty[] allFaculties = service.getFaculties();
+        int count = 0;
+        for (Faculty f : allFaculties) {
+            if (f != null) {
+                System.out.println((count + 1) + ". " + f);
+                count++;
+            }
+        }
+        if (count == 0) System.out.println("Факультетів поки не створено.");
+    }
+
+    private static void readDepartment() {
+        System.out.println("\n--- СПИСОК КАФЕДР ---");
+        Department[] allDepartments = service.getDepartments();
+        int count = 0;
+        for (Department d : allDepartments) {
+            if (d != null) {
+                System.out.println((count + 1) + ". " + d);
+                count++;
+            }
+        }
+        if (count == 0) System.out.println("Кафедр поки не створено.");
+    }
+
+    private static void readStudent() {
+        System.out.println("\n--- СПИСОК СТУДЕНТІВ ---");
+        int count = 0;
+        for (Student s : student) {
+            if (s != null) {
+                System.out.println((count + 1) + ". " + s);
+                count++;
+            }
+        }
+        if (count == 0) System.out.println("Студентів у реєстрі немає.");
+    }
+
+    private static void readTeacher() {
+        System.out.println("\n--- СПИСОК ВИКЛАДАЧІВ ---");
+        int count = 0;
+        for (Teacher t : teachers) {
+            if (t != null) {
+                System.out.println((count + 1) + ". " + t);
+                count++;
+            }
+        }
+        if (count == 0) System.out.println("Викладачів у реєстрі немає.");
+    }
+
     private static Student findStudent() {
         System.out.println("\n--- ПОШУК СТУДЕНТА ---");
         System.out.println("1) За ПІБ 2) Обрати зі списку 0) Назад");
@@ -107,7 +192,6 @@ public class ConsoleProgram implements Searching {
         }
         if (count == 0) return null;
         int choice = getIntInput("Оберіть номер", 1, count);
-
         int current = 0;
         for (Student s : student) {
             if (s != null) {
@@ -143,11 +227,9 @@ public class ConsoleProgram implements Searching {
             boolean foundInStudents = false;
             for (int i = 0; i < student.length; i++) {
                 if (student[i] == s) {
-                    // Зсуваємо всі наступні елементи на одну позицію вліво
                     for (int j = i; j < student.length - 1; j++) {
                         student[j] = student[j + 1];
                     }
-                    // Зануляємо останню комірку, щоб не було дубліката
                     student[student.length - 1] = null;
                     foundInStudents = true;
                     break;
@@ -208,16 +290,27 @@ public class ConsoleProgram implements Searching {
             int step = getIntInput("Оберіть поле", 0, 4);
             try {
                 switch (step) {
-                    case 1 -> { System.out.print("Новий ПІБ: "); st.setName(sc.nextLine()); }
-                    case 2 -> st.setCourse(getIntInput("Новий курс", 1, 6));
-                    case 3 -> { System.out.print("Нова група: "); st.setGroup(sc.nextLine()); }
-                    case 4 -> {
+                    case 1 :
+                    System.out.print("Новий ПІБ: ");
+                    st.setName(sc.nextLine());
+                    break;
+                    case 2 :
+                        st.setCourse(getIntInput("Новий курс", 1, 6));
+                        break;
+                    case 3:
+                        System.out.print("Нова група: ");
+                    st.setGroup(sc.nextLine());
+                    break;
+                    case 4:
                         int s = getIntInput("1)Навчається 2)Академ 3)Відрахований", 1, 3);
                         st.setStudentStatus(s == 1 ? Status.Studying : (s == 2 ? Status.Academic_vacation : Status.Expelled));
-                    }
-                    case 0 -> updating = false;
+                        break;
+                    case 0:
+                    updating = false;
+                    break;
                 }
-            } catch (IllegalArgumentException e) { System.out.println("Помилка: " + e.getMessage()); }
+            } catch (IllegalArgumentException e) {
+                System.out.println("Помилка: " + e.getMessage()); }
         }
     }
 
@@ -232,16 +325,21 @@ public class ConsoleProgram implements Searching {
             int step = getIntInput("Оберіть поле", 0, 3);
             try {
                 switch (step) {
-                    case 1 -> {
-                        int p = getIntInput("1.Асистент 2.Викладач 3.Доцент 4.Професор", 1, 4);
+                    case 1:
+                        int p = getIntInput("1)Асистент 2)Викладач 3)Доцент 4)Професор", 1, 4);
                         if (p == 1) t.setPosition(Position.Assistant);
                         else if (p == 2) t.setPosition(Position.Lecturer);
                         else if (p == 3) t.setPosition(Position.Docent);
                         else t.setPosition(Position.Profesor);
-                    }
-                    case 2 -> t.setRate(Double.parseDouble(sc.nextLine()));
-                    case 3 -> t.setWorkload(Integer.parseInt(sc.nextLine()));
-                    case 0 -> updating = false;
+                        break;
+                    case 2 :
+                        t.setRate(Double.parseDouble(sc.nextLine()));
+                        break;
+                    case 3 :
+                        t.setWorkload(Integer.parseInt(sc.nextLine()));
+                        break;
+                    case 0:
+                        updating = false;
                 }
             } catch (Exception e) { System.out.println("Помилка: " + e.getMessage()); }
         }
@@ -253,7 +351,7 @@ public class ConsoleProgram implements Searching {
         fillFaculty(f);
             try {
                 service.addFaculty(f);
-                System.out.println( f.getName() + " успішно створена!");
+                System.out.println( f.getName() + " успішно створений!");
             } catch (Exception e) {
                 System.out.println("Помилка при збереженні: " + e.getMessage());
             }
@@ -288,8 +386,11 @@ public class ConsoleProgram implements Searching {
                         step++;
                         break;
                     case 5:
-                        if (teachers[0] != null)
-                            f.setDean(chooseTeacher());
+                        if (teachers[0] != null) {
+                            Teacher t = chooseTeacher();
+                            f.setDean(t);
+                            t.setPosition(Position.Dean);
+                        }
                         else
                             System.out.println("Вам треба буде обрати Декана після створення вчителів");
                         step++;
@@ -339,7 +440,7 @@ public class ConsoleProgram implements Searching {
             try {
                 switch (step) {
                     case 1:
-                        System.out.print("Введіть код кафедри (напр. IPZ): ");
+                        System.out.print("Введіть код кафедри (напр. K01): ");
                         d.setCode(sc.nextLine());
                         step++;
                         break;
@@ -350,13 +451,16 @@ public class ConsoleProgram implements Searching {
                         break;
                     case 3:
                         System.out.println("Оберіть ФАКУЛЬТЕТ, до якого належить кафедра:");
-                        d.setFaculty(chooseFaculty()); // Спеціальний вибір зі списку
+                        d.setFaculty(chooseFaculty());
                         step++;
                         break;
                     case 4:
                         System.out.println("Оберіть ЗАВІДУВАЧА кафедри:");
-                        if (teachers[0] != null)
-                            d.setHead(chooseTeacher());
+                        if (teachers[0] != null) {
+                            Teacher t = chooseTeacher();
+                            d.setHead(t);
+                            t.setPosition(Position.Head_of_department);
+                        }
                         else System.out.println("Після створення треба буде додати завідувача");
                         step++;
                         break;
