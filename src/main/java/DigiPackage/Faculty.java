@@ -6,7 +6,9 @@ public class Faculty {
     private String shortName;
     private Teacher dean;
     private String contacts;
+    public Faculty(){
 
+    }
     public Faculty(String code, String name, String shortName, Teacher dean, String contacts) {
         setCode(code);
         setName(name);

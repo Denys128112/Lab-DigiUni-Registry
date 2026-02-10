@@ -6,7 +6,9 @@ package DigiPackage;
         private String dateOfBirth;
         private String email;
         private String phone;
+        public Person(){
 
+        }
         public Person(String id, String name, String dateOfBirth, String email, String phone) {
             this.id = id;
             setName(name);

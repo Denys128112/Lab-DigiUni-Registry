@@ -8,6 +8,9 @@ public class Teacher extends Person{
     private double rate;
     private int workload; //години
 
+    public Teacher(){
+
+    }
     public Teacher(String id, String name, String dateOfBirth, String email, String phone,
                    Position position, ScientificDegree scientificDegree, AcademicTitle academicTitle,
                    String dateOfentering, double rate, int workload) {
