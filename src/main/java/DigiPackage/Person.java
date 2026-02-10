@@ -6,7 +6,9 @@ package DigiPackage;
         private String dateOfBirth;
         private String email;
         private String phone;
+        public Person(){
 
+        }
         public Person(String id, String name, String dateOfBirth, String email, String phone) {
             this.id = id;
             setName(name);
@@ -32,7 +34,7 @@ package DigiPackage;
             return true;
         }
 
-        protected boolean verifyCorectionOfDate(String dateOfBirth) {
+        private boolean verifyCorectionOfDate(String dateOfBirth) {
             if(dateOfBirth==null || dateOfBirth.length()!=10)
                 return false;
             for(int i = 0; i < dateOfBirth.length(); i++) {
@@ -45,14 +47,14 @@ package DigiPackage;
             return true;
         }
 
-        protected boolean corectData(String date) {
+        private boolean corectData(String date) {
             String days=date.substring(0,2);
             String months=date.substring(3,5);
             String years=date.substring(6,10);
            int day=Integer.parseInt(days);
            int month=Integer.parseInt(months);
            int year=Integer.parseInt(years);
-            return day >= 1 && day <= 31 && month >= 1 && month <= 12 && year >= 1946 && (month != 2 || day <= 28);
+            return day >= 1 && day <= 31 && month >= 1 && month <= 12 && year >= 1946;
         }
 
         private boolean verifyCorectionOfEmail(String email) {

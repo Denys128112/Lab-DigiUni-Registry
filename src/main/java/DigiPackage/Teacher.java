@@ -8,6 +8,9 @@ public class Teacher extends Person{
     private double rate;
     private int workload; //години
 
+    public Teacher(){
+
+    }
     public Teacher(String id, String name, String dateOfBirth, String email, String phone,
                    Position position, ScientificDegree scientificDegree, AcademicTitle academicTitle,
                    String dateOfentering, double rate, int workload) {
@@ -118,8 +121,20 @@ public class Teacher extends Person{
         this.workload = workload;
     }
 
-     @Override
-     protected boolean corectData(String date) {
+    private boolean verifyCorectionOfDate(String dateOfBirth) {
+        if(dateOfBirth==null || dateOfBirth.length()!=10)
+            return false;
+        for(int i = 0; i < dateOfBirth.length(); i++) {
+            if(!Character.isDigit(dateOfBirth.charAt(i))&&!(i==2||i==5&&dateOfBirth.charAt(i)=='.'))
+                return false;
+        }
+        if (!corectData(dateOfBirth))
+            return false;
+
+        return true;
+    }
+
+     private boolean corectData(String date) {
         String days=date.substring(0,2);
         String months=date.substring(3,5);
         String years=date.substring(6,10);

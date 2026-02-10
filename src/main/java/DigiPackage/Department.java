@@ -6,7 +6,9 @@ public class Department {
     private Faculty faculty;
     private Teacher head;
     private String location;
+    public Department(){
 
+    }
     public Department(String code, String name, Faculty faculty, Teacher head, String location) {
         setCode(code);
         setName(name);

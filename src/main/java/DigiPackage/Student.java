@@ -7,7 +7,9 @@ public class Student extends Person {
     private int yearOfentering;
     private FormOfStudy formOfStudy;
     private Status studentStatus;
+    public Student(){
 
+    }
     public Student(String id, String name, String dateOfBirth, String email, String phone, String idOfRecordBook, int course, String group, int yearOfentering, FormOfStudy formOfStudy, Status studentStatus) {
         super(id, name, dateOfBirth, email, phone);
         setIdOfRecordBook(idOfRecordBook);
@@ -19,14 +21,19 @@ public class Student extends Person {
     }
 
     private boolean verifyidOfGroup(String group) {
-        if(group==null || group.isEmpty()) return false;
-        int len = group.length()-1;
-        if(!Character.isDigit(group.charAt(len))&&group.charAt(len-1)!='-') return false;
-        for (int i=len-2;i>=0;i--) {
-            if(!Character.isDigit(group.charAt(i))) return false;
+        // 1. Базова перевірка на null та мінімальну довжину (напр. "А-1" - це 3 символи)
+        if (group == null || group.length() < 3) return false;
+        int len = group.length();
+        if (!Character.isDigit(group.charAt(len - 1))) return false;
+        int hyphenIndex = group.lastIndexOf('-');
+        if (hyphenIndex <= 0 || hyphenIndex == len - 1) return false;
+        for (int i = 0; i < hyphenIndex; i++) {
+            if (!Character.isLetter(group.charAt(i))) return false;
+        }
+        for (int i = hyphenIndex + 1; i < len; i++) {
+            if (!Character.isDigit(group.charAt(i))) return false;
         }
         return true;
-
     }
 
     private boolean verifyidOfRecordBook(String rb) {
