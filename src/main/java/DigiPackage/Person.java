@@ -1,6 +1,8 @@
 package DigiPackage;
 
-    public class Person {
+import java.util.Objects;
+
+public class Person {
         private String id;
         private String name;
         private String dateOfBirth;
@@ -47,7 +49,11 @@ package DigiPackage;
             return true;
         }
 
-        private boolean corectData(String date) {
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    private boolean corectData(String date) {
             String days=date.substring(0,2);
             String months=date.substring(3,5);
             String years=date.substring(6,10);
@@ -72,7 +78,7 @@ package DigiPackage;
         }
 
         private boolean verifyCorectionOfPhone(String phone) {
-            if(phone==null || phone.isEmpty()|| phone.length()!=13||phone.charAt(0)!='+')
+            if(phone==null ||phone.length()!=13)
                 return false;
             for (int i = 1; i < phone.length(); i++) {
                 if(!Character.isDigit(phone.charAt(i))){
@@ -95,10 +101,6 @@ package DigiPackage;
 
         public String getId() {
             return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
         }
 
         public String getName() {
@@ -145,4 +147,17 @@ package DigiPackage;
                     ", email:'" + email + '\'' +
                     ", phone:'" + phone;
         }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        if(o==this) return true;
+        Person person = (Person) o;
+        return Objects.equals(id, person.id);
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+}
