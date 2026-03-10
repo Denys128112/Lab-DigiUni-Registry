@@ -1,5 +1,7 @@
 package DigiPackage;
 
+import java.util.Objects;
+
 public class Teacher extends Person{
     private Position position;
     private ScientificDegree scientificDegree;
