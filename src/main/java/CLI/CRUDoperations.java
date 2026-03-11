@@ -1,15 +1,16 @@
 package CLI;
 
 import DigiPackage.*;
-
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 import static CLI.ConsoleProgram.getIntInput;
 
 public class CRUDoperations {
-    UniversityService service = new UniversityService();
+    UniversityRepository universityRepository = new UniversityRepository();
     Repository repository = new Repository();
+    Searching searching = new Searching();
     Scanner sc = new Scanner(System.in);
 
     public void createStudent() {
@@ -41,13 +42,13 @@ public class CRUDoperations {
                         step++;
                         break;
                     case 3:
-                        System.out.print("Введіть Email: ");
-                        st.setEmail(sc.nextLine());
+                        System.out.print("Введіть Email до @: ");
+                        st.setEmail(sc.nextLine()+"@ukma.edu.ua");
                         step++;
                         break;
                     case 4:
-                        System.out.print("Введіть телефон (+380...): ");
-                        st.setPhone(sc.nextLine());
+                        System.out.print("Введіть телефон без +380: ");
+                        st.setPhone("+380"+sc.nextLine());
                         step++;
                         break;
                     case 5:
@@ -57,7 +58,7 @@ public class CRUDoperations {
                         break;
                     case 6:
                         System.out.print("Введіть курс (1-6): ");
-                        st.setCourse(Integer.parseInt(sc.nextLine()));
+                        st.setCourse(getIntInput("Введіть курс (1-6): ",1,6));
                         step++;
                         break;
                     case 7:
@@ -111,13 +112,13 @@ public class CRUDoperations {
                         step++;
                         break;
                     case 4:
-                        System.out.print("Введіть Email: ");
-                        t.setEmail(sc.nextLine());
+                        System.out.print("Введіть Email до @: ");
+                        t.setEmail(sc.nextLine()+"@ukma.edu.ua");
                         step++;
                         break;
                     case 5:
-                        System.out.print("Введіть телефон: ");
-                        t.setPhone(sc.nextLine());
+                        System.out.print("Введіть телефон без +380: ");
+                        t.setPhone("+380"+sc.nextLine());
                         step++;
                         break;
                     case 6:
@@ -160,7 +161,7 @@ public class CRUDoperations {
         Faculty f = new Faculty();
         fillFaculty(f);
         try {
-            service.addFaculty(f);
+            universityRepository.addFaculty(f);
             System.out.println(f.getName() + " успішно створений!");
         } catch (Exception e) {
             System.out.println("Помилка: " + e.getMessage());
@@ -195,7 +196,7 @@ public class CRUDoperations {
                         break;
                     case 5:
                         if (!repository.getTeachers().isEmpty()) {
-                            Teacher t = chooseTeacher();
+                            Teacher t = findTeacher();
                             f.setDean(t);
                             t.setPosition(Position.Dean);
                         } else {
@@ -213,14 +214,14 @@ public class CRUDoperations {
 
     public void createDepartment() {
         System.out.println("\n--- СТВОРЕННЯ КАФЕДРИ ---");
-        if (service.getFaculties().length == 0 || service.getFaculties()[0] == null) {
+        if (universityRepository.getFaculties().isEmpty()) {
             System.out.println("Спочатку створіть факультет.");
             return;
         }
         Department d = new Department();
         fillDepartmentData(d);
         try {
-            service.addDepartment(d);
+            universityRepository.addDepartment(d);
             System.out.println("Кафедра " + d.getName() + " успішно створена!");
         } catch (Exception e) {
             System.out.println("Помилка при збереженні: " + e.getMessage());
@@ -245,12 +246,12 @@ public class CRUDoperations {
                         break;
                     case 3:
                         System.out.println("Оберіть ФАКУЛЬТЕТ:");
-                        d.setFaculty(chooseFaculty());
+                        d.setFaculty(findFaculty());
                         step++;
                         break;
                     case 4:
                         if (!repository.getTeachers().isEmpty()) {
-                            Teacher t = chooseTeacher();
+                            Teacher t = findTeacher();
                             d.setHead(t);
                             t.setPosition(Position.Head_of_department);
                         } else {
@@ -272,7 +273,7 @@ public class CRUDoperations {
 
     public void readFaculty() {
         System.out.println("\n--- СПИСОК ФАКУЛЬТЕТІВ ---");
-        Faculty[] all = service.getFaculties();
+        List<Faculty> all = universityRepository.getFaculties();
         int count = 0;
         for (Faculty f : all) {
             if (f != null) {
@@ -285,7 +286,7 @@ public class CRUDoperations {
 
     public void readDepartment() {
         System.out.println("\n--- СПИСОК КАФЕДР ---");
-        Department[] all = service.getDepartments();
+        List<Department> all = universityRepository.getDepartments();
         int count = 0;
         for (Department d : all) {
             if (d != null) {
@@ -414,7 +415,7 @@ public class CRUDoperations {
                     case 3: System.out.print("Абревіатура: "); f.setShortName(sc.nextLine()); break;
                     case 4: System.out.print("Контакти: "); f.setContacts(sc.nextLine()); break;
                     case 5:
-                        Teacher newDean = chooseTeacher();
+                        Teacher newDean = findTeacher();
                         if (newDean != null) f.setDean(newDean);
                         break;
                     case 0: updating = false; break;
@@ -434,8 +435,8 @@ public class CRUDoperations {
             try {
                 switch (choice) {
                     case 1: System.out.print("Назва: "); d.setName(sc.nextLine()); break;
-                    case 2: d.setFaculty(chooseFaculty()); break;
-                    case 3: d.setHead(chooseTeacher()); break;
+                    case 2: d.setFaculty(findFaculty()); break;
+                    case 3: d.setHead(findTeacher()); break;
                     case 4: System.out.print("Локація: "); d.setLocation(sc.nextLine()); break;
                 }
             } catch (Exception e) { System.out.println("Помилка: " + e.getMessage()); }
@@ -455,68 +456,116 @@ public class CRUDoperations {
     public void deleteStudent() {
         Student s = findStudent();
         if (s != null && getIntInput("Видалити? 1-Так, 0-Ні", 0, 1) == 1) {
-            repository.getStudents().remove(s);
+            repository.removeStudent(s);
+            System.out.println("Видалення Успішне!");
         }
+        else
+            System.out.println("Видалення не було");
+
     }
 
     public void deleteTeacher() {
         Teacher t = findTeacher();
         if (t != null && getIntInput("Видалити? 1-Так, 0-Ні", 0, 1) == 1) {
-            repository.getTeachers().remove(t);
+            repository.removeTeacher(t);
+            System.out.println("Видалення Успішне!");
         }
+        else
+            System.out.println("Видалення не було");
+
     }
 
     public void deleteFaculty() {
         Faculty f = findFaculty();
         if (f != null && getIntInput("Видалити? 1-Так, 0-Ні", 0, 1) == 1) {
-            service.removeFaculty(f.getCode());
+            universityRepository.removeFaculty(f);
+            System.out.println("Видалення Успішне!");
         }
+        else
+            System.out.println("Видалення не було");
     }
 
     public void deleteDepartment() {
         Department d = findDepartment();
         if (d != null && getIntInput("Видалити? 1-Так, 0-Ні", 0, 1) == 1) {
-            service.removeDepartment(d.getCode());
+            universityRepository.removeDepartment(d);
+            System.out.println("Видалення Успішне!");
         }
+        else
+            System.out.println("Видалення не було");
+
     }
 
-    public Teacher chooseTeacher() {
-        List<Teacher> teachers = repository.getTeachers();
-        if (teachers.isEmpty()) return null;
-        for (int i = 0; i < teachers.size(); i++) {
-            System.out.println((i + 1) + ") " + teachers.get(i).getName());
-        }
-        int choose = getIntInput("Вибір", 1, teachers.size());
-        return teachers.get(choose - 1);
-    }
 
-    public Faculty chooseFaculty() {
-        Faculty[] all = service.getFaculties();
-        int count = 0;
-        for (Faculty f : all) {
-            if (f != null) System.out.println((++count) + ") " + f.getShortName());
-        }
-        if (count == 0) return null;
-        int choice = getIntInput("Вибір факультету", 1, count);
-        return all[choice - 1];
-    }
 
     public Student findStudent() {
         System.out.println("\n--- ПОШУК СТУДЕНТА ---");
         System.out.println("1) За ID 2) За ПІБ 3) Зі списку 0) Назад");
         int choice = getIntInput("Вибір", 0, 3);
-        return null;
-    }
+        while (true) {
+            Optional<? extends Person> maybestudent=Optional.empty();
+            switch (choice) {
+                case 1:
+                    maybestudent = searching.findById(sc.nextLine(), repository.getStudentmap());
+                    break;
+                case 2:
+                    maybestudent = searching.findByName(sc.nextLine(), repository.getStudents());
+                    break;
+                case 3:
+                    return chooseEntity(repository.getStudents());
+                    default:
+                        break;
+            }
+            if (maybestudent.isPresent()) {
+                Person p = maybestudent.get();
+                if (p instanceof Student student) {
+                    return student;
+                }
+            }
+                System.out.println("Студента не знайдено, спробуйте знову");
 
-    public Teacher findTeacher() {
-        System.out.println("\n--- ПОШУК ВИКЛАДАЧА ---");
-        System.out.println("1) За ПІБ 2) Зі списку 0) Назад");
-        int choice = getIntInput("Вибір", 0, 2);
-        switch (choice) {
-            case 2: return chooseTeacher();
-            default: return null;
         }
     }
+    public Teacher findTeacher(){
+        System.out.println("\n--- ПОШУК СТУДЕНТА ---");
+        System.out.println("1) За ID 2) За ПІБ 3) Зі списку 0) Назад");
+        int choice = getIntInput("Вибір", 0, 3);
+        while (true) {
+            Optional<? extends Person> maybeteacher=Optional.empty();
+            switch (choice) {
+                case 1:
+                    maybeteacher = searching.findById(sc.nextLine(), repository.getTeachersmap());
+                    break;
+                case 2:
+                    maybeteacher = searching.findByName(sc.nextLine(), repository.getTeachers());
+                    break;
+                case 3:
+                    return chooseEntity(repository.getTeachers());
+                default:
+                    break;
+            }
+            if (maybeteacher.isPresent()) {
+                Person p = maybeteacher.get();
+                if (p instanceof Teacher teacher) {
+                    return teacher;
+                }
+            }
+            System.out.println("Викладача не знайдено, спробуйте знову");
+
+        }
+    }
+
+    private <T> T chooseEntity(List<T> entity) {
+        int i=0;
+        for (Object o : entity) {
+            i++;
+            System.out.println(i + ") " + o);
+        }
+        int choose=getIntInput("Оберіть бажанний варіант",1,i);
+        return entity.get(choose-1);
+    }
+
+
 
     public Faculty findFaculty() {
         System.out.println("\n--- ПОШУК ФАКУЛЬТЕТУ ---");
@@ -524,10 +573,16 @@ public class CRUDoperations {
         int choice = getIntInput("Вибір", 0, 2);
         switch (choice) {
             case 1:
-                System.out.print("Код: ");
-                return service.getFacultyByCode(sc.nextLine());
+                while (true) {
+                    System.out.print("Код: ");
+                    Optional<Faculty> maybeFaculties=searching.getFacultyByCode(sc.nextLine(), universityRepository.getFacultiesMap());
+                    if (maybeFaculties.isPresent())
+                        return maybeFaculties.get();
+                    else
+                        System.out.println("Кафедру не знайдено, спробуйте знову");
+                }
             case 2:
-                return chooseFaculty();
+                return chooseEntity(universityRepository.getFaculties());
             default:
                 return null;
         }
@@ -538,23 +593,23 @@ public class CRUDoperations {
         int method = getIntInput("Вибір", 0, 2);
         switch (method) {
             case 1:
-                System.out.print("Код: ");
-                return service.getDepartmentByCode(sc.nextLine());
-            case 2:
-                Department[] all = service.getDepartments();
-                int count = 0;
-                for (Department d : all) {
-                    if (d != null) System.out.println((++count) + ") " + d.getName());
+                while (true) {
+                    System.out.print("Код: ");
+                    Optional<Department> maybeDepartment=searching.getDepartmentByCode(sc.nextLine(), universityRepository.getDepartmentMap());
+                    if (maybeDepartment.isPresent())
+                            return maybeDepartment.get();
+                    else
+                        System.out.println("Кафедру не знайдено, спробуйте знову");
                 }
-                if (count == 0) return null;
-                return all[getIntInput("Номер", 1, count) - 1];
+            case 2:
+                return chooseEntity(universityRepository.getDepartments());
             default:
                 return null;
         }
     }
 
-    public void getUniversity() {
-        service.getUniversity();
+    public University getUniversity() {
+        return universityRepository.getUniversity();
     }
 
     private <T extends Enum<T>> T chooseEnum(String message, T[] values) {

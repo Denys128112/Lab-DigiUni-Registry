@@ -14,7 +14,7 @@ import java.util.Optional;
 
 public class Searching {
 
-     public Optional<Person> findByEmail(String email, List<? extends Person> people) {
+     public Optional<?extends Person> findByEmail(String email, List<? extends Person> people) {
 
         for (Person p : people) {
 
@@ -25,7 +25,7 @@ public class Searching {
         return Optional.empty();
     }
 
-   public  Optional<Person> findByPhone(String phone, List<? extends Person> people) {
+   public  Optional<? extends Person> findByPhone(String phone, List<? extends Person> people) {
 
         for (Person p : people) {
             if (p != null && p.getPhone().equals(phone)) {
@@ -36,7 +36,7 @@ public class Searching {
 
     }
 
-    public Optional<Person> findByName(String name,  List<? extends Person> people) {
+    public Optional<? extends Person> findByName(String name,  List<? extends Person> people) {
         for (Person p : people) {
             if (p != null && p.getName().equals(name)) {
                 return Optional.of(p);
@@ -71,4 +71,15 @@ public class Searching {
             throw new IllegalArgumentException("No student with course "+course);
         return result;
     }
-}
+
+    public Optional<? extends Person> findById(String s, Map<String,? extends Person> personsbyid) {
+         return Optional.ofNullable(personsbyid.get(s));
+    }
+    public Optional<Department> getDepartmentByCode(String code,Map<String,Department> departments) {
+       return Optional.ofNullable(departments.get(code));
+    }
+    public Optional<Faculty> getFacultyByCode(String code,Map<String,Faculty> faculties) {
+         return Optional.ofNullable(faculties.get(code));
+    }
+    }
+
