@@ -36,6 +36,19 @@ public class Repository {
         personmap.remove(teacher.getId());
 
     }
+
+    public Map<String, Teacher> getTeachersmap() {
+        return teachersmap;
+    }
+
+    public Map<String, Student> getStudentmap() {
+        return studentmap;
+    }
+
+    public Map<String, Person> getPersonmap() {
+        return personmap;
+    }
+
     public void  addTeacher(Teacher teacher) {
         teachers.add(teacher);
         persons.add(teacher);

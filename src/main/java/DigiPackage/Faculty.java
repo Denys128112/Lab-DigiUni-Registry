@@ -1,5 +1,7 @@
 package DigiPackage;
 
+import java.util.Objects;
+
 public class Faculty {
     private String code;
     private String name;
@@ -65,5 +67,18 @@ public class Faculty {
     @Override
     public String toString() {
         return "Faculty [" + code + "]: " + name + " (" + shortName + "), Dean: " + dean.getName();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        if (o == this) return true;
+        Faculty faculty = (Faculty) o;
+        return Objects.equals(code, faculty.code);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(code);
     }
 }

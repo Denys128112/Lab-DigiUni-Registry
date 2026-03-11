@@ -10,11 +10,11 @@ import java.util.Scanner;
 public class SearchOperations {
     Scanner sc = new Scanner(System.in);
     Searching searching = new Searching();
-    private  void searchName(List<? extends Person> humans) {
+    protected   void searchName(List<? extends Person> humans) {
         System.out.println("Введіть ПІБ у форматі ПРІЗВИЩЕ ІМ'Я ПО-БАТЬКОВІ");
         String name = sc.nextLine();
 
-        Optional<Person> maybePerson = searching.findByName(name, humans);
+        Optional<? extends Person> maybePerson = searching.findByName(name, humans);
         try {
             Person person = maybePerson.orElseThrow(() -> new IllegalArgumentException("Користувача з таким іменем не знайдено"));
             System.out.println(person);
@@ -24,11 +24,11 @@ public class SearchOperations {
         }
     }
 
-    private  void searchEmail(List<? extends Person> humans) {
+    protected   void searchEmail(List<? extends Person> humans) {
         System.out.println("Введіть email:");
         String email = sc.nextLine();
 
-        Optional<Person> maybePerson = searching.findByEmail(email, humans);
+        Optional<? extends Person> maybePerson = searching.findByEmail(email, humans);
         try {
             Person person = maybePerson.orElseThrow(() -> new IllegalArgumentException("Користувача з таким email не знайдено"));
             System.out.println(person);
@@ -37,11 +37,11 @@ public class SearchOperations {
         }
     }
 
-    private  void searchPhone(List<? extends Person> humans) {
+    protected   void searchPhone(List<? extends Person> humans) {
         System.out.println("Введіть номер телефону без +380:");
         String phone = "+380"+sc.nextLine();
 
-        Optional<Person> maybePerson = searching.findByPhone(phone, humans);
+        Optional<? extends Person> maybePerson = searching.findByPhone(phone, humans);
         try {
             Person person = maybePerson.orElseThrow(() -> new IllegalArgumentException("Користувача з таким телефоном не знайдено"));
             System.out.println(person);
@@ -50,7 +50,7 @@ public class SearchOperations {
         }
     }
 
-    private  void searchGroup(Repository repository) {
+    protected   void searchGroup(Repository repository) {
         System.out.println("Введіть групу(наприклад ІПЗ-1):");
         String group = sc.nextLine();
 
@@ -68,7 +68,7 @@ public class SearchOperations {
         }
     }
 
-    private  void searchCourse(Repository repository) {
+   protected   void searchCourse(Repository repository) {
         System.out.println("Введіть курс:");
         int course = sc.nextInt();
         sc.nextLine();
@@ -87,5 +87,11 @@ public class SearchOperations {
     }
 
 
+    public void searchById(List<? extends Person> humans) {
+
+    }
+
+    public void findById(List<Student> students) {
+    }
 }
 

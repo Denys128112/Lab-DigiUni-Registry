@@ -1,4 +1,5 @@
 package CLI;
+
 import DigiPackage.*;
 
 import java.util.List;
@@ -9,8 +10,8 @@ public class ConsoleProgram {
     static Scanner sc = new Scanner(System.in);
     static CRUDoperations crudoperations = new CRUDoperations();
     static SearchOperations searchoperations = new SearchOperations();
-     static Reportoperations reportoperations= new  Reportoperations();
-     static Repository repository = new Repository();
+    static Reportoperations reportoperations = new Reportoperations();
+    static Repository repository = new Repository();
 
     public static void main(String[] args) {
         run();
@@ -53,73 +54,119 @@ public class ConsoleProgram {
         }
     }
 
+    private static int chooseOperation() {
+        System.out.println("1. Створити");
+        System.out.println("2. Редагувати");
+        System.out.println("3. Видалити");
+        System.out.println("4. Читати");
+        System.out.println("0. Назад");
+        return getIntInput("Ваш вибір", 0, 4);
+    }
+
     private static void workWithTeacher() {
-    }
-    private static void workWithStudent() {
-    }
-    private static void workWithFaculty() {
-    }
-
-    private static void workWithUniversity() {
-
-    }
-    private static void  workWithDepartment() {
-
-    }
-
-    private static void crud() {
-        while (true) {
-            System.out.println("1. Створити");
-            System.out.println("2. Редагувати");
-            System.out.println("3. Видалити");
-            System.out.println("4. Читати");
-            System.out.println("0. Назад");
-
-            int operation = getIntInput("Ваш вибір", 0, 4);
-            if (operation == 0) return;
-
-            System.out.println("\n--- ОБЕРІТЬ СУТНІСТЬ ---");
-            System.out.println("1. Факультет");
-            System.out.println("2. Кафедра");
-            System.out.println("3. Студент");
-            System.out.println("4. Викладач");
-            int entity;
-            if (operation == 4) {
-                System.out.println("5. Університет");
-                entity = getIntInput("Ваш вибір", 1, 5);
-            } else {
-                entity = getIntInput("Ваш вибір", 1, 4);
-            }
-
-            switch (operation) {
+        int choice = 1;
+        while (choice != 0) {
+            choice = chooseOperation();
+            switch (choice) {
                 case 1:
-                    if (entity == 1) crudoperations.createFaculty();
-                    else if (entity == 2) crudoperations.createDepartment();
-                    else if (entity == 3) crudoperations.createStudent();
-                    else if (entity == 4) crudoperations.createTeacher();
+                    crudoperations.createTeacher();
                     break;
                 case 2:
-                    if (entity == 1) crudoperations.updateFaculty();
-                    else if (entity == 2) crudoperations.updateDepartment();
-                    else if (entity == 3) crudoperations.updateStudent();
-                    else if (entity == 4) crudoperations.updateTeacher();
+                    crudoperations.updateTeacher();
                     break;
                 case 3:
-                    if (entity == 1) crudoperations.deleteFaculty();
-                    else if (entity == 2) crudoperations.deleteDepartment();
-                    else if (entity == 3) crudoperations.deleteStudent();
-                    else if (entity == 4) crudoperations.deleteTeacher();
+                    crudoperations.deleteTeacher();
                     break;
                 case 4:
-                    if (entity == 1) crudoperations.readFaculty();
-                    else if (entity == 2) crudoperations.readDepartment();
-                    else if (entity == 3) crudoperations.readStudent();
-                    else if (entity == 4) crudoperations.readTeacher();
-                    else if (entity == 5) crudoperations.getUniversity();
+                    crudoperations.readTeacher();
                     break;
+
             }
         }
     }
+
+    private static void workWithStudent() {
+        int choice = 1;
+        while (choice != 0) {
+            choice = chooseOperation();
+            switch (choice) {
+                case 1:
+                    crudoperations.createStudent();
+                    break;
+                case 2:
+                    crudoperations.updateStudent();
+                    break;
+                case 3:
+                    crudoperations.deleteStudent();
+                    break;
+                case 4:
+                    crudoperations.readStudent();
+                    break;
+
+            }
+        }
+    }
+
+    private static void workWithFaculty() {
+        int choice = 1;
+        while (choice != 0) {
+            choice = chooseOperation();
+            switch (choice) {
+                case 1:
+                    crudoperations.createFaculty();
+                    break;
+                case 2:
+                    crudoperations.updateFaculty();
+                    break;
+                case 3:
+                    crudoperations.deleteFaculty();
+                    break;
+                case 4:
+                    crudoperations.readFaculty();
+                    break;
+
+            }
+        }
+    }
+
+    private static void workWithUniversity() {
+        System.out.println("1) Читати");
+        System.out.println("2) Список кафедр університета");
+        System.out.println("3) Назад");
+        int choice=getIntInput("Оберіть операцію", 1, 3);
+        switch (choice) {
+            case 1:
+                System.out.println(crudoperations.getUniversity());
+                break;
+            default:
+                System.out.println("В розробці");
+        }
+
+    }
+
+    private static void workWithDepartment() {
+        int choice = 1;
+        while (choice != 0) {
+            choice = chooseOperation();
+            switch (choice) {
+                case 1:
+                    crudoperations.createDepartment();
+                    break;
+                case 2:
+                    crudoperations.updateDepartment();
+                    break;
+                case 3:
+                    crudoperations.deleteDepartment();
+                    break;
+                case 4:
+                    crudoperations.readDepartment();
+                    break;
+
+            }
+        }
+
+    }
+
 
     public static int getIntInput(String prompt, int min, int max) {
         while (true) {
@@ -145,21 +192,43 @@ public class ConsoleProgram {
     }
 
 
-
-
     private static void search() {
         System.out.println("Обрано пошук");
-        int choosenSearchByPerson = getIntInput("Доступні операції: 1)Пошук Персони 2)Пошук Студента 3)Пошук Викладача",1,3);
+        int choosenSearchByPerson = getIntInput("Доступні операції: 1)Пошук Персони 2)Пошук Студента 3)Пошук Викладача", 1, 3);
         List<? extends Person> humans;
         switch (choosenSearchByPerson) {
             case 1:
-                humans= repository.getPersons();
+                humans = repository.getPersons();
                 break;
             case 2:
-                humans= repository.getStudents();
+                humans = repository.getStudents();
                 break;
             default:
-                humans= repository.getTeachers();
+                humans = repository.getTeachers();
+        }
+        int choosenSearch;
+        if (choosenSearchByPerson != 2)
+            choosenSearch = getIntInput("Доступні операції: 1)Пошук за email 2)Пошук за ПІБ 3)Пошук за номером телефону", 1, 4);
+        else
+            choosenSearch = getIntInput("Доступні операції: 1)Пошук за email 2)Пошук за ПІБ 3)Пошук за номером телефону 4)Пошук за групою 5)Пошук за курсом", 1, 6);
+        switch (choosenSearch) {
+            case 1:
+                searchoperations.searchEmail(humans);
+                break;
+            case 2:
+                searchoperations.searchName(humans);
+                break;
+            case 3:
+                searchoperations.searchPhone(humans);
+                break;
+            case 4:
+                searchoperations.searchById(humans);
+                break;
+            case 5:
+                searchoperations.searchGroup(repository);
+                break;
+            default:
+                searchoperations.searchCourse(repository);
         }
 
     }
