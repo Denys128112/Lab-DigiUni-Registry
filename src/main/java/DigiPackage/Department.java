@@ -1,5 +1,7 @@
 package DigiPackage;
 
+import exceptions.ValidatingException;
+
 import java.util.Objects;
 
 public class Department {
@@ -22,31 +24,31 @@ public class Department {
     public String getCode() { return code; }
     public void setCode(String code) {
         if (code != null && !code.trim().isEmpty()) this.code = code;
-        else throw new IllegalArgumentException("Department code cannot be empty");
+        else throw new ValidatingException("Department code cannot be empty");
     }
 
     public String getName() { return name; }
     public void setName(String name) {
         if (name != null && !name.trim().isEmpty()) this.name = name;
-        else throw new IllegalArgumentException("Department name cannot be empty");
+        else throw new ValidatingException("Department name cannot be empty");
     }
 
     public Faculty getFaculty() { return faculty; }
     public void setFaculty(Faculty faculty) {
         if (faculty != null) this.faculty = faculty;
-        else throw new IllegalArgumentException("Faculty cannot be null");
+        else throw new ValidatingException("Faculty cannot be null");
     }
 
     public Teacher getHead() { return head; }
     public void setHead(Teacher head) {
         if (head != null) this.head = head;
-        else throw new IllegalArgumentException("Head of department cannot be null");
+        else throw new ValidatingException("Head of department cannot be null");
     }
 
     public String getLocation() { return location; }
     public void setLocation(String location) {
         if (location != null && !location.trim().isEmpty()) this.location = location;
-        else throw new IllegalArgumentException("Location cannot be empty");
+        else throw new ValidatingException("Location cannot be empty");
     }
 
     @Override

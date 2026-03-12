@@ -1,5 +1,7 @@
 package DigiPackage;
 
+import exceptions.ValidatingException;
+
 import java.util.Objects;
 
 public class Person {
@@ -31,22 +33,17 @@ public class Person {
                     return false;
                 prch=name.charAt(i);
             }
-            if(spaceCount !=2)
-                return false;
-            return true;
+            return spaceCount == 2;
         }
 
         private boolean verifyCorectionOfDate(String dateOfBirth) {
-            if(dateOfBirth==null || dateOfBirth.length()!=10)
+            if(dateOfBirth.length()!=10)
                 return false;
             for(int i = 0; i < dateOfBirth.length(); i++) {
                 if(!Character.isDigit(dateOfBirth.charAt(i))&&!(i==2||i==5&&dateOfBirth.charAt(i)=='.'))
                     return false;
             }
-            if (!corectData(dateOfBirth))
-                return false;
-
-            return true;
+            return corectData(dateOfBirth);
         }
 
     public void setId(String id) {
@@ -73,7 +70,7 @@ public class Person {
                     lastDotIndex <= dogIndex + 1 ||
                     lastDotIndex > email.length() - 3 ||
                     email.contains(" "))
-                return false;;
+                return false;
             return true;
         }
 
@@ -96,7 +93,7 @@ public class Person {
             if(verifyCorectionOfDate(dateOfBirth))
             this.dateOfBirth = dateOfBirth;
             else
-                throw  new IllegalArgumentException("Invalid date of birth");
+                throw  new ValidatingException("Invalid date of birth");
         }
 
         public String getId() {
@@ -113,7 +110,7 @@ public class Person {
             if(verifyCorectionOfname(name))
             this.name = name;
             else
-                throw  new IllegalArgumentException("Invalid name of person");
+                throw  new ValidatingException("Invalid name of person");
         }
 
         public String getEmail() {
@@ -124,7 +121,7 @@ public class Person {
             if(verifyCorectionOfEmail(email))
             this.email = email;
             else
-                throw  new IllegalArgumentException("Invalid email of person");
+                throw  new ValidatingException("Invalid email of person");
         }
 
         public String getPhone() {
@@ -135,7 +132,7 @@ public class Person {
             if(verifyCorectionOfPhone(phone))
             this.phone = phone;
             else
-                throw  new IllegalArgumentException("Invalid phone number of person");
+                throw  new ValidatingException("Invalid phone number of person");
         }
 
         @Override

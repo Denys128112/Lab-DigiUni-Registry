@@ -1,5 +1,7 @@
 package DigiPackage;
 
+import exceptions.ValidatingException;
+
 public class Student extends Person {
     private String idOfRecordBook;
     private int course;
@@ -21,7 +23,6 @@ public class Student extends Person {
     }
 
     private boolean verifyidOfGroup(String group) {
-        // 1. Базова перевірка на null та мінімальну довжину (напр. "А-1" - це 3 символи)
         if (group == null || group.length() < 3) return false;
         int len = group.length();
         if (!Character.isDigit(group.charAt(len - 1))) return false;
@@ -61,7 +62,7 @@ public class Student extends Person {
     public void setIdOfRecordBook(String idOfRecordBook) {
         if(verifyidOfRecordBook(idOfRecordBook))
         this.idOfRecordBook = idOfRecordBook;
-        else throw new IllegalArgumentException("Invalid id of record book");
+        else throw new ValidatingException("Invalid id of record book");
     }
 
     public int getCourse() {
@@ -71,7 +72,7 @@ public class Student extends Person {
     public void setCourse(int course) {
         if(course>0&&course<=6)
         this.course = course;
-        else throw new IllegalArgumentException("course must be between 1 and 6");
+        else throw new ValidatingException("course must be between 1 and 6");
     }
 
     public String getGroup() {
@@ -81,7 +82,7 @@ public class Student extends Person {
     public void setGroup(String group) {
         if(verifyidOfGroup(group))
         this.group = group;
-        else throw new IllegalArgumentException("group incorect");
+        else throw new ValidatingException("group incorect");
     }
 
     public int getYearOfentering() {
@@ -91,7 +92,7 @@ public class Student extends Person {
     public void setYearOfentering(int yearOfentering) {
         if(yearOfentering>=2019 && yearOfentering<2026)
         this.yearOfentering = yearOfentering;
-        else throw new IllegalArgumentException("yearOfentering must be between 2019 and 2026");
+        else throw new ValidatingException("yearOfentering must be between 2019 and 2026");
     }
 
     public String getFormOfStudy() {

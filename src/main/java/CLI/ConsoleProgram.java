@@ -5,6 +5,8 @@ import DigiPackage.*;
 import java.util.List;
 import java.util.Scanner;
 
+import static CLI.InputHelper.getIntInput;
+
 public class ConsoleProgram {
 
     static Scanner sc = new Scanner(System.in);
@@ -168,22 +170,7 @@ public class ConsoleProgram {
     }
 
 
-    public static int getIntInput(String prompt, int min, int max) {
-        while (true) {
-            System.out.print(prompt + ": ");
-            String input = sc.nextLine();
-            try {
-                int value = Integer.parseInt(input);
-                if (value >= min && value <= max) {
-                    return value;
-                } else {
-                    System.out.println("Помилка: Число має бути від " + min + " до " + max);
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Помилка: Це не число. Введіть цифру.");
-            }
-        }
-    }
+
 
     private static void reports() {
         System.out.println("Оберіть звіт: 1)Студенти за групою 2)In Progress3");

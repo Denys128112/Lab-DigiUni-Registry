@@ -1,5 +1,7 @@
 package DigiPackage;
 
+import exceptions.ValidatingException;
+
 import java.util.Objects;
 
 public class Teacher extends Person{
@@ -94,7 +96,7 @@ public class Teacher extends Person{
 
     public void setRate(double rate) {
             if (rate < 0.25 || rate > 1.5) {
-                throw new IllegalArgumentException("Rate must be between 0.25 and 1.5");
+                throw new ValidatingException("Rate must be between 0.25 and 1.5");
             }
             this.rate = rate;
         }
@@ -108,7 +110,7 @@ public class Teacher extends Person{
         if (verifyCorectionOfDate(dateOfentering)) {
             this.dateOfentering = dateOfentering;
         } else {
-            throw new IllegalArgumentException("Date of entering is incorrect (must be DD.MM.YYYY and after 1992)");
+            throw new ValidatingException("Date of entering is incorrect (must be DD.MM.YYYY and after 1992)");
         }
     }
 
@@ -118,7 +120,7 @@ public class Teacher extends Person{
 
     public void setWorkload(int workload) {
         if (workload < 0 || workload > 1000) {
-            throw new IllegalArgumentException("Workload must be between 0 and 1000 hours");
+            throw new ValidatingException("Workload must be between 0 and 1000 hours");
         }
         this.workload = workload;
     }

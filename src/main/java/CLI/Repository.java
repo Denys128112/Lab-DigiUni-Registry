@@ -3,6 +3,7 @@ package CLI;
 import DigiPackage.Person;
 import DigiPackage.Student;
 import DigiPackage.Teacher;
+import exceptions.EntityAlreadyExistsException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,6 +19,9 @@ public class Repository {
     private final Map<String,Person> personmap = new HashMap<>();
 
     public void addStudent(Student student) {
+        if (studentmap.containsKey(student.getId())) {
+            throw new EntityAlreadyExistsException("Student with id " + student.getId() + " already exists");
+        }
         students.add(student);
         persons.add(student);
         studentmap.put(student.getId(), student);
@@ -50,6 +54,9 @@ public class Repository {
     }
 
     public void  addTeacher(Teacher teacher) {
+        if (teachersmap.containsKey(teacher.getId())) {
+            throw new EntityAlreadyExistsException("Student with id " +teacher.getId() + " already exists");
+        }
         teachers.add(teacher);
         persons.add(teacher);
         teachersmap.put(teacher.getId(),teacher);
@@ -64,5 +71,6 @@ public class Repository {
     public List<Person> getPersons() {
         return persons;
     }
+
 
 }

@@ -1,23 +1,31 @@
 package CLI;
 
 import DigiPackage.*;
+import exceptions.EntityAlreadyExistsException;
+import exceptions.ValidatingException;
+
 import java.util.List;
 import java.util.Optional;
-import java.util.Scanner;
 
-import static CLI.ConsoleProgram.getIntInput;
+import static CLI.InputHelper.getDoubleInput;
+import static CLI.InputHelper.getIntInput;
+import static CLI.InputHelper.getStringInput;
 
 public class CRUDoperations {
     UniversityRepository universityRepository = new UniversityRepository();
     Repository repository = new Repository();
     Searching searching = new Searching();
-    Scanner sc = new Scanner(System.in);
 
     public void createStudent() {
         System.out.println("\n--- ДОДАВАННЯ СТУДЕНТА ---");
         Student st = new Student();
         fillStudentData(st);
-        repository.addStudent(st);
+        try {
+            repository.addStudent(st);
+        }
+        catch(EntityAlreadyExistsException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public void fillStudentData(Student st) {
@@ -27,43 +35,35 @@ public class CRUDoperations {
             try {
                 switch (step) {
                     case 0:
-                        System.out.print("Введіть id: ");
-                        st.setId(sc.nextLine());
+                        st.setId(getStringInput("Введіть id: "));
                         step++;
                         break;
                     case 1:
-                        System.out.print("Введіть ПІБ: ");
-                        st.setName(sc.nextLine());
+                        st.setName(getStringInput("Введіть ПІБ: "));
                         step++;
                         break;
                     case 2:
-                        System.out.print("Введіть дату народження (дд.мм.рррр): ");
-                        st.setDateOfBirth(sc.nextLine());
+                        st.setDateOfBirth(getStringInput("Введіть дату народження (дд.мм.рррр): "));
                         step++;
                         break;
                     case 3:
-                        System.out.print("Введіть Email до @: ");
-                        st.setEmail(sc.nextLine()+"@ukma.edu.ua");
+                        st.setEmail(getStringInput("Введіть Email до @: ") + "@ukma.edu.ua");
                         step++;
                         break;
                     case 4:
-                        System.out.print("Введіть телефон без +380: ");
-                        st.setPhone("+380"+sc.nextLine());
+                        st.setPhone("+380" + getStringInput("Введіть телефон без +380: "));
                         step++;
                         break;
                     case 5:
-                        System.out.print("Введіть номер заліковки: ");
-                        st.setIdOfRecordBook(sc.nextLine());
+                        st.setIdOfRecordBook(getStringInput("Введіть номер заліковки: "));
                         step++;
                         break;
                     case 6:
-                        System.out.print("Введіть курс (1-6): ");
-                        st.setCourse(getIntInput("Введіть курс (1-6): ",1,6));
+                        st.setCourse(getIntInput("Введіть курс (1-6): ", 1, 6));
                         step++;
                         break;
                     case 7:
-                        System.out.print("Введіть групу: ");
-                        st.setGroup(sc.nextLine());
+                        st.setGroup(getStringInput("Введіть групу: "));
                         step++;
                         break;
                     case 8:
@@ -75,7 +75,7 @@ public class CRUDoperations {
                         step++;
                         break;
                 }
-            } catch (IllegalArgumentException e) {
+            } catch (ValidatingException e) {
                 System.out.println("Помилка валідації: " + e.getMessage());
                 System.out.println("Спробуйте ще раз.");
             }
@@ -87,7 +87,11 @@ public class CRUDoperations {
         System.out.println("\n--- ДОДАВАННЯ ВИКЛАДАЧА ---");
         Teacher t = new Teacher();
         fillTeacherData(t);
-        repository.addTeacher(t);
+        try {
+            repository.addTeacher(t);
+        } catch(EntityAlreadyExistsException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public void fillTeacherData(Teacher t) {
@@ -97,28 +101,23 @@ public class CRUDoperations {
             try {
                 switch (step) {
                     case 1:
-                        System.out.print("Введіть ID: ");
-                        t.setId(sc.nextLine());
+                        t.setId(getStringInput("Введіть ID: "));
                         step++;
                         break;
                     case 2:
-                        System.out.print("Введіть ПІБ: ");
-                        t.setName(sc.nextLine());
+                        t.setName(getStringInput("Введіть ПІБ: "));
                         step++;
                         break;
                     case 3:
-                        System.out.print("Введіть дату народження: ");
-                        t.setDateOfBirth(sc.nextLine());
+                        t.setDateOfBirth(getStringInput("Введіть дату народження: "));
                         step++;
                         break;
                     case 4:
-                        System.out.print("Введіть Email до @: ");
-                        t.setEmail(sc.nextLine()+"@ukma.edu.ua");
+                        t.setEmail(getStringInput("Введіть Email до @: ") + "@ukma.edu.ua");
                         step++;
                         break;
                     case 5:
-                        System.out.print("Введіть телефон без +380: ");
-                        t.setPhone("+380"+sc.nextLine());
+                        t.setPhone("+380" + getStringInput("Введіть телефон без +380: "));
                         step++;
                         break;
                     case 6:
@@ -134,22 +133,19 @@ public class CRUDoperations {
                         step++;
                         break;
                     case 9:
-                        System.out.print("Дата прийняття: ");
-                        t.setDateOfentering(sc.nextLine());
+                        t.setDateOfentering(getStringInput("Дата прийняття: "));
                         step++;
                         break;
                     case 10:
-                        System.out.print("Ставка (0.25-1.5): ");
-                        t.setRate(Double.parseDouble(sc.nextLine()));
+                        t.setRate(getDoubleInput("Ставка (0.25-1.5): ", 0.25, 1.5));
                         step++;
                         break;
                     case 11:
-                        System.out.print("Навантаження: ");
-                        t.setWorkload(Integer.parseInt(sc.nextLine()));
+                        t.setWorkload(Integer.parseInt(getStringInput("Навантаження: ")));
                         step++;
                         break;
                 }
-            } catch (IllegalArgumentException e) {
+            } catch (ValidatingException e) {
                 System.out.println("Помилка: " + e.getMessage());
             }
         }
@@ -163,7 +159,7 @@ public class CRUDoperations {
         try {
             universityRepository.addFaculty(f);
             System.out.println(f.getName() + " успішно створений!");
-        } catch (Exception e) {
+        } catch (EntityAlreadyExistsException e) {
             System.out.println("Помилка: " + e.getMessage());
         }
     }
@@ -175,23 +171,19 @@ public class CRUDoperations {
             try {
                 switch (step) {
                     case 1:
-                        System.out.print("Введіть код факультету: ");
-                        f.setCode(sc.nextLine());
+                        f.setCode(getStringInput("Введіть код факультету: "));
                         step++;
                         break;
                     case 2:
-                        System.out.print("Введіть повну назву: ");
-                        f.setName(sc.nextLine());
+                        f.setName(getStringInput("Введіть повну назву: "));
                         step++;
                         break;
                     case 3:
-                        System.out.print("Введіть абревіатуру: ");
-                        f.setShortName(sc.nextLine());
+                        f.setShortName(getStringInput("Введіть абревіатуру: "));
                         step++;
                         break;
                     case 4:
-                        System.out.print("Введіть контакти: ");
-                        f.setContacts(sc.nextLine());
+                        f.setContacts(getStringInput("Введіть контакти: "));
                         step++;
                         break;
                     case 5:
@@ -205,7 +197,7 @@ public class CRUDoperations {
                         step++;
                         break;
                 }
-            } catch (IllegalArgumentException e) {
+            } catch (ValidatingException e) {
                 System.out.println("Помилка: " + e.getMessage());
             }
         }
@@ -223,7 +215,7 @@ public class CRUDoperations {
         try {
             universityRepository.addDepartment(d);
             System.out.println("Кафедра " + d.getName() + " успішно створена!");
-        } catch (Exception e) {
+        } catch (EntityAlreadyExistsException e) {
             System.out.println("Помилка при збереженні: " + e.getMessage());
         }
     }
@@ -235,13 +227,11 @@ public class CRUDoperations {
             try {
                 switch (step) {
                     case 1:
-                        System.out.print("Введіть код кафедри: ");
-                        d.setCode(sc.nextLine());
+                        d.setCode(getStringInput("Введіть код кафедри: "));
                         step++;
                         break;
                     case 2:
-                        System.out.print("Введіть назву: ");
-                        d.setName(sc.nextLine());
+                        d.setName(getStringInput("Введіть назву: "));
                         step++;
                         break;
                     case 3:
@@ -260,12 +250,11 @@ public class CRUDoperations {
                         step++;
                         break;
                     case 5:
-                        System.out.print("Введіть локацію: ");
-                        d.setLocation(sc.nextLine());
+                        d.setLocation(getStringInput("Введіть локацію: "));
                         step++;
                         break;
                 }
-            } catch (Exception e) {
+            } catch (ValidatingException e) {
                 System.out.println("Помилка: " + e.getMessage());
             }
         }
@@ -335,17 +324,16 @@ public class CRUDoperations {
             try {
                 switch (step) {
                     case 3:
-                        st.setCourse(getIntInput("Новий курс", 1, 6));
+                        st.setCourse(getIntInput("Новий курс (1-6)", 1, 6));
                         break;
                     case 4:
-                        System.out.print("Нова група: ");
-                        st.setGroup(sc.nextLine());
+                        st.setGroup(getStringInput("Нова група 'ІПЗ-1' "));
                         break;
                     case 5:
                         st.setStudentStatus(chooseEnum("Статус", Status.values()));
                         break;
                     case 6:
-                        st.setFormOfStudy(chooseEnum("Форма", FormOfStudy.values()));
+                        st.setFormOfStudy(chooseEnum("Форма Навчання", FormOfStudy.values()));
                         break;
                     case 0:
                         updating = false;
@@ -354,7 +342,7 @@ public class CRUDoperations {
                         personUpdate(st, step);
                         break;
                 }
-            } catch (IllegalArgumentException e) {
+            } catch (ValidatingException e) {
                 System.out.println("Помилка: " + e.getMessage());
             }
         }
@@ -380,12 +368,10 @@ public class CRUDoperations {
                         t.setAcademicTitle(chooseEnum("Звання", AcademicTitle.values()));
                         break;
                     case 6:
-                        System.out.print("Ставка: ");
-                        t.setRate(Double.parseDouble(sc.nextLine()));
+                        t.setRate(getDoubleInput("Ставка (0.25-1.5)", 0.25, 1.5));
                         break;
                     case 7:
-                        System.out.print("Навантаження: ");
-                        t.setWorkload(Integer.parseInt(sc.nextLine()));
+                        t.setWorkload(getIntInput("Навантаження (0-1000)",0,1000));
                         break;
                     case 0:
                         updating = false;
@@ -394,7 +380,7 @@ public class CRUDoperations {
                         personUpdate(t, step);
                         break;
                 }
-            } catch (Exception e) {
+            } catch (ValidatingException e) {
                 System.out.println("Помилка: " + e.getMessage());
             }
         }
@@ -406,21 +392,30 @@ public class CRUDoperations {
         boolean updating = true;
         while (updating) {
             System.out.println("\n--- РЕДАГУВАННЯ ФАКУЛЬТЕТУ ---");
-            System.out.println("1) Назву 2) Код 3) Абревіатуру 4) Контакти 5) Декана 0) Готово");
+            System.out.println("1) Назву 2) Абревіатуру 3) Контакти 4) Декана 0) Готово");
             int choice = getIntInput("Вибір", 0, 5);
             try {
                 switch (choice) {
-                    case 1: System.out.print("Назва: "); f.setName(sc.nextLine()); break;
-                    case 2: System.out.print("Код: "); f.setCode(sc.nextLine()); break;
-                    case 3: System.out.print("Абревіатура: "); f.setShortName(sc.nextLine()); break;
-                    case 4: System.out.print("Контакти: "); f.setContacts(sc.nextLine()); break;
-                    case 5:
+                    case 1:
+                        f.setName(getStringInput("Назва: "));
+                        break;
+                    case 2:
+                        f.setShortName(getStringInput("Абревіатура: "));
+                        break;
+                    case 3:
+                        f.setContacts(getStringInput("Контакти: "));
+                        break;
+                    case 4:
                         Teacher newDean = findTeacher();
                         if (newDean != null) f.setDean(newDean);
                         break;
-                    case 0: updating = false; break;
+                    case 0:
+                        updating = false;
+                        break;
                 }
-            } catch (Exception e) { System.out.println("Помилка: " + e.getMessage()); }
+            } catch (ValidatingException e) {
+                System.out.println("Помилка: " + e.getMessage());
+            }
         }
     }
 
@@ -434,87 +429,89 @@ public class CRUDoperations {
             if (choice == 0) break;
             try {
                 switch (choice) {
-                    case 1: System.out.print("Назва: "); d.setName(sc.nextLine()); break;
-                    case 2: d.setFaculty(findFaculty()); break;
-                    case 3: d.setHead(findTeacher()); break;
-                    case 4: System.out.print("Локація: "); d.setLocation(sc.nextLine()); break;
+                    case 1:
+                        d.setName(getStringInput("Назва: "));
+                        break;
+                    case 2:
+                        d.setFaculty(findFaculty());
+                        break;
+                    case 3:
+                        d.setHead(findTeacher());
+                        break;
+                    case 4:
+                        d.setLocation(getStringInput("Локація: "));
+                        break;
                 }
-            } catch (Exception e) { System.out.println("Помилка: " + e.getMessage()); }
+            } catch (ValidatingException e) {
+                System.out.println("Помилка: " + e.getMessage());
+            }
         }
     }
 
     private void personUpdate(Person p, int step) {
         if (step == 2) {
-            System.out.print("Новий телефон: ");
-            p.setPhone(sc.nextLine());
+            p.setPhone(getStringInput("Новий телефон без +380: "));
         } else if (step == 1) {
-            System.out.print("Новий ПІБ: ");
-            p.setName(sc.nextLine());
+            p.setName(getStringInput("Новий ПІБ: "));
         }
     }
 
     public void deleteStudent() {
         Student s = findStudent();
-        if (s != null && getIntInput("Видалити? 1-Так, 0-Ні", 0, 1) == 1) {
+        if (s != null && getIntInput("Видалити? 1-Так, 0-Ні", 0, 1) == 1 && repository.getStudentmap().get(s.getId()) != null) {
             repository.removeStudent(s);
             System.out.println("Видалення Успішне!");
-        }
-        else
+        } else
             System.out.println("Видалення не було");
 
     }
 
     public void deleteTeacher() {
         Teacher t = findTeacher();
-        if (t != null && getIntInput("Видалити? 1-Так, 0-Ні", 0, 1) == 1) {
+        if (t != null && getIntInput("Видалити? 1-Так, 0-Ні", 0, 1) == 1 && repository.getTeachersmap().get(t.getId())!=null) {
             repository.removeTeacher(t);
             System.out.println("Видалення Успішне!");
-        }
-        else
+        } else
             System.out.println("Видалення не було");
 
     }
 
     public void deleteFaculty() {
         Faculty f = findFaculty();
-        if (f != null && getIntInput("Видалити? 1-Так, 0-Ні", 0, 1) == 1) {
+        if (f != null && getIntInput("Видалити? 1-Так, 0-Ні", 0, 1) == 1 && universityRepository.getFacultiesMap().get(f.getCode())!=null) {
             universityRepository.removeFaculty(f);
             System.out.println("Видалення Успішне!");
-        }
-        else
+        } else
             System.out.println("Видалення не було");
     }
 
     public void deleteDepartment() {
         Department d = findDepartment();
-        if (d != null && getIntInput("Видалити? 1-Так, 0-Ні", 0, 1) == 1) {
+        if (d != null && getIntInput("Видалити? 1-Так, 0-Ні", 0, 1) == 1 && universityRepository.getDepartmentMap().get(d.getCode())!=null) {
             universityRepository.removeDepartment(d);
             System.out.println("Видалення Успішне!");
-        }
-        else
+        } else
             System.out.println("Видалення не було");
 
     }
-
-
 
     public Student findStudent() {
         System.out.println("\n--- ПОШУК СТУДЕНТА ---");
         System.out.println("1) За ID 2) За ПІБ 3) Зі списку 0) Назад");
         int choice = getIntInput("Вибір", 0, 3);
         while (true) {
-            Optional<? extends Person> maybestudent=Optional.empty();
+            Optional<? extends Person> maybestudent = Optional.empty();
             switch (choice) {
                 case 1:
-                    maybestudent = searching.findById(sc.nextLine(), repository.getStudentmap());
+                    maybestudent = searching.findById(getStringInput("Введіть ID: "), repository.getStudentmap());
                     break;
                 case 2:
-                    maybestudent = searching.findByName(sc.nextLine(), repository.getStudents());
+                    maybestudent = searching.findByName(getStringInput("Введіть ПІБ: "), repository.getStudents());
                     break;
                 case 3:
                     return chooseEntity(repository.getStudents());
-                    default:
-                        break;
+                default:
+                    break;
             }
             if (maybestudent.isPresent()) {
                 Person p = maybestudent.get();
@@ -522,22 +519,23 @@ public class CRUDoperations {
                     return student;
                 }
             }
-                System.out.println("Студента не знайдено, спробуйте знову");
+            System.out.println("Студента не знайдено, спробуйте знову");
 
         }
     }
-    public Teacher findTeacher(){
-        System.out.println("\n--- ПОШУК СТУДЕНТА ---");
+
+    public Teacher findTeacher() {
+        System.out.println("\n--- ПОШУК ВИКЛАДАЧА ---");
         System.out.println("1) За ID 2) За ПІБ 3) Зі списку 0) Назад");
         int choice = getIntInput("Вибір", 0, 3);
         while (true) {
-            Optional<? extends Person> maybeteacher=Optional.empty();
+            Optional<? extends Person> maybeteacher = Optional.empty();
             switch (choice) {
                 case 1:
-                    maybeteacher = searching.findById(sc.nextLine(), repository.getTeachersmap());
+                    maybeteacher = searching.findById(getStringInput("Введіть ID: "), repository.getTeachersmap());
                     break;
                 case 2:
-                    maybeteacher = searching.findByName(sc.nextLine(), repository.getTeachers());
+                    maybeteacher = searching.findByName(getStringInput("Введіть ПІБ: "), repository.getTeachers());
                     break;
                 case 3:
                     return chooseEntity(repository.getTeachers());
@@ -556,16 +554,14 @@ public class CRUDoperations {
     }
 
     private <T> T chooseEntity(List<T> entity) {
-        int i=0;
+        int i = 0;
         for (Object o : entity) {
             i++;
             System.out.println(i + ") " + o);
         }
-        int choose=getIntInput("Оберіть бажанний варіант",1,i);
-        return entity.get(choose-1);
+        int choose = getIntInput("Оберіть бажанний варіант", 1, i);
+        return entity.get(choose - 1);
     }
-
-
 
     public Faculty findFaculty() {
         System.out.println("\n--- ПОШУК ФАКУЛЬТЕТУ ---");
@@ -574,12 +570,11 @@ public class CRUDoperations {
         switch (choice) {
             case 1:
                 while (true) {
-                    System.out.print("Код: ");
-                    Optional<Faculty> maybeFaculties=searching.getFacultyByCode(sc.nextLine(), universityRepository.getFacultiesMap());
+                    Optional<Faculty> maybeFaculties = searching.getFacultyByCode(getStringInput("Код: "), universityRepository.getFacultiesMap());
                     if (maybeFaculties.isPresent())
                         return maybeFaculties.get();
                     else
-                        System.out.println("Кафедру не знайдено, спробуйте знову");
+                        System.out.println("Факультет не знайдено, спробуйте знову");
                 }
             case 2:
                 return chooseEntity(universityRepository.getFaculties());
@@ -594,10 +589,9 @@ public class CRUDoperations {
         switch (method) {
             case 1:
                 while (true) {
-                    System.out.print("Код: ");
-                    Optional<Department> maybeDepartment=searching.getDepartmentByCode(sc.nextLine(), universityRepository.getDepartmentMap());
+                    Optional<Department> maybeDepartment = searching.getDepartmentByCode(getStringInput("Код: "), universityRepository.getDepartmentMap());
                     if (maybeDepartment.isPresent())
-                            return maybeDepartment.get();
+                        return maybeDepartment.get();
                     else
                         System.out.println("Кафедру не знайдено, спробуйте знову");
                 }

@@ -1,5 +1,7 @@
 package DigiPackage;
 
+import exceptions.ValidatingException;
+
 import java.util.Objects;
 
 public class Faculty {
@@ -25,7 +27,7 @@ public class Faculty {
 
     public void setCode(String code) {
         if (code != null && !code.trim().isEmpty()) this.code = code;
-        else throw new IllegalArgumentException("Faculty code cannot be empty");
+        else throw new ValidatingException("Faculty code cannot be empty");
     }
 
     public String getName() {
@@ -34,7 +36,7 @@ public class Faculty {
 
     public void setName(String name) {
         if (name != null && !name.trim().isEmpty()) this.name = name;
-        else throw new IllegalArgumentException("Faculty name cannot be empty");
+        else throw new ValidatingException("Faculty name cannot be empty");
     }
 
     public String getShortName() {
@@ -43,7 +45,7 @@ public class Faculty {
 
     public void setShortName(String shortName) {
         if (shortName != null && !shortName.trim().isEmpty()) this.shortName = shortName;
-        else throw new IllegalArgumentException("Faculty short name cannot be empty");
+        else throw new ValidatingException("Faculty short name cannot be empty");
     }
 
     public Teacher getDean() {
@@ -52,7 +54,7 @@ public class Faculty {
 
     public void setDean(Teacher dean) {
         if (dean != null) this.dean = dean;
-        else throw new IllegalArgumentException("Dean cannot be null");
+        else throw new ValidatingException("Dean cannot be null");
     }
 
     public String getContacts() {
@@ -61,7 +63,7 @@ public class Faculty {
 
     public void setContacts(String contacts) {
         if (contacts != null && !contacts.trim().isEmpty()) this.contacts = contacts;
-        else throw new IllegalArgumentException("Contacts cannot be empty");
+        else throw new ValidatingException("Contacts cannot be empty");
     }
 
     @Override

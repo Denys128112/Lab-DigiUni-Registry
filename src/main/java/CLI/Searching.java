@@ -3,6 +3,7 @@ package CLI;
 
 
 import DigiPackage.*;
+import exceptions.EmptySearchResultException;
 
 
 import java.util.ArrayList;
@@ -54,7 +55,7 @@ public class Searching {
             }
         }
         if(result.isEmpty())
-            throw new IllegalArgumentException("No student with group "+group);
+            throw new EmptySearchResultException("No student with group "+group);
         return result;
     }
 
@@ -68,7 +69,7 @@ public class Searching {
             }
         }
         if(result.isEmpty())
-            throw new IllegalArgumentException("No student with course "+course);
+            throw new EmptySearchResultException("No student with course "+course);
         return result;
     }
 
