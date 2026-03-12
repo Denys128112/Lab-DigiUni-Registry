@@ -11,9 +11,10 @@ import static CLI.InputHelper.getDoubleInput;
 import static CLI.InputHelper.getIntInput;
 import static CLI.InputHelper.getStringInput;
 
+import static CLI.ConsoleProgram.repository;
+
 public class CRUDoperations {
     UniversityRepository universityRepository = new UniversityRepository();
-    Repository repository = new Repository();
     Searching searching = new Searching();
 
     public void createStudent() {

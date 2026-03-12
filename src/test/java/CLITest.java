@@ -96,4 +96,39 @@ public class CLITest {
        
        
     }
+    @Test
+    public void javaTimeApiTest() {
+        Student student = new Student();
+
+        assertThrows(ValidatingException.class, () -> student.setDateOfBirth("01.01.2099"));
+        assertThrows(ValidatingException.class, () -> student.setDateOfBirth("31.12.1945"));
+        assertDoesNotThrow(() -> student.setDateOfBirth("01.01.2005"));
+        assertEquals("01.01.2005", student.getDateOfBirth());
+
+        Teacher teacher = new Teacher();
+
+        assertThrows(ValidatingException.class, () -> teacher.setDateOfentering("31.12.1991"));
+        assertDoesNotThrow(() -> teacher.setDateOfentering("15.08.2020"));
+        assertEquals("15.08.2020", teacher.getDateOfentering());
+    }
+
+    @Test
+    public void repositoryCollectionsTest() {
+        Repository repo = new Repository();
+
+        assertTrue(repo.getStudents().isEmpty());
+        assertTrue(repo.getStudentmap().isEmpty());
+
+        Student s1 = new Student("ID1", "Іван Іванов Іванович", "01.01.2000", "ivan@ukma.edu.ua", "+380501111111", "К 111/11 бп", 1, "ІПЗ-1", 2023, FormOfStudy.Budget, Status.Studying);
+        Student s2 = new Student("ID2", "Петро Петров Петрович", "02.02.2001", "petro@ukma.edu.ua", "+380502222222", "К 222/22 бп", 2, "ІПЗ-2", 2022, FormOfStudy.Contract, Status.Studying);
+
+        repo.addStudent(s1);
+        repo.addStudent(s2);
+
+        assertEquals(2, repo.getStudents().size());
+        assertEquals(2, repo.getStudentmap().size());
+
+        assertEquals(s1, repo.getStudentmap().get("ID1"));
+        assertEquals(s2, repo.getStudentmap().get("ID2"));
+    }
 }

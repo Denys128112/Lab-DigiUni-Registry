@@ -4,10 +4,16 @@ import exceptions.ValidatingException;
 
 import java.util.Objects;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import exceptions.ValidatingException;
+
 public class Person {
         private String id;
         private String name;
-        private String dateOfBirth;
+        private LocalDate dateOfBirth;
+        private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         private String email;
         private String phone;
         public Person(){
@@ -36,29 +42,10 @@ public class Person {
             return spaceCount == 2;
         }
 
-        private boolean verifyCorectionOfDate(String dateOfBirth) {
-            if(dateOfBirth.length()!=10)
-                return false;
-            for(int i = 0; i < dateOfBirth.length(); i++) {
-                if(!Character.isDigit(dateOfBirth.charAt(i))&&!(i==2||i==5&&dateOfBirth.charAt(i)=='.'))
-                    return false;
-            }
-            return corectData(dateOfBirth);
-        }
-
     public void setId(String id) {
         this.id = id;
     }
 
-    private boolean corectData(String date) {
-            String days=date.substring(0,2);
-            String months=date.substring(3,5);
-            String years=date.substring(6,10);
-           int day=Integer.parseInt(days);
-           int month=Integer.parseInt(months);
-           int year=Integer.parseInt(years);
-            return day >= 1 && day <= 31 && month >= 1 && month <= 12 && year >= 1946;
-        }
 
         private boolean verifyCorectionOfEmail(String email) {
             if(email==null || email.isEmpty())
@@ -85,16 +72,21 @@ public class Person {
             return true;
         }
 
-        public String getDateOfBirth() {
-            return dateOfBirth;
-        }
+    public String getDateOfBirth() {
+        return dateOfBirth != null ? dateOfBirth.format(DATE_FORMATTER) : null;
+    }
 
-        public void setDateOfBirth(String dateOfBirth) {
-            if(verifyCorectionOfDate(dateOfBirth))
-            this.dateOfBirth = dateOfBirth;
-            else
-                throw  new ValidatingException("Invalid date of birth");
+    public void setDateOfBirth(String dateOfBirth) {
+        try {
+            LocalDate parsedDate = LocalDate.parse(dateOfBirth, DATE_FORMATTER);
+            if (parsedDate.getYear() < 1946 || parsedDate.isAfter(LocalDate.now())) {
+                throw new ValidatingException("Invalid date of birth");
+            }
+            this.dateOfBirth = parsedDate;
+        } catch (DateTimeParseException e) {
+            throw new ValidatingException("Invalid date format. Use dd.MM.yyyy");
         }
+    }
 
         public String getId() {
             return id;
