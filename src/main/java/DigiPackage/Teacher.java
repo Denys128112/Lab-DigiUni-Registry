@@ -4,11 +4,16 @@ import exceptions.ValidatingException;
 
 import java.util.Objects;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import exceptions.ValidatingException;
+
 public class Teacher extends Person{
     private Position position;
     private ScientificDegree scientificDegree;
     private AcademicTitle academicTitle;
-    private String dateOfentering;
+    private LocalDate dateOfentering;
     private double rate;
     private int workload; //години
 
@@ -103,14 +108,18 @@ public class Teacher extends Person{
 
 
     public String getDateOfentering() {
-        return dateOfentering;
+        return dateOfentering != null ? dateOfentering.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) : null;
     }
 
     public void setDateOfentering(String dateOfentering) {
-        if (verifyCorectionOfDate(dateOfentering)) {
-            this.dateOfentering = dateOfentering;
-        } else {
-            throw new ValidatingException("Date of entering is incorrect (must be DD.MM.YYYY and after 1992)");
+        try {
+            LocalDate parsedDate = LocalDate.parse(dateOfentering, DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+            if (parsedDate.getYear() < 1992 || parsedDate.isAfter(LocalDate.now())) {
+                throw new ValidatingException("Date of entering is incorrect (must be after 1992)");
+            }
+            this.dateOfentering = parsedDate;
+        } catch (DateTimeParseException e) {
+            throw new ValidatingException("Invalid date format for entering. Use dd.MM.yyyy");
         }
     }
 
@@ -123,29 +132,6 @@ public class Teacher extends Person{
             throw new ValidatingException("Workload must be between 0 and 1000 hours");
         }
         this.workload = workload;
-    }
-
-    private boolean verifyCorectionOfDate(String dateOfBirth) {
-        if(dateOfBirth==null || dateOfBirth.length()!=10)
-            return false;
-        for(int i = 0; i < dateOfBirth.length(); i++) {
-            if(!Character.isDigit(dateOfBirth.charAt(i))&&!(i==2||i==5&&dateOfBirth.charAt(i)=='.'))
-                return false;
-        }
-        if (!corectData(dateOfBirth))
-            return false;
-
-        return true;
-    }
-
-     private boolean corectData(String date) {
-        String days=date.substring(0,2);
-        String months=date.substring(3,5);
-        String years=date.substring(6,10);
-        int day=Integer.parseInt(days);
-        int month=Integer.parseInt(months);
-        int year=Integer.parseInt(years);
-        return day >= 1 && day <= 31 && month >= 1 && month <= 12 && year >= 1992 && (month != 2 || day <= 28);
     }
 
     @Override

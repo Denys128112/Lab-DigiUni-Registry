@@ -15,6 +15,8 @@ public class ConsoleProgram {
     static Reportoperations reportoperations = new Reportoperations();
     static Repository repository = new Repository();
 
+    static boolean isManager = false;
+
     public static void main(String[] args) {
         run();
     }
@@ -22,8 +24,39 @@ public class ConsoleProgram {
 
     private static void run() {
         System.out.println("Вітаємо в програмі DigiUni Registry(консольна інформаційна система університету)");
+        authenticate();
         while (true) {
             mainMenu();
+        }
+    }
+
+    private static void authenticate() {
+        System.out.println("\n--- АВТОРИЗАЦІЯ ---");
+        System.out.println("1) Увійти як Менеджер (повний доступ)");
+        System.out.println("2) Увійти як Гість/Студент (тільки перегляд та пошук)");
+        int roleChoice = getIntInput("Ваш вибір", 1, 2);
+
+        if (roleChoice == 1) {
+            int attempts = 0;
+            while (attempts < 3) {
+                System.out.print("Введіть пароль: ");
+                String password = sc.nextLine();
+
+                if (password.equals("admin")) {            // JUST SIMPLE PASSWORD; CAN BE CHANGED
+                    isManager = true;
+                    System.out.println("Успішно! Ви увійшли як Менеджер.");
+                    return;
+                } else {
+                    attempts++;
+                    System.out.println("Невірний пароль. Залишилось спроб: " + (3 - attempts));
+                }
+            }
+            System.out.println("Вичерпано ліміт спроб. Вас автоматично авторизовано як Гостя.");
+            isManager = false;
+
+        } else {
+            isManager = false;
+            System.out.println("Ви увійшли як Гість.");
         }
     }
 
@@ -57,12 +90,22 @@ public class ConsoleProgram {
     }
 
     private static int chooseOperation() {
-        System.out.println("1. Створити");
-        System.out.println("2. Редагувати");
-        System.out.println("3. Видалити");
+        if (isManager) {
+            System.out.println("1. Створити");
+            System.out.println("2. Редагувати");
+            System.out.println("3. Видалити");
+        }
         System.out.println("4. Читати");
         System.out.println("0. Назад");
-        return getIntInput("Ваш вибір", 0, 4);
+
+        while (true) {
+            int choice = getIntInput("Ваш вибір", 0, 4);
+            if (!isManager && (choice == 1 || choice == 2 || choice == 3)) {
+                System.out.println("Помилка: У вас немає доступу до цієї операції.(Тільки для менеджера)");
+            } else {
+                return choice;
+            }
+        }
     }
 
     private static void workWithTeacher() {
@@ -173,9 +216,11 @@ public class ConsoleProgram {
 
 
     private static void reports() {
-        System.out.println("Оберіть звіт: 1)Студенти за групою 2)In Progress3");
-        System.out.println("Поки буде викликатися перший звіт");
-        reportoperations.studentByCourse();
+        System.out.println("Оберіть звіт: 1)Студенти за курсом 2)Назад");
+        int choice = getIntInput("Ваш вибір", 1, 2);
+        if (choice == 1) {
+            reportoperations.studentByCourse(repository.getStudents());
+        }
     }
 
 
