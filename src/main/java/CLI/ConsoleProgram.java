@@ -13,14 +13,39 @@ public class ConsoleProgram {
     static CRUDoperations crudoperations = new CRUDoperations();
     static SearchOperations searchoperations = new SearchOperations();
     static Reportoperations reportoperations = new Reportoperations();
-    static Repository repository = new Repository();
 
+    static Repository repository = new Repository();
+    static UniversityRepository universityRepository = new UniversityRepository();
     static boolean isManager = false;
 
     public static void main(String[] args) {
+        initTestData();
         run();
     }
 
+    private static void initTestData() {
+        try {
+            Student student1 = new Student("001", "Сковорода Григорій Савич", "07.12.2005", "skovoroda@gmail.com", "+380000000001", "A 000/01 бп", 3, "ІПЗ-3", 2023, FormOfStudy.Budget, Status.Studying);
+            Student student2 = new Student("002", "Колісник Денис Максимович", "02.10.2007", "kolisnyk@gmail.com", "+380633155000", "A 120/20 бп", 1, "ІПЗ-1", 2025, FormOfStudy.Budget, Status.Studying);
+            repository.addStudent(student1);
+            repository.addStudent(student2);
+
+            Teacher teacher1 = new Teacher("D01", "Глибовець Андрій Миколайович", "25.10.1985", "a.glybovets@ukma.edu.ua", "+380444636985", Position.Dean, ScientificDegree.Doctor_of_science, AcademicTitle.None, "30.05.2019", 1.0, 1000);
+            Teacher teacher2 = new Teacher("D02", "Малашонок Геннадій Іванович", "10.08.1985", "malashanok@ukma.edu.ua", "+380444257723", Position.Head_of_department, ScientificDegree.Doctor_of_science, AcademicTitle.None, "10.04.2015", 1.0, 600);
+            Teacher teacher3 = new Teacher("D03", "Пєчкурова Олена Миколаївна", "01.01.1999", "pyechkurova@ukma.edu.ua", "+380441234567", Position.Senior_lecturer, ScientificDegree.None, AcademicTitle.Docent, "02.02.2002", 1.0, 500);
+            repository.addTeacher(teacher1);
+            repository.addTeacher(teacher2);
+            repository.addTeacher(teacher3);
+
+            Faculty faculty1 = new Faculty("F00", "Факультет Інформатики", "ФІ", teacher1, "https://www.fin.ukma.edu.ua/contacts");
+            universityRepository.addFaculty(faculty1);
+
+            Department department1 = new Department("D00", "Кафедра Мережних Технологій", faculty1, teacher2, "Кабінет: 1-204");
+            universityRepository.addDepartment(department1);
+        } catch (Exception e) {
+            System.out.println("Помилка ініціалізації тестових даних: " + e.getMessage());
+        }
+    }
 
     private static void run() {
         System.out.println("Вітаємо в програмі DigiUni Registry(консольна інформаційна система університету)");
