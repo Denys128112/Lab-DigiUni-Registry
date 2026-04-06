@@ -1,8 +1,9 @@
 package DigiPackage;
 
+import exceptions.EntityAlreadyExistsException;
 import exceptions.ValidatingException;
 
-import java.util.Objects;
+import java.util.*;
 
 public class Faculty {
     private String code;
@@ -10,6 +11,8 @@ public class Faculty {
     private String shortName;
     private Teacher dean;
     private String contacts;
+    private final Set<Department> departmentsOfFaculty=new HashSet<>();
+
     public Faculty(){
 
     }
@@ -82,5 +85,32 @@ public class Faculty {
     @Override
     public int hashCode() {
         return Objects.hashCode(code);
+    }
+
+    public List<Student> getStudentsOfFaculty() {
+        List<Student> studentsOfFaculty=new ArrayList<>();
+        for(Department d: departmentsOfFaculty){
+            studentsOfFaculty.addAll(d.getStudentsOfDepartment());
+        }
+        return studentsOfFaculty;
+    }
+    public List<Teacher> getTeachersOfFaculty() {
+        List<Teacher> teachersOfFaculty=new ArrayList<>();
+        for(Department d: departmentsOfFaculty){
+            teachersOfFaculty.addAll(d.getTeachersOfDepartment());
+        }
+        return teachersOfFaculty;
+    }
+    public List<Person> getPersonsOfFaculty() {
+        List<Person> personsOfFaculty=new ArrayList<>();
+        for(Department d: departmentsOfFaculty){
+            personsOfFaculty.addAll(d.getTeachersOfDepartment());
+        }
+        return personsOfFaculty;
+    }
+    public void addDepartmentTofaculty(Department d) {
+        if(departmentsOfFaculty.contains(d))
+            throw new EntityAlreadyExistsException("Кафедра вже існує");
+       departmentsOfFaculty.add(d);
     }
 }

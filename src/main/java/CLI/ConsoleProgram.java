@@ -2,6 +2,7 @@ package CLI;
 
 import DigiPackage.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -241,11 +242,46 @@ public class ConsoleProgram {
 
 
     private static void reports() {
-        System.out.println("Оберіть звіт: 1)Студенти за курсом 2)Назад");
-        int choice = getIntInput("Ваш вибір", 1, 2);
-        if (choice == 1) {
-            reportoperations.studentByCourse(repository.getStudents());
+        System.out.println("Оберіть звіт: 1)Студенти за курсом 2)Студенти за Алфавітом 3)Викладачі за Алфавітом 4)Люди за Алфавітом 5)Студенти факультету за алфавітом 6)Викладачі факультету за Алфавітом 7)Викладачі кафедри за алфавітом 8)Студенти кафедри за алфавітом 9)Студенти кафедри за курсами 10)Фільтровані студенти певного курсу 11)Фільтровані студенти кафедри за курсом");
+        int choice = getIntInput("Ваш вибір", 1, 11);
+        List result= new ArrayList<>();
+        switch (choice){
+            case 1:
+                reportoperations.studentByCourse(repository.getStudents());
+                break;
+            case 2:
+                result=reportoperations.personsByAlpabhet(repository.getStudents());
+                break;
+            case 3:
+                result=reportoperations.personsByAlpabhet(repository.getTeachers());
+                break;
+            case 4:
+                result=reportoperations.personsByAlpabhet(repository.getPersons());
+                break;
+            case 5:
+                result=reportoperations.personsByAlpabhet(crudoperations.findFaculty().getStudentsOfFaculty());
+                break;
+            case 6:
+                result=reportoperations.personsByAlpabhet(crudoperations.findFaculty().getTeachersOfFaculty());
+                break;
+            case 7:
+                result=reportoperations.personsByAlpabhet(crudoperations.findDepartment().getTeachersOfDepartment());
+                break;
+            case 8:
+                result=reportoperations.personsByAlpabhet(crudoperations.findDepartment().getStudentsOfDepartment());
+                break;
+            case 9:
+                reportoperations.studentByCourse(crudoperations.findDepartment().getStudentsOfDepartment());
+                break;
+            case 10:
+                reportoperations.filterStudentsByCourse(repository.getStudents());
+                break;
+            case 11:
+                reportoperations.filterStudentsByCourse(crudoperations.findDepartment().getStudentsOfDepartment());
+                break;
         }
+        System.out.println(result);
+
     }
 
 
