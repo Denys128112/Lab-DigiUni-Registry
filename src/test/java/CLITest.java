@@ -2,6 +2,7 @@ import CLI.Repository;
 import CLI.Searching;
 import CLI.UniversityRepository;
 import DigiPackage.*;
+import exceptions.EmptySearchResultException;
 import exceptions.ValidatingException;
 import org.junit.jupiter.api.Test;
 
@@ -27,8 +28,8 @@ public class CLITest {
         assertEquals(Optional.of(student),searching.findByEmail("d.kolisnyk@ukma.edu.ua",repository.getStudents()));
         assertEquals(students,searching.findByCourse(1,repository));
         assertEquals(students,searching.findByGroup("ІПЗ-1",repository));
-        assertThrows(IllegalArgumentException.class,()->searching.findByCourse(3,repository) );
-        assertThrows(IllegalArgumentException.class,()->searching.findByGroup("ІПЗ-6",repository) );
+        assertThrows(EmptySearchResultException.class,()->searching.findByCourse(3,repository) );
+        assertThrows(EmptySearchResultException.class,()->searching.findByGroup("ІПЗ-6",repository) );
         assertEquals(Optional.of(student), searching.findByPhone("+380991234567", repository.getStudents()));
     }
     @Test
