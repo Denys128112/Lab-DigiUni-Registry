@@ -1,5 +1,6 @@
 package DigiPackage;
 
+import exceptions.EntityAlreadyExistsException;
 import exceptions.ValidatingException;
 
 import java.util.*;
@@ -107,6 +108,9 @@ public class Faculty {
         }
         return personsOfFaculty;
     }
-
-
+    public void addDepartmentTofaculty(Department d) {
+        if(departmentsOfFaculty.contains(d))
+            throw new EntityAlreadyExistsException("Кафедра вже існує");
+       departmentsOfFaculty.add(d);
+    }
 }

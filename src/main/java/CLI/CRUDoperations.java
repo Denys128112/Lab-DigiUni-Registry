@@ -320,7 +320,7 @@ public class CRUDoperations {
         boolean updating = true;
         while (updating) {
             System.out.println("\n--- РЕДАГУВАННЯ: " + st.getName() + " ---");
-            System.out.println("1) ПІБ 2) Телефон 3) Курс 4) Група 5) Статус 6) Форма 0) Готово");
+            System.out.println("1) ПІБ 2) Телефон 3) Курс 4) Група 5) Статус 6) Форма 7)Додати на кафедру) Готово");
             int step = getIntInput("Оберіть поле", 0, 6);
             try {
                 switch (step) {
@@ -336,6 +336,14 @@ public class CRUDoperations {
                     case 6:
                         st.setFormOfStudy(chooseEnum("Форма Навчання", FormOfStudy.values()));
                         break;
+                    case 7:
+                        if (universityRepository.getDepartments().isEmpty())
+                            System.out.println("Неможливо додати, бо не існує кафедр");
+                        else {
+                            Department d = chooseEntity(universityRepository.getDepartments());
+                            d.addStudentToDepartment(st);
+                        }
+
                     case 0:
                         updating = false;
                         break;
@@ -344,6 +352,8 @@ public class CRUDoperations {
                         break;
                 }
             } catch (ValidatingException e) {
+                System.out.println("Помилка: " + e.getMessage());
+            }catch (EntityAlreadyExistsException e) {
                 System.out.println("Помилка: " + e.getMessage());
             }
         }
@@ -355,7 +365,7 @@ public class CRUDoperations {
         boolean updating = true;
         while (updating) {
             System.out.println("\n--- РЕДАГУВАННЯ: " + t.getName() + " ---");
-            System.out.println("1) ПІБ 2) Телефон 3) Посада 4) Ступінь 5) Звання 6) Ставка 7) Навантаження 0) Готово");
+            System.out.println("1) ПІБ 2) Телефон 3) Посада 4) Ступінь 5) Звання 6) Ставка 7) Навантаження 8)Додати до кафедри 0) Готово");
             int step = getIntInput("Оберіть поле", 0, 7);
             try {
                 switch (step) {
@@ -374,6 +384,13 @@ public class CRUDoperations {
                     case 7:
                         t.setWorkload(getIntInput("Навантаження (0-1000)",0,1000));
                         break;
+                    case 8:
+                        if (universityRepository.getDepartments().isEmpty())
+                            System.out.println("Неможливо додати, бо не існує кафедр");
+                        else {
+                            Department d = chooseEntity(universityRepository.getDepartments());
+                            d.addTeacherToDepartment(t);
+                        }
                     case 0:
                         updating = false;
                         break;
@@ -382,6 +399,9 @@ public class CRUDoperations {
                         break;
                 }
             } catch (ValidatingException e) {
+                System.out.println("Помилка: " + e.getMessage());
+            }
+            catch (EntityAlreadyExistsException e) {
                 System.out.println("Помилка: " + e.getMessage());
             }
         }
@@ -425,7 +445,7 @@ public class CRUDoperations {
         if (d == null) return;
         while (true) {
             System.out.println("\n--- РЕДАГУВАННЯ КАФЕДРИ ---");
-            System.out.println("1) Назву 2) Факультет 3) Завідувача 4) Локацію 0) Готово");
+            System.out.println("1) Назву 2) Факультет 3) Завідувача 4) Локацію 5)Додати до Факультету 0) Готово");
             int choice = getIntInput("Вибір", 0, 4);
             if (choice == 0) break;
             try {
@@ -442,8 +462,18 @@ public class CRUDoperations {
                     case 4:
                         d.setLocation(getStringInput("Локація: "));
                         break;
+                    case 5:
+                        if (universityRepository.getFaculties().isEmpty())
+                            System.out.println("Неможливо додати, бо не існує факультетів");
+                        else {
+                                Faculty f = chooseEntity(universityRepository.getFaculties());
+                                f.addDepartmentTofaculty(d);
+
+                        }
                 }
             } catch (ValidatingException e) {
+                System.out.println("Помилка: " + e.getMessage());
+            } catch (EntityAlreadyExistsException e) {
                 System.out.println("Помилка: " + e.getMessage());
             }
         }
@@ -587,19 +617,21 @@ public class CRUDoperations {
     public Department findDepartment() {
         System.out.println("1) За кодом 2) Зі списку 0) Назад");
         int method = getIntInput("Вибір", 0, 2);
-        switch (method) {
-            case 1:
-                while (true) {
-                    Optional<Department> maybeDepartment = searching.getDepartmentByCode(getStringInput("Код: "), universityRepository.getDepartmentMap());
-                    if (maybeDepartment.isPresent())
-                        return maybeDepartment.get();
-                    else
-                        System.out.println("Кафедру не знайдено, спробуйте знову");
-                }
-            case 2:
-                return chooseEntity(universityRepository.getDepartments());
-            default:
-                return null;
+        while (true) {
+            switch (method) {
+                case 1:
+                    while (true) {
+                        Optional<Department> maybeDepartment = searching.getDepartmentByCode(getStringInput("Код: "), universityRepository.getDepartmentMap());
+                        if (maybeDepartment.isPresent())
+                            return maybeDepartment.get();
+                        else
+                            System.out.println("Кафедру не знайдено, спробуйте знову");
+                    }
+                case 2:
+                    return chooseEntity(universityRepository.getDepartments());
+                default:
+                    break;
+            }
         }
     }
 

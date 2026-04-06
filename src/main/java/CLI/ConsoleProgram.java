@@ -243,7 +243,7 @@ public class ConsoleProgram {
 
     private static void reports() {
         System.out.println("Оберіть звіт: 1)Студенти за курсом 2)Студенти за Алфавітом 3)Викладачі за Алфавітом 4)Люди за Алфавітом 5)Студенти факультету за алфавітом 6)Викладачі факультету за Алфавітом 7)Викладачі кафедри за алфавітом 8)Студенти кафедри за алфавітом 9)Студенти кафедри за курсами 10)Фільтровані студенти певного курсу 11)Фільтровані студенти кафедри за курсом");
-        int choice = getIntInput("Ваш вибір", 1, 2);
+        int choice = getIntInput("Ваш вибір", 1, 11);
         List result= new ArrayList<>();
         switch (choice){
             case 1:
@@ -269,16 +269,18 @@ public class ConsoleProgram {
                 break;
             case 8:
                 result=reportoperations.personsByAlpabhet(crudoperations.findDepartment().getStudentsOfDepartment());
+                break;
             case 9:
                 reportoperations.studentByCourse(crudoperations.findDepartment().getStudentsOfDepartment());
+                break;
             case 10:
-                //in progress
+                reportoperations.filterStudentsByCourse(repository.getStudents());
+                break;
             case 11:
-                //in progress
-
+                reportoperations.filterStudentsByCourse(crudoperations.findDepartment().getStudentsOfDepartment());
+                break;
         }
-
-
+        System.out.println(result);
 
     }
 
