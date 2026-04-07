@@ -1,10 +1,12 @@
 package DigiPackage;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import exceptions.EntityAlreadyExistsException;
 import exceptions.ValidatingException;
 
 import java.util.*;
-
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "code")
 public class Department {
     private String code;
     private String name;
@@ -39,7 +41,10 @@ public class Department {
 
     public Faculty getFaculty() { return faculty; }
     public void setFaculty(Faculty faculty) {
-        if (faculty != null) this.faculty = faculty;
+        if (faculty != null) {
+            this.faculty = faculty;
+            faculty.addDepartmentTofaculty(this);
+        }
         else throw new ValidatingException("Faculty cannot be null");
     }
 
@@ -57,7 +62,7 @@ public class Department {
 
     @Override
     public String toString() {
-        return "Department: " + name + " (" + code + "), Faculty: " + faculty.getShortName() + ", Head: " + head.getName();
+        return "Department: " + name + " (" + code + "), Faculty: " + faculty.getShortName() + ", Head: " + head.getName()+ ", Location: " + location;
     }
 
     @Override

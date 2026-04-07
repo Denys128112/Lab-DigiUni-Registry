@@ -32,7 +32,7 @@ public class Teacher extends Person{
         setWorkload(workload);
     }
 
-    public String getPosition() {
+    public String PositionString() {
         switch (position) {
             case Assistant:
                 return "Асистент";
@@ -57,7 +57,7 @@ public class Teacher extends Person{
         this.position = position;
     }
 
-    public String getScientificDegree() {
+    public String ScientificDegreeString() {
         switch (scientificDegree) {
             case PHD:
                 return "Доктор філософії (Phd)";
@@ -76,7 +76,7 @@ public class Teacher extends Person{
         this.scientificDegree = scientificDegree;
     }
 
-    public String getAcademicTitle() {
+    public String AcademicTitleString() {
         switch (academicTitle) {
             case None:
                 return "Немає";
@@ -123,6 +123,18 @@ public class Teacher extends Person{
         }
     }
 
+    public Position getPosition() {
+        return position;
+    }
+
+    public ScientificDegree getScientificDegree() {
+        return scientificDegree;
+    }
+
+    public AcademicTitle getAcademicTitle() {
+        return academicTitle;
+    }
+
     public int getWorkload() {
         return workload;
     }
@@ -136,10 +148,10 @@ public class Teacher extends Person{
 
     @Override
     public String toString() {
-        return "Teacher" +
-                "position:" + getPosition() +
-                ", scientificDegree:" + getScientificDegree() +
-                ", academicTitle:" +getAcademicTitle() +
+        return "Teacher" + super.toString()+
+                "position:" + PositionString() +
+                ", scientificDegree:" + ScientificDegreeString() +
+                ", academicTitle:" + AcademicTitleString() +
                 ", dateOfentering:'" + dateOfentering + '\'' +
                 ", rate:" + rate +
                 ", workload:" + workload;

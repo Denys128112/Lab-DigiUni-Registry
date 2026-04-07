@@ -33,11 +33,10 @@ public class UniversityRepository {
            faculties.remove(faculty);
            facultiesMap.remove(faculty.getCode());
         }
-
-        // --- Кафедри ---
         public void addDepartment(Department department) {
             if (department != null) {
                 departments.add(department);
+                departmentMap.put(department.getCode(), department);
             }
         }
 
