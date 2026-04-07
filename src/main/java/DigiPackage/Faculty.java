@@ -1,10 +1,12 @@
 package DigiPackage;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import exceptions.EntityAlreadyExistsException;
 import exceptions.ValidatingException;
 
 import java.util.*;
-
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "code")
 public class Faculty {
     private String code;
     private String name;
@@ -71,7 +73,7 @@ public class Faculty {
 
     @Override
     public String toString() {
-        return "Faculty [" + code + "]: " + name + " (" + shortName + "), Dean: " + dean.getName();
+        return "Faculty [" + code + "]: " + name + " (" + shortName + "), Dean: " + dean.getName()+"Contacts: "+contacts+"]";
     }
 
     @Override

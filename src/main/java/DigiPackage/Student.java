@@ -95,7 +95,7 @@ public class Student extends Person {
         else throw new ValidatingException("yearOfentering must be between 2019 and 2026");
     }
 
-    public String getFormOfStudy() {
+    public String FormOfStudyString() {
         switch (formOfStudy) {
             case Budget:
                 return "Бюджет";
@@ -106,11 +106,19 @@ public class Student extends Person {
         }
     }
 
+    public FormOfStudy getFormOfStudy() {
+        return formOfStudy;
+    }
+
+    public Status getStudentStatus() {
+        return studentStatus;
+    }
+
     public void setFormOfStudy(FormOfStudy formOfStudy) {
         this.formOfStudy = formOfStudy;
     }
 
-    public String getStudentStatus() {
+    public String StudentStatusString() {
         switch (studentStatus) {
             case Studying:
                 return "Навчається";
@@ -123,6 +131,7 @@ public class Student extends Person {
         }
     }
 
+
     public void setStudentStatus(Status studentStatus) {
         this.studentStatus = studentStatus;
     }
@@ -134,7 +143,7 @@ public class Student extends Person {
                 ", course:" + course +
                 ", group:'" + group + '\'' +
                 ", yearOfentering:" + yearOfentering +
-                ", formOfStudy:" + getFormOfStudy() +
-                ", studentStatus:" + getStudentStatus();
+                ", formOfStudy:" + FormOfStudyString() +
+                ", studentStatus:" + StudentStatusString();
     }
 }

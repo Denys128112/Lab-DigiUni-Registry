@@ -1,5 +1,7 @@
 package DigiPackage;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import exceptions.ValidatingException;
 
 import java.util.Objects;
@@ -8,7 +10,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import exceptions.ValidatingException;
-
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Person {
         private String id;
         private String name;

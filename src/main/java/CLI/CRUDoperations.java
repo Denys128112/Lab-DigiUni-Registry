@@ -445,7 +445,7 @@ public class CRUDoperations {
         if (d == null) return;
         while (true) {
             System.out.println("\n--- РЕДАГУВАННЯ КАФЕДРИ ---");
-            System.out.println("1) Назву 2) Факультет 3) Завідувача 4) Локацію 5)Додати до Факультету 0) Готово");
+            System.out.println("1) Назву 2) Факультет 3) Завідувача 4) Локацію  0) Готово");
             int choice = getIntInput("Вибір", 0, 4);
             if (choice == 0) break;
             try {
@@ -454,7 +454,9 @@ public class CRUDoperations {
                         d.setName(getStringInput("Назва: "));
                         break;
                     case 2:
-                        d.setFaculty(findFaculty());
+                        Faculty f = findFaculty();
+                        d.setFaculty(f);
+                        f.addDepartmentTofaculty(d);
                         break;
                     case 3:
                         d.setHead(findTeacher());
@@ -462,18 +464,8 @@ public class CRUDoperations {
                     case 4:
                         d.setLocation(getStringInput("Локація: "));
                         break;
-                    case 5:
-                        if (universityRepository.getFaculties().isEmpty())
-                            System.out.println("Неможливо додати, бо не існує факультетів");
-                        else {
-                                Faculty f = chooseEntity(universityRepository.getFaculties());
-                                f.addDepartmentTofaculty(d);
-
-                        }
                 }
-            } catch (ValidatingException e) {
-                System.out.println("Помилка: " + e.getMessage());
-            } catch (EntityAlreadyExistsException e) {
+            } catch (ValidatingException | EntityAlreadyExistsException e) {
                 System.out.println("Помилка: " + e.getMessage());
             }
         }

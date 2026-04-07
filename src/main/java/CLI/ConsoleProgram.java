@@ -1,7 +1,9 @@
 package CLI;
 
 import DigiPackage.*;
+import saving.SaveOperations;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -18,9 +20,15 @@ public class ConsoleProgram {
     static Repository repository = new Repository();
     static UniversityRepository universityRepository = new UniversityRepository();
     static boolean isManager = false;
-
+    static SaveOperations saveOperations = new SaveOperations();
     public static void main(String[] args) {
-        initTestData();
+        //initTestData();
+        try {
+            saveOperations.loadDatabase(repository, universityRepository);
+        }
+        catch (IOException e) {
+            System.out.println("Нажаль дані з бази данних були втрачені, ми дуже вам співчуваємо, але вам треба заповнити все з самісінького початку");
+        }
         run();
     }
 
@@ -87,8 +95,8 @@ public class ConsoleProgram {
     }
 
     private static void mainMenu() {
-        System.out.println("Оберіть з чим бажаєте працювати: 1)Університет 2)Факультет 3)Кафедра 4)Викладач 5)Студент 6)Пошуки 7)Сортування");
-        int choice = getIntInput("Оберіть операцію", 1, 7);
+        System.out.println("Оберіть з чим бажаєте працювати: 1)Університет 2)Факультет 3)Кафедра 4)Викладач 5)Студент 6)Пошуки 7)Сортування 8)Збереження");
+        int choice = getIntInput("Оберіть операцію", 1, 8);
         switch (choice) {
             case 1:
                 workWithUniversity();
@@ -111,7 +119,9 @@ public class ConsoleProgram {
             case 7:
                 reports();
                 break;
-
+            case 8:
+                saveOperations.saveDatabase(repository, universityRepository);
+                break;
         }
     }
 
