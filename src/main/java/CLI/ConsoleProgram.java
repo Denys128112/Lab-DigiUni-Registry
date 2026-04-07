@@ -19,7 +19,7 @@ public class ConsoleProgram {
 
     static Repository repository = new Repository();
     static UniversityRepository universityRepository = new UniversityRepository();
-    static boolean isManager = false;
+    static UserRole currentUserRole = UserRole.GUEST;
     static SaveOperations saveOperations = new SaveOperations();
     public static void main(String[] args) {
         //initTestData();
@@ -66,30 +66,28 @@ public class ConsoleProgram {
 
     private static void authenticate() {
         System.out.println("\n--- АВТОРИЗАЦІЯ ---");
-        System.out.println("1) Увійти як Менеджер (повний доступ)");
-        System.out.println("2) Увійти як Гість/Студент (тільки перегляд та пошук)");
-        int roleChoice = getIntInput("Ваш вибір", 1, 2);
+        System.out.println("1) Увійти як Адміністратор (повний доступ)");
+        System.out.println("2) Увійти як Менеджер (запис та читання)");
+        System.out.println("3) Увійти як Гість (тільки читання)");
 
-        if (roleChoice == 1) {
-            int attempts = 0;
-            while (attempts < 3) {
-                System.out.print("Введіть пароль: ");
-                String password = sc.nextLine();
+        int roleChoice = getIntInput("Ваш вибір", 1, 3);
 
-                if (password.equals("admin")) {            // JUST SIMPLE PASSWORD; CAN BE CHANGED
-                    isManager = true;
-                    System.out.println("Успішно! Ви увійшли як Менеджер.");
-                    return;
-                } else {
-                    attempts++;
-                    System.out.println("Невірний пароль. Залишилось спроб: " + (3 - attempts));
-                }
+        if (roleChoice == 1 || roleChoice == 2) {
+            System.out.print("Введіть пароль: ");
+            String password = sc.nextLine();
+
+            if (roleChoice == 1 && password.equals("admin")) {               // JUST SIMPLE PASSWORD; CAN BE CHANGED
+                currentUserRole = UserRole.ADMIN;
+                System.out.println("Успішно! Ви увійшли як Адміністратор.");
+            } else if (roleChoice == 2 && password.equals("manager")) {          // JUST SIMPLE PASSWORD; CAN BE CHANGED
+                currentUserRole = UserRole.MANAGER;
+                System.out.println("Успішно! Ви увійшли як Менеджер.");
+            } else {
+                System.out.println("Невірний пароль. Вас авторизовано як Гостя.");
+                currentUserRole = UserRole.GUEST;
             }
-            System.out.println("Вичерпано ліміт спроб. Вас автоматично авторизовано як Гостя.");
-            isManager = false;
-
         } else {
-            isManager = false;
+            currentUserRole = UserRole.GUEST;
             System.out.println("Ви увійшли як Гість.");
         }
     }
@@ -126,18 +124,29 @@ public class ConsoleProgram {
     }
 
     private static int chooseOperation() {
-        if (isManager) {
+        int mask = currentUserRole.getMask();
+
+        if ((mask & UserRole.CAN_WRITE) != 0) {
             System.out.println("1. Створити");
             System.out.println("2. Редагувати");
+        }
+        if ((mask & UserRole.CAN_DELETE) != 0) {
             System.out.println("3. Видалити");
         }
+
         System.out.println("4. Читати");
         System.out.println("0. Назад");
 
         while (true) {
             int choice = getIntInput("Ваш вибір", 0, 4);
-            if (!isManager && (choice == 1 || choice == 2 || choice == 3)) {
-                System.out.println("Помилка: У вас немає доступу до цієї операції.(Тільки для менеджера)");
+
+            boolean canWrite = (mask & UserRole.CAN_WRITE) != 0;
+            boolean canDelete = (mask & UserRole.CAN_DELETE) != 0;
+
+            if ((choice == 1 || choice == 2) && !canWrite) {
+                System.out.println("Помилка: У вас немає доступу до створення або редагування.");
+            } else if (choice == 3 && !canDelete) {
+                System.out.println("Помилка: У вас немає доступу до видалення.");
             } else {
                 return choice;
             }
