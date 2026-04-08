@@ -1,0 +1,19 @@
+{
+  "students" : [ {
+    "id" : "003",
+    "name" : "Коротков Андрій Костянтинович",
+    "dateOfBirth" : "23.05.2008",
+    "email" : "korotkov@ukma.edu.ua",
+    "phone" : "+380955630200",
+    "idOfRecordBook" : "A 083/25 бп",
+    "course" : 1,
+    "group" : "ІПЗ-2",
+    "yearOfentering" : 2025,
+    "formOfStudy" : "Budget",
+    "studentStatus" : "Studying"
+  } ],
+  "teachers" : [ ],
+  "persons" : [ "003" ],
+  "faculties" : [ ],
+  "departments" : [ ]
+}

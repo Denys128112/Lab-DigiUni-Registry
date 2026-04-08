@@ -17,6 +17,8 @@ public class ConsoleProgram {
     static SearchOperations searchoperations = new SearchOperations();
     static Reportoperations reportoperations = new Reportoperations();
 
+    static UserSession currentSession;
+
     static Repository repository = new Repository();
     static UniversityRepository universityRepository = new UniversityRepository();
     static UserRole currentUserRole = UserRole.GUEST;
@@ -76,18 +78,21 @@ public class ConsoleProgram {
             System.out.print("Введіть пароль: ");
             String password = sc.nextLine();
 
-            if (roleChoice == 1 && password.equals("admin")) {               // JUST SIMPLE PASSWORD; CAN BE CHANGED
+            if (roleChoice == 1 && password.equals("admin")) {           // JUST SIMPLE PASSWORD; CAN BE CHANGED
                 currentUserRole = UserRole.ADMIN;
-                System.out.println("Успішно! Ви увійшли як Адміністратор.");
-            } else if (roleChoice == 2 && password.equals("manager")) {          // JUST SIMPLE PASSWORD; CAN BE CHANGED
+                currentSession = new UserSession("Адміністратор", currentUserRole);
+                System.out.println("Успішно! Сесія створена для: " + currentSession.username());
+            } else if (roleChoice == 2 && password.equals("manager")) {                          // JUST SIMPLE PASSWORD; CAN BE CHANGED
                 currentUserRole = UserRole.MANAGER;
-                System.out.println("Успішно! Ви увійшли як Менеджер.");
+                currentSession = new UserSession("Менеджер", currentUserRole);
+                System.out.println("Успішно! Сесія створена для: " + currentSession.username());
             } else {
                 System.out.println("Невірний пароль. Вас авторизовано як Гостя.");
                 currentUserRole = UserRole.GUEST;
             }
         } else {
             currentUserRole = UserRole.GUEST;
+            currentSession = new UserSession("Гість", currentUserRole);
             System.out.println("Ви увійшли як Гість.");
         }
     }

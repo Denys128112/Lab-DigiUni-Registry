@@ -31,7 +31,7 @@ public class CRUDoperations {
 
     public void fillStudentData(Student st) {
         int step = 0;
-        int totalSteps = 9;
+        int totalSteps = 10;
         while (step <= totalSteps) {
             try {
                 switch (step) {
@@ -68,10 +68,14 @@ public class CRUDoperations {
                         step++;
                         break;
                     case 8:
-                        st.setFormOfStudy(chooseEnum("Оберіть форму навчання: 1)Бюджет 2)Контракт", FormOfStudy.values()));
+                        st.setYearOfentering(getIntInput("Введіть рік вступу (2019-2025)", 2019, 2025));
                         step++;
                         break;
                     case 9:
+                        st.setFormOfStudy(chooseEnum("Оберіть форму навчання: 1)Бюджет 2)Контракт", FormOfStudy.values()));
+                        step++;
+                        break;
+                    case 10:
                         st.setStudentStatus(chooseEnum("Оберіть статус: 1)Навчається 2)Академ 3)Відрахований", Status.values()));
                         step++;
                         break;
