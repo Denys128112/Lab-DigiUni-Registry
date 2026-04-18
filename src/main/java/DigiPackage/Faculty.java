@@ -115,4 +115,8 @@ public class Faculty {
             throw new EntityAlreadyExistsException("Кафедра вже існує");
        departmentsOfFaculty.add(d);
     }
+
+    public void removeDeparmentFromFaculty(Department d) {
+        departmentsOfFaculty.remove(d);
+    }
 }

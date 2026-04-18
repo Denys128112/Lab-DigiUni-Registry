@@ -3,6 +3,8 @@ package CLI;
 import DigiPackage.*;
 import exceptions.EntityAlreadyExistsException;
 import exceptions.ValidatingException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,23 +15,30 @@ import static CLI.InputHelper.getStringInput;
 
 import static CLI.ConsoleProgram.repository;
 import static CLI.ConsoleProgram.universityRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CRUDoperations {
+    private static final Logger log = LoggerFactory.getLogger(CRUDoperations.class);
     Searching searching = new Searching();
 
     public void createStudent() {
+        log.debug("Creating new student with");
         System.out.println("\n--- ДОДАВАННЯ СТУДЕНТА ---");
         Student st = new Student();
         fillStudentData(st);
         try {
             repository.addStudent(st);
+            log.info("Student {} has been created",st);
         }
         catch(EntityAlreadyExistsException e) {
+            log.warn("Student with id {} already exists",st.getId());
             System.out.println(e.getMessage());
         }
     }
 
     public void fillStudentData(Student st) {
+        log.debug("Filling student data");
         int step = 0;
         int totalSteps = 10;
         while (step <= totalSteps) {
@@ -83,23 +92,28 @@ public class CRUDoperations {
             } catch (ValidatingException e) {
                 System.out.println("Помилка валідації: " + e.getMessage());
                 System.out.println("Спробуйте ще раз.");
+                log.warn("wrong input in Student {}",e.getMessage());
             }
         }
         System.out.println("Студент був заповнений");
     }
 
     public void createTeacher() {
+        log.debug("Creating teacher");
         System.out.println("\n--- ДОДАВАННЯ ВИКЛАДАЧА ---");
         Teacher t = new Teacher();
         fillTeacherData(t);
         try {
             repository.addTeacher(t);
+            log.info("Teacher {} has been created",t);
         } catch(EntityAlreadyExistsException e) {
             System.out.println(e.getMessage());
+            log.warn(e.getMessage());
         }
     }
 
     public void fillTeacherData(Teacher t) {
+        log.debug("Filling teacher data");
         int step = 1;
         int totalSteps = 11;
         while (step <= totalSteps) {
@@ -151,6 +165,7 @@ public class CRUDoperations {
                         break;
                 }
             } catch (ValidatingException e) {
+                log.warn("wrong input in Teacher {}",e.getMessage());
                 System.out.println("Помилка: " + e.getMessage());
             }
         }
@@ -158,18 +173,22 @@ public class CRUDoperations {
     }
 
     public void createFaculty() {
+        log.debug("Creating faculty");
         System.out.println("\n--- СТВОРЕННЯ ФАКУЛЬТЕТУ ---");
         Faculty f = new Faculty();
         fillFaculty(f);
         try {
             universityRepository.addFaculty(f);
             System.out.println(f.getName() + " успішно створений!");
+            log.info("Faculty {} has been created",f);
         } catch (EntityAlreadyExistsException e) {
             System.out.println("Помилка: " + e.getMessage());
+            log.warn("Faculty with id {} already exists",f);
         }
     }
 
     public void fillFaculty(Faculty f) {
+        log.debug("Filling faculty data");
         int step = 1;
         int totalSteps = 5;
         while (step <= totalSteps) {
@@ -204,12 +223,14 @@ public class CRUDoperations {
                 }
             } catch (ValidatingException e) {
                 System.out.println("Помилка: " + e.getMessage());
+                log.warn("Faculty validation problem {}",e.getMessage());
             }
         }
         System.out.println("Дані факультету заповнено.");
     }
 
     public void createDepartment() {
+        log.debug("Creating department");
         System.out.println("\n--- СТВОРЕННЯ КАФЕДРИ ---");
         if (universityRepository.getFaculties().isEmpty()) {
             System.out.println("Спочатку створіть факультет.");
@@ -220,12 +241,15 @@ public class CRUDoperations {
         try {
             universityRepository.addDepartment(d);
             System.out.println("Кафедра " + d.getName() + " успішно створена!");
+            log.info("Department {} has been created",d);
         } catch (EntityAlreadyExistsException e) {
+            log.warn("Department with id {} already exists",d.getCode());
             System.out.println("Помилка при збереженні: " + e.getMessage());
         }
     }
 
     public void fillDepartmentData(Department d) {
+        log.debug("Filling department data");
         int step = 1;
         int totalSteps = 5;
         while (step <= totalSteps) {
@@ -260,12 +284,14 @@ public class CRUDoperations {
                         break;
                 }
             } catch (ValidatingException e) {
+                log.warn("wrong input in Department {}",e.getMessage());
                 System.out.println("Помилка: " + e.getMessage());
             }
         }
     }
 
     public void readFaculty() {
+        log.debug("Reading faculty data");
         System.out.println("\n--- СПИСОК ФАКУЛЬТЕТІВ ---");
         List<Faculty> all = universityRepository.getFaculties();
         int count = 0;
@@ -279,6 +305,7 @@ public class CRUDoperations {
     }
 
     public void readDepartment() {
+        log.debug("Reading department data");
         System.out.println("\n--- СПИСОК КАФЕДР ---");
         List<Department> all = universityRepository.getDepartments();
         int count = 0;
@@ -292,6 +319,7 @@ public class CRUDoperations {
     }
 
     public void readStudent() {
+        log.debug("Reading student data");
         System.out.println("\n--- СПИСОК СТУДЕНТІВ ---");
         int count = 0;
         for (Student s : repository.getStudents()) {
@@ -304,6 +332,7 @@ public class CRUDoperations {
     }
 
     public void readTeacher() {
+        log.debug("Reading teacher data");
         System.out.println("\n--- СПИСОК ВИКЛАДАЧІВ ---");
         if (repository.getTeachers().isEmpty()) {
             System.out.println("Викладачів у реєстрі немає.");
@@ -319,6 +348,7 @@ public class CRUDoperations {
     }
 
     public void updateStudent() {
+        log.debug("Updating student data");
         Student st = findStudent();
         if (st == null) return;
         boolean updating = true;
@@ -341,8 +371,10 @@ public class CRUDoperations {
                         st.setFormOfStudy(chooseEnum("Форма Навчання", FormOfStudy.values()));
                         break;
                     case 7:
-                        if (universityRepository.getDepartments().isEmpty())
+                        if (universityRepository.getDepartments().isEmpty()) {
                             System.out.println("Неможливо додати, бо не існує кафедр");
+                            log.warn("Department not found");
+                        }
                         else {
                             Department d = chooseEntity(universityRepository.getDepartments());
                             d.addStudentToDepartment(st);
@@ -355,15 +387,19 @@ public class CRUDoperations {
                         personUpdate(st, step);
                         break;
                 }
+                log.info("Student {} has been updated", st.getId());
             } catch (ValidatingException e) {
                 System.out.println("Помилка: " + e.getMessage());
+                log.warn("Student {} validating problem {}", st.getId(),e.getMessage());
             }catch (EntityAlreadyExistsException e) {
                 System.out.println("Помилка: " + e.getMessage());
+                log.warn("Student {} already exists", st.getId());
             }
         }
     }
 
     public void updateTeacher() {
+        log.debug("Updating teacher data");
         Teacher t = findTeacher();
         if (t == null) return;
         boolean updating = true;
@@ -402,16 +438,20 @@ public class CRUDoperations {
                         personUpdate(t, step);
                         break;
                 }
+                log.info("Teacher {} has been updated", t.getId());
             } catch (ValidatingException e) {
                 System.out.println("Помилка: " + e.getMessage());
+                log.warn("Teacher {} validating problem {}", t.getId(),e.getMessage());
             }
             catch (EntityAlreadyExistsException e) {
                 System.out.println("Помилка: " + e.getMessage());
+                log.warn("Teacher {} already exists", t.getId());
             }
         }
     }
 
     public void updateFaculty() {
+        log.debug("Updating faculty data");
         Faculty f = findFaculty();
         if (f == null) return;
         boolean updating = true;
@@ -438,13 +478,16 @@ public class CRUDoperations {
                         updating = false;
                         break;
                 }
+                log.info("Faculty {} has been updated", f.getName());
             } catch (ValidatingException e) {
                 System.out.println("Помилка: " + e.getMessage());
+                log.warn("Faculty {} validating problem {}", f.getName(), e.getMessage());
             }
         }
     }
 
     public void updateDepartment() {
+        log.debug("Updating department data");
         Department d = findDepartment();
         if (d == null) return;
         while (true) {
@@ -458,9 +501,11 @@ public class CRUDoperations {
                         d.setName(getStringInput("Назва: "));
                         break;
                     case 2:
+                        Faculty pf=d.getFaculty();
                         Faculty f = findFaculty();
                         d.setFaculty(f);
                         f.addDepartmentTofaculty(d);
+                        pf.removeDeparmentFromFaculty(d);
                         break;
                     case 3:
                         d.setHead(findTeacher());
@@ -469,8 +514,12 @@ public class CRUDoperations {
                         d.setLocation(getStringInput("Локація: "));
                         break;
                 }
-            } catch (ValidatingException | EntityAlreadyExistsException e) {
+                log.info("Department {} has been updated", d.getName());
+            } catch (ValidatingException e) {
+                log.warn("Department {} validating problem {}", d.getName(), e.getMessage());
                 System.out.println("Помилка: " + e.getMessage());
+            } catch (EntityAlreadyExistsException e) {
+                throw new RuntimeException(e);
             }
         }
     }
@@ -484,45 +533,59 @@ public class CRUDoperations {
     }
 
     public void deleteStudent() {
+        log.debug("Deleting student data");
         Student s = findStudent();
         if (s != null && getIntInput("Видалити? 1-Так, 0-Ні", 0, 1) == 1 && repository.getStudentmap().get(s.getId()) != null) {
             repository.removeStudent(s);
             System.out.println("Видалення Успішне!");
-        } else
+            log.info("Student {} has been removed", s.getId());
+        } else {
             System.out.println("Видалення не було");
+            log.info("Student {} hasn't been removed", s.getId());
+        }
 
     }
 
     public void deleteTeacher() {
+        log.debug("Deleting teacher data");
         Teacher t = findTeacher();
         if (t != null && getIntInput("Видалити? 1-Так, 0-Ні", 0, 1) == 1 && repository.getTeachersmap().get(t.getId())!=null) {
             repository.removeTeacher(t);
             System.out.println("Видалення Успішне!");
-        } else
+            log.info("Teacher {} has been removed", t.getId());
+        } else {
             System.out.println("Видалення не було");
-
+            log.info("Teacher {} hasn't been removed", t.getId());
+        }
     }
 
     public void deleteFaculty() {
+        log.debug("Deleting faculty data");
         Faculty f = findFaculty();
         if (f != null && getIntInput("Видалити? 1-Так, 0-Ні", 0, 1) == 1 && universityRepository.getFacultiesMap().get(f.getCode())!=null) {
             universityRepository.removeFaculty(f);
             System.out.println("Видалення Успішне!");
-        } else
+            log.info("Faculty {} has been removed", f.getCode());
+        } else {
             System.out.println("Видалення не було");
+            log.info("Faculty {} hasn't been removed", f.getCode());
+        }
     }
 
     public void deleteDepartment() {
+        log.debug("Deleting department data");
         Department d = findDepartment();
         if (d != null && getIntInput("Видалити? 1-Так, 0-Ні", 0, 1) == 1 && universityRepository.getDepartmentMap().get(d.getCode())!=null) {
             universityRepository.removeDepartment(d);
             System.out.println("Видалення Успішне!");
+            log.info("Department {} has been removed", d.getCode());
         } else
             System.out.println("Видалення не було");
-
+            log.info("Department {} hasn't been removed", d.getCode());
     }
 
     public Student findStudent() {
+        log.debug("Finding student");
         System.out.println("\n--- ПОШУК СТУДЕНТА ---");
         System.out.println("1) За ID 2) За ПІБ 3) Зі списку 0) Назад");
         int choice = getIntInput("Вибір", 0, 3);
@@ -552,6 +615,7 @@ public class CRUDoperations {
     }
 
     public Teacher findTeacher() {
+        log.debug("Finding teacher");
         System.out.println("\n--- ПОШУК ВИКЛАДАЧА ---");
         System.out.println("1) За ID 2) За ПІБ 3) Зі списку 0) Назад");
         int choice = getIntInput("Вибір", 0, 3);
@@ -591,6 +655,7 @@ public class CRUDoperations {
     }
 
     public Faculty findFaculty() {
+        log.debug("Finding faculty");
         System.out.println("\n--- ПОШУК ФАКУЛЬТЕТУ ---");
         System.out.println("1) За кодом 2) Зі списку 0) Назад");
         int choice = getIntInput("Вибір", 0, 2);
@@ -611,6 +676,7 @@ public class CRUDoperations {
     }
 
     public Department findDepartment() {
+        log.debug("Finding department");
         System.out.println("1) За кодом 2) Зі списку 0) Назад");
         int method = getIntInput("Вибір", 0, 2);
         while (true) {

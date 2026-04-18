@@ -1,6 +1,8 @@
 package CLI;
 
 import DigiPackage.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import saving.SaveOperations;
 
 import java.io.IOException;
@@ -11,7 +13,7 @@ import java.util.Scanner;
 import static CLI.InputHelper.getIntInput;
 
 public class ConsoleProgram {
-
+    private static final Logger log = LoggerFactory.getLogger(ConsoleProgram.class);
     static Scanner sc = new Scanner(System.in);
     static CRUDoperations crudoperations = new CRUDoperations();
     static SearchOperations searchoperations = new SearchOperations();
@@ -24,41 +26,19 @@ public class ConsoleProgram {
     static UserRole currentUserRole = UserRole.GUEST;
     static SaveOperations saveOperations = new SaveOperations();
     public static void main(String[] args) {
-        //initTestData();
         try {
+            log.debug("Starting ConsoleProgram load repositories from JSONs");
             saveOperations.loadDatabase(repository, universityRepository);
+            log.info("Loading users from database successful");
         }
         catch (IOException e) {
+            log.error("JSON missed {}",e.getMessage());
             System.out.println("Нажаль дані з бази данних були втрачені, ми дуже вам співчуваємо, але вам треба заповнити все з самісінького початку");
         }
         run();
     }
-
-    private static void initTestData() {
-        try {
-            Student student1 = new Student("001", "Сковорода Григорій Савич", "07.12.2005", "skovoroda@gmail.com", "+380000000001", "A 000/01 бп", 3, "ІПЗ-3", 2023, FormOfStudy.Budget, Status.Studying);
-            Student student2 = new Student("002", "Колісник Денис Максимович", "02.10.2007", "kolisnyk@gmail.com", "+380633155000", "A 120/20 бп", 1, "ІПЗ-1", 2025, FormOfStudy.Budget, Status.Studying);
-            repository.addStudent(student1);
-            repository.addStudent(student2);
-
-            Teacher teacher1 = new Teacher("D01", "Глибовець Андрій Миколайович", "25.10.1985", "a.glybovets@ukma.edu.ua", "+380444636985", Position.Dean, ScientificDegree.Doctor_of_science, AcademicTitle.None, "30.05.2019", 1.0, 1000);
-            Teacher teacher2 = new Teacher("D02", "Малашонок Геннадій Іванович", "10.08.1985", "malashanok@ukma.edu.ua", "+380444257723", Position.Head_of_department, ScientificDegree.Doctor_of_science, AcademicTitle.None, "10.04.2015", 1.0, 600);
-            Teacher teacher3 = new Teacher("D03", "Пєчкурова Олена Миколаївна", "01.01.1999", "pyechkurova@ukma.edu.ua", "+380441234567", Position.Senior_lecturer, ScientificDegree.None, AcademicTitle.Docent, "02.02.2002", 1.0, 500);
-            repository.addTeacher(teacher1);
-            repository.addTeacher(teacher2);
-            repository.addTeacher(teacher3);
-
-            Faculty faculty1 = new Faculty("F00", "Факультет Інформатики", "ФІ", teacher1, "https://www.fin.ukma.edu.ua/contacts");
-            universityRepository.addFaculty(faculty1);
-
-            Department department1 = new Department("D00", "Кафедра Мережних Технологій", faculty1, teacher2, "Кабінет: 1-204");
-            universityRepository.addDepartment(department1);
-        } catch (Exception e) {
-            System.out.println("Помилка ініціалізації тестових даних: " + e.getMessage());
-        }
-    }
-
     private static void run() {
+        log.debug("Starting ConsoleProgram run");
         System.out.println("Вітаємо в програмі DigiUni Registry(консольна інформаційна система університету)");
         authenticate();
         while (true) {
@@ -67,6 +47,7 @@ public class ConsoleProgram {
     }
 
     private static void authenticate() {
+        log.debug("Authenticating user");
         System.out.println("\n--- АВТОРИЗАЦІЯ ---");
         System.out.println("1) Увійти як Адміністратор (повний доступ)");
         System.out.println("2) Увійти як Менеджер (запис та читання)");
@@ -82,22 +63,28 @@ public class ConsoleProgram {
                 currentUserRole = UserRole.ADMIN;
                 currentSession = new UserSession("Адміністратор", currentUserRole);
                 System.out.println("Успішно! Сесія створена для: " + currentSession.username());
+                log.info("admin sesion started {}",currentSession.username());
             } else if (roleChoice == 2 && password.equals("manager")) {                          // JUST SIMPLE PASSWORD; CAN BE CHANGED
                 currentUserRole = UserRole.MANAGER;
                 currentSession = new UserSession("Менеджер", currentUserRole);
                 System.out.println("Успішно! Сесія створена для: " + currentSession.username());
+                log.info("manager sesion started {}",currentSession.username());
             } else {
                 System.out.println("Невірний пароль. Вас авторизовано як Гостя.");
                 currentUserRole = UserRole.GUEST;
+                log.warn("incorect password was 3 times in row");
+                log.info("guest sesion started {}",currentSession.username());
             }
         } else {
             currentUserRole = UserRole.GUEST;
             currentSession = new UserSession("Гість", currentUserRole);
             System.out.println("Ви увійшли як Гість.");
+            log.info("guest sesion started {}",currentSession.username());
         }
     }
 
     private static void mainMenu() {
+        log.debug("Main Menu openned");
         System.out.println("Оберіть з чим бажаєте працювати: 1)Університет 2)Факультет 3)Кафедра 4)Викладач 5)Студент 6)Пошуки 7)Сортування 8)Збереження");
         int choice = getIntInput("Оберіть операцію", 1, 8);
         switch (choice) {
@@ -129,6 +116,7 @@ public class ConsoleProgram {
     }
 
     private static int chooseOperation() {
+
         int mask = currentUserRole.getMask();
 
         if ((mask & UserRole.CAN_WRITE) != 0) {
@@ -159,6 +147,7 @@ public class ConsoleProgram {
     }
 
     private static void workWithTeacher() {
+        log.debug("Working with Teacher");
         int choice = 1;
         while (choice != 0) {
             choice = chooseOperation();
@@ -178,9 +167,11 @@ public class ConsoleProgram {
 
             }
         }
+        log.info("Teacher finish work with teacher");
     }
 
     private static void workWithStudent() {
+        log.debug("Working with Student");
         int choice = 1;
         while (choice != 0) {
             choice = chooseOperation();
@@ -200,9 +191,11 @@ public class ConsoleProgram {
 
             }
         }
+        log.info(" finish work with student");
     }
 
     private static void workWithFaculty() {
+        log.debug("Working with Faculty");
         int choice = 1;
         while (choice != 0) {
             choice = chooseOperation();
@@ -222,9 +215,11 @@ public class ConsoleProgram {
 
             }
         }
+        log.info(" finish work with Faculty");
     }
 
     private static void workWithUniversity() {
+        log.debug("Working with University");
         System.out.println("1) Читати");
         System.out.println("2) Список кафедр університета");
         System.out.println("3) Назад");
@@ -236,10 +231,11 @@ public class ConsoleProgram {
             default:
                 System.out.println("В розробці");
         }
-
+        log.info(" finish work with university");
     }
 
     private static void workWithDepartment() {
+        log.debug("Working with Department");
         int choice = 1;
         while (choice != 0) {
             choice = chooseOperation();
@@ -259,15 +255,17 @@ public class ConsoleProgram {
 
             }
         }
-
+        log.info(" finish work with department");
     }
 
 
 
 
     private static void reports() {
+        log.debug("Reports operations");
         System.out.println("Оберіть звіт: 1)Студенти за курсом 2)Студенти за Алфавітом 3)Викладачі за Алфавітом 4)Люди за Алфавітом 5)Студенти факультету за алфавітом 6)Викладачі факультету за Алфавітом 7)Викладачі кафедри за алфавітом 8)Студенти кафедри за алфавітом 9)Студенти кафедри за курсами 10)Фільтровані студенти певного курсу 11)Фільтровані студенти кафедри за курсом");
         int choice = getIntInput("Ваш вибір", 1, 11);
+        log.trace("choice {} was choosen",choice);
         List result= new ArrayList<>();
         switch (choice){
             case 1:
@@ -305,13 +303,15 @@ public class ConsoleProgram {
                 break;
         }
         System.out.println(result);
-
+        log.info(" finish work with reports operations");
     }
 
 
     private static void search() {
+        log.debug("Search operations");
         System.out.println("Обрано пошук");
         int choosenSearchByPerson = getIntInput("Доступні операції: 1)Пошук Персони 2)Пошук Студента 3)Пошук Викладача", 1, 3);
+        log.trace("choice {} was choosen",choosenSearchByPerson);
         List<? extends Person> humans;
         switch (choosenSearchByPerson) {
             case 1:
@@ -325,9 +325,10 @@ public class ConsoleProgram {
         }
         int choosenSearch;
         if (choosenSearchByPerson != 2)
-            choosenSearch = getIntInput("Доступні операції: 1)Пошук за email 2)Пошук за ПІБ 3)Пошук за номером телефону", 1, 4);
+            choosenSearch = getIntInput("Доступні операції: 1)Пошук за email 2)Пошук за ПІБ 3)Пошук за номером телефону", 1, 3);
         else
-            choosenSearch = getIntInput("Доступні операції: 1)Пошук за email 2)Пошук за ПІБ 3)Пошук за номером телефону 4)Пошук за групою 5)Пошук за курсом", 1, 6);
+            choosenSearch = getIntInput("Доступні операції: 1)Пошук за email 2)Пошук за ПІБ 3)Пошук за номером телефону 4)Пошук за групою 5)Пошук за курсом", 1, 5);
+        log.trace("choice {} was choosen",choosenSearch);
         switch (choosenSearch) {
             case 1:
                 searchoperations.searchEmail(humans);
@@ -339,15 +340,12 @@ public class ConsoleProgram {
                 searchoperations.searchPhone(humans);
                 break;
             case 4:
-                searchoperations.searchById(humans);
-                break;
-            case 5:
                 searchoperations.searchGroup(repository);
                 break;
             default:
                 searchoperations.searchCourse(repository);
         }
-
+        log.info(" finish work with search operations");
     }
 
 }
