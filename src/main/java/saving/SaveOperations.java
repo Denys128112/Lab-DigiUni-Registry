@@ -135,6 +135,33 @@ public class SaveOperations {
                 }
                 System.out.println("Дані Кафедр успішно завантажено з JSON!");
                 log.trace("Department loaded successfully");
+                for (Department d : uniRepo.getDepartments()) {
+                    if (d.getFaculty() != null && d.getFaculty().getCode() != null) {
+                        Faculty realFaculty = uniRepo.getFacultiesMap().get(d.getFaculty().getCode());
+                        if (realFaculty != null) {
+                            d.setFaculty(realFaculty);
+                        }
+                    }
+                }
+                log.trace("Departments loaded successfully to faculties");
+                for (Student s : repo.getStudents()) {
+                    if (s.getDepartmentCode() != null) {
+                        Department d = uniRepo.getDepartmentMap().get(s.getDepartmentCode());
+                        if (d != null) {
+                            d.addStudentToDepartment(s);
+                        }
+                    }
+                }
+                log.trace("Students loaded successfully to departments");
+                for (Teacher t : repo.getTeachers()) {
+                    if (t.getDepartmentCode() != null) {
+                        Department d = uniRepo.getDepartmentMap().get(t.getDepartmentCode());
+                        if (d != null) {
+                            d.addTeacherToDepartment(t);
+                        }
+                    }
+                }
+                log.trace("Teachers loaded successfully to departments");
                 log.info("load database successfully");
             } catch (Exception e) {
                 System.err.println("Помилка читання JSON: " + e.getMessage());

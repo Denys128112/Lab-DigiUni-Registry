@@ -13,6 +13,7 @@ public class Faculty {
     private String shortName;
     private Teacher dean;
     private String contacts;
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private final Set<Department> departmentsOfFaculty=new HashSet<>();
 
     public Faculty(){

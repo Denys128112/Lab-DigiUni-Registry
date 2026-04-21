@@ -9,6 +9,7 @@ public class Student extends Person {
     private int yearOfentering;
     private FormOfStudy formOfStudy;
     private Status studentStatus;
+    private String departmentCode;
     public Student(){
 
     }
@@ -134,6 +135,14 @@ public class Student extends Person {
 
     public void setStudentStatus(Status studentStatus) {
         this.studentStatus = studentStatus;
+    }
+
+    public String getDepartmentCode() {
+        return departmentCode;
+    }
+
+    public void setDepartmentCode(String departmentCode) {
+        this.departmentCode = departmentCode;
     }
 
     @Override

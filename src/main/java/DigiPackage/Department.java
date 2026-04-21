@@ -13,8 +13,11 @@ public class Department {
     private Faculty faculty;
     private Teacher head;
     private String location;
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private final Set<Person> personsOfDepartment=new HashSet<>();
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private final Set<Teacher> teachersOfDepartment=new HashSet<>();
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private final Set<Student> studentsOfDepartment=new HashSet<>();
     public Department(){
 
@@ -104,4 +107,5 @@ public class Department {
         studentsOfDepartment.add(s);
         personsOfDepartment.add(s);
     }
+
 }

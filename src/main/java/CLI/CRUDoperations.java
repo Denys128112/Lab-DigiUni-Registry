@@ -40,7 +40,7 @@ public class CRUDoperations {
     public void fillStudentData(Student st) {
         log.debug("Filling student data");
         int step = 0;
-        int totalSteps = 10;
+        int totalSteps = 11;
         while (step <= totalSteps) {
             try {
                 switch (step) {
@@ -88,6 +88,16 @@ public class CRUDoperations {
                         st.setStudentStatus(chooseEnum("Оберіть статус: 1)Навчається 2)Академ 3)Відрахований", Status.values()));
                         step++;
                         break;
+                    case 11:
+                        Department d=findDepartment();
+                        if(d==null) {
+                            System.out.println("На данний момент кафедр не існує, тому вам треба її створити зараз");
+                            createDepartment();
+                            d=universityRepository.getDepartments().get(0);
+                        } d.addStudentToDepartment(st);
+                        st.setDepartmentCode(d.getCode());
+                        step++;
+                        break;
                 }
             } catch (ValidatingException e) {
                 System.out.println("Помилка валідації: " + e.getMessage());
@@ -115,7 +125,7 @@ public class CRUDoperations {
     public void fillTeacherData(Teacher t) {
         log.debug("Filling teacher data");
         int step = 1;
-        int totalSteps = 11;
+        int totalSteps = 12;
         while (step <= totalSteps) {
             try {
                 switch (step) {
@@ -161,6 +171,17 @@ public class CRUDoperations {
                         break;
                     case 11:
                         t.setWorkload(Integer.parseInt(getStringInput("Навантаження: ")));
+                        step++;
+                        break;
+                    case 12:
+                        Department d=findDepartment();
+                        if(d==null) {
+                        System.out.println("На данний момент кафедр не існує, тому вам треба її створити зараз");
+                        createDepartment();
+                        d=universityRepository.getDepartments().get(0);
+                        }
+                        d.addTeacherToDepartment(t);
+                        t.setDepartmentCode(d.getCode());
                         step++;
                         break;
                 }
@@ -265,7 +286,14 @@ public class CRUDoperations {
                         break;
                     case 3:
                         System.out.println("Оберіть ФАКУЛЬТЕТ:");
-                        d.setFaculty(findFaculty());
+                        Faculty f = findFaculty();
+                        if(f==null) {
+                            System.out.println("Факультета не існує");
+                            createFaculty();
+                            f=universityRepository.getFaculties().get(0);
+                            f.addDepartmentTofaculty(d);
+                        }
+                        d.setFaculty(f);
                         step++;
                         break;
                     case 4:
@@ -371,15 +399,13 @@ public class CRUDoperations {
                         st.setFormOfStudy(chooseEnum("Форма Навчання", FormOfStudy.values()));
                         break;
                     case 7:
-                        if (universityRepository.getDepartments().isEmpty()) {
-                            System.out.println("Неможливо додати, бо не існує кафедр");
-                            log.warn("Department not found");
-                        }
-                        else {
-                            Department d = chooseEntity(universityRepository.getDepartments());
-                            d.addStudentToDepartment(st);
-                        }
-
+                       Department d=findDepartment();
+                       if (d == null) {
+                           System.out.println("Неможливо додати, бо не існує кафедр, створіть спершу кафедру");
+                           log.warn("Department not found");
+                       }else
+                           d.addStudentToDepartment(st);
+                       break;
                     case 0:
                         updating = false;
                         break;
@@ -425,12 +451,12 @@ public class CRUDoperations {
                         t.setWorkload(getIntInput("Навантаження (0-1000)",0,1000));
                         break;
                     case 8:
-                        if (universityRepository.getDepartments().isEmpty())
-                            System.out.println("Неможливо додати, бо не існує кафедр");
-                        else {
-                            Department d = chooseEntity(universityRepository.getDepartments());
-                            d.addTeacherToDepartment(t);
-                        }
+                            Department d=findDepartment();
+                            if(d==null) {
+                                System.out.println("Неможливо додати, бо не існує кафедр, створіть спершу кафедру");
+                                log.warn("Department not found");
+                            }else d.addTeacherToDepartment(t);
+                            break;
                     case 0:
                         updating = false;
                         break;
@@ -589,6 +615,10 @@ public class CRUDoperations {
         System.out.println("\n--- ПОШУК СТУДЕНТА ---");
         System.out.println("1) За ID 2) За ПІБ 3) Зі списку 0) Назад");
         int choice = getIntInput("Вибір", 0, 3);
+        if(repository.getStudents().isEmpty()) {
+            System.out.println("Студентів не існує, створіть спочатку");
+            return null;
+        }
         while (true) {
             Optional<? extends Person> maybestudent = Optional.empty();
             switch (choice) {
@@ -619,6 +649,10 @@ public class CRUDoperations {
         System.out.println("\n--- ПОШУК ВИКЛАДАЧА ---");
         System.out.println("1) За ID 2) За ПІБ 3) Зі списку 0) Назад");
         int choice = getIntInput("Вибір", 0, 3);
+        if(repository.getTeachers().isEmpty()) {
+            System.out.println("Викладачів не існує, створіть спочатку");
+            return null;
+        }
         while (true) {
             Optional<? extends Person> maybeteacher = Optional.empty();
             switch (choice) {
@@ -659,6 +693,10 @@ public class CRUDoperations {
         System.out.println("\n--- ПОШУК ФАКУЛЬТЕТУ ---");
         System.out.println("1) За кодом 2) Зі списку 0) Назад");
         int choice = getIntInput("Вибір", 0, 2);
+        if (universityRepository.getFaculties().isEmpty()) {
+            System.out.println("Факультетів немає створіть їх спочатку");
+            return null;
+        }
         switch (choice) {
             case 1:
                 while (true) {
@@ -679,6 +717,10 @@ public class CRUDoperations {
         log.debug("Finding department");
         System.out.println("1) За кодом 2) Зі списку 0) Назад");
         int method = getIntInput("Вибір", 0, 2);
+        if (universityRepository.getDepartments().isEmpty()) {
+            System.out.println("Кафедр немає створіть їх спочатку");
+            return null;
+        }
         while (true) {
             switch (method) {
                 case 1:

@@ -132,4 +132,14 @@ public class CLITest {
         assertEquals(s1, repo.getStudentmap().get("ID1"));
         assertEquals(s2, repo.getStudentmap().get("ID2"));
     }
+    @Test
+    public void addToFacultyTest() {
+        Faculty f = new Faculty();
+        Department d = new Department();
+        Student s1 = new Student("ID1", "Іван Іванов Іванович", "01.01.2000", "ivan@ukma.edu.ua", "+380501111111", "К 111/11 бп", 1, "ІПЗ-1", 2023, FormOfStudy.Budget, Status.Studying);
+        f.addDepartmentTofaculty(d);
+        d.addStudentToDepartment(s1);
+        List <Student> students =f.getStudentsOfFaculty();
+        assertEquals(s1.getName(), students.get(0).getName());
+    }
 }

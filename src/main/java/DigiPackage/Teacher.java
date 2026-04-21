@@ -16,6 +16,19 @@ public class Teacher extends Person{
     private LocalDate dateOfentering;
     private double rate;
     private int workload; //години
+    private String departmentCode;
+
+    public void setDateOfentering(LocalDate dateOfentering) {
+        this.dateOfentering = dateOfentering;
+    }
+
+    public String getDepartmentCode() {
+        return departmentCode;
+    }
+
+    public void setDepartmentCode(String departmentCode) {
+        this.departmentCode = departmentCode;
+    }
 
     public Teacher(){
 
