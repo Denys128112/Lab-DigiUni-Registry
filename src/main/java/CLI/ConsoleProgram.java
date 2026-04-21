@@ -1,6 +1,8 @@
 package CLI;
 
 import DigiPackage.*;
+import network.Client;
+import network.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import saving.SaveOperations;
@@ -25,6 +27,8 @@ public class ConsoleProgram {
     static UniversityRepository universityRepository = new UniversityRepository();
     static UserRole currentUserRole = UserRole.GUEST;
     static SaveOperations saveOperations = new SaveOperations();
+    static Server server = new Server();
+    static Client client;
     public static void main(String[] args) {
         try {
             log.debug("Starting ConsoleProgram load repositories from JSONs");
@@ -41,8 +45,30 @@ public class ConsoleProgram {
         log.debug("Starting ConsoleProgram run");
         System.out.println("Вітаємо в програмі DigiUni Registry(консольна інформаційна система університету)");
         authenticate();
+        backgroundSave();
+        backgroundShare();
         while (true) {
             mainMenu();
+        }
+    }
+
+    private static void backgroundShare() {
+        Thread dataSharer= new Thread(() -> {
+            try {
+                server.startServer(repository,universityRepository);
+            } catch (IOException e) {
+                log.error("Problem with sharing {}",e.getMessage());
+            }
+        });
+        dataSharer.start();
+        dataSharer.setDaemon(true);
+    }
+    private static void updateDatabaseFromNet() {
+        Client client = new Client();
+        try {
+            client.accept();
+        }catch (Exception e){
+            log.error("cannot accept connection {}",e.getMessage());
         }
     }
 
@@ -85,7 +111,7 @@ public class ConsoleProgram {
 
     private static void mainMenu() {
         log.debug("Main Menu openned");
-        System.out.println("Оберіть з чим бажаєте працювати: 1)Університет 2)Факультет 3)Кафедра 4)Викладач 5)Студент 6)Пошуки 7)Сортування 8)Збереження");
+        System.out.println("Оберіть з чим бажаєте працювати: 1)Університет 2)Факультет 3)Кафедра 4)Викладач 5)Студент 6)Пошуки 7)Сортування 8)Збереження 9)Мережеві операції");
         int choice = getIntInput("Оберіть операцію", 1, 8);
         switch (choice) {
             case 1:
@@ -110,7 +136,23 @@ public class ConsoleProgram {
                 reports();
                 break;
             case 8:
-                saveOperations.saveDatabase(repository, universityRepository);
+                saveOperations.commitChanges();
+                break;
+            case 9:
+                netOperations();
+        }
+    }
+
+    private static void netOperations() {
+        int a=getIntInput("1)Стати сервером 2)Завантажити дані з мережі 0)вийти",0,2);
+        switch (a) {
+            case 1:
+                backgroundShare();
+                break;
+            case 2:
+                updateDatabaseFromNet();
+                break;
+            default:
                 break;
         }
     }
@@ -347,5 +389,18 @@ public class ConsoleProgram {
         }
         log.info(" finish work with search operations");
     }
-
+    private static void backgroundSave() {
+        Thread backgroundSaver=new Thread(()->{while (true){
+            try {
+                Thread.sleep(180000);
+                log.info("Autosaving background saving");
+                saveOperations.saveTempDatabase(repository, universityRepository);
+            }catch (InterruptedException e){
+                log.error("Thread interrupted");
+            }
+        }
+        });
+        backgroundSaver.start();
+        backgroundSaver.setDaemon(true);
+    }
 }

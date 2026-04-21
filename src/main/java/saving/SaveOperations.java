@@ -16,14 +16,15 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
 
 public class SaveOperations {
-    private static final Path STUDENTS_SAVE = Path.of(".\\resources\\Students.json");
-    private static final Path TEACHERS_SAVE = Path.of(".\\resources\\Teachers.json");
-    private static final Path FACULTIES_SAVE = Path.of(".\\resources\\Faculties.json");
-    private static final Path DEPARMENTS_SAVE = Path.of(".\\resources\\Deparments.json");
+    private static final Path STUDENTS_SAVE = Path.of(".\\resources\\temp_Students.json");
+    private static final Path TEACHERS_SAVE = Path.of(".\\resources\\temp_Teachers.json");
+    private static final Path FACULTIES_SAVE = Path.of(".\\resources\\temp_Faculties.json");
+    private static final Path DEPARMENTS_SAVE = Path.of(".\\resources\\temp_Deparments.json");
     private final ObjectMapper mapper;
     private static final Logger log = LoggerFactory.getLogger(SaveOperations.class);
     public SaveOperations() {
@@ -45,7 +46,7 @@ public class SaveOperations {
         }
     }
 
-    public void saveDatabase(Repository repo, UniversityRepository uniRepo) {
+    public void saveTempDatabase(Repository repo, UniversityRepository uniRepo) {
         log.debug("save database");
 
         try {
@@ -90,7 +91,27 @@ public class SaveOperations {
         }
         log.info("database saved");
     }
+    public void commitChanges() {
+        log.info("Користувач підтвердив збереження. Починаємо перенесення тимчасових файлів...");
+        try {
+            String[] entities = {"Students", "Teachers", "Faculties", "Deparments"};
 
+            for (String entity : entities) {
+                Path tempPath = Path.of(".\\resources\\temp_" + entity + ".json");
+                Path mainPath = Path.of(".\\resources\\" + entity + ".json");
+
+                if (Files.exists(tempPath)) {
+                    Files.move(tempPath, mainPath, StandardCopyOption.REPLACE_EXISTING);
+                    Files.deleteIfExists(tempPath);
+                    log.debug("Файл {}.json успішно оновлено з тимчасової копії", entity);
+                }
+            }
+            System.out.println("Зміни успішно застосовані до бази даних!");
+        } catch (IOException e) {
+            log.error("Помилка при коміті файлів: {}", e.getMessage());
+            System.out.println("Сталася помилка при збереженні змін.");
+        }
+    }
     public void loadDatabase(Repository repo, UniversityRepository uniRepo) throws IOException {
         log.debug("load database");
         if (Files.notExists(STUDENTS_SAVE)) {
