@@ -13,20 +13,17 @@ import static CLI.InputHelper.getIntInput;
 
 public class Reportoperations {
     private static final Logger log = LoggerFactory.getLogger(Reportoperations.class);
-    public void studentByCourse(List<Student> students) {
+    public List<Student> studentByCourse(List<Student> students) {
         log.debug("sort studentByCourse");
         if (students == null || students.isEmpty()) {
             System.out.println("Список студентів порожній.");
             log.warn("list is empty");
-            return;
+            return null;
         }
-
-        System.out.println("\n--- Студенти відсортовані за курсом ---");
-
-        students.stream()
-                .sorted(Comparator.comparingInt(Student::getCourse))
-                .forEach(s -> System.out.println("Курс: " + s.getCourse() + " | " + s.getName() + " | Група: " + s.getGroup()));
         log.info("sorted studentByCourse");
+        return students.stream()
+                .sorted(Comparator.comparingInt(Student::getCourse)).toList();
+
     }
     public List<Person> personsByAlpabhet(List<? extends Person> personList){
         log.debug("sort personsByAlpabhet");
@@ -40,15 +37,17 @@ public class Reportoperations {
         log.info("sorted personsByAlpabhet");
         return personList1;
     }
-    public void filterStudentsByCourse(List<Student> students){
+    public List<Student> filterStudentsByCourse(List<Student> students, int course) {
         if (students == null || students.isEmpty()) {
             System.out.println("Список студентів порожній.");
             log.warn("list is empty");
+            return null;
         }
         else {
-            int course = getIntInput("Оберіть курс1",1,4);
-            students.stream()
-                    .filter(s->s.getCourse()==course).forEach(System.out::println);
+            log.info("filterStudentsByCourse");
+            return students.stream()
+                    .filter(s->s.getCourse()==course)
+                    .toList();
         }
     }
 }

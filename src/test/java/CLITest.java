@@ -1,3 +1,4 @@
+import CLI.Reportoperations;
 import CLI.Repository;
 import CLI.Searching;
 import CLI.UniversityRepository;
@@ -5,7 +6,11 @@ import DigiPackage.*;
 import exceptions.EmptySearchResultException;
 import exceptions.ValidatingException;
 import org.junit.jupiter.api.Test;
-
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.CsvSource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -59,43 +64,44 @@ public class CLITest {
         assertEquals(Optional.empty(), searching.findById("2026-01", repository.getStudentmap()));
         assertTrue(repository.getStudents().isEmpty());
     }
-    @Test
-    public void validationTest(){
+    @ParameterizedTest
+    @ValueSource(strings = {"Іванов Іван", "Іванов", "Іванов Іван Іванович Петрович", "   "})
+    @NullAndEmptySource
+    public void studentInvalidNameValidationTest(String invalidName) {
         Student st = new Student();
-        Teacher t = new Teacher();
-        Faculty f = new Faculty();
-        Department d = new Department();
+        assertThrows(ValidatingException.class, () -> st.setName(invalidName));
+    }
 
-        assertThrows(ValidatingException.class, () -> st.setName("Іванов Іван"));
-        assertThrows(ValidatingException.class, () -> st.setDateOfBirth("15-05-2000"));
-        assertThrows(ValidatingException.class, () -> st.setEmail("testemail.com"));
-        assertThrows(ValidatingException.class, () -> st.setPhone("+38050123456"));
+    @ParameterizedTest
+    @ValueSource(strings = {"15-05-2000", "2000.05.15", "01/01/2005", "Сьогодні"})
+    public void studentInvalidDatesValidationTest(String invalidDate) {
+        Student st = new Student();
+        assertThrows(ValidatingException.class, () -> st.setDateOfBirth(invalidDate));
+    }
 
-        assertThrows(ValidatingException.class, () -> st.setIdOfRecordBook("12345678901"));
-        assertThrows(ValidatingException.class, () -> st.setCourse(7));
-        assertThrows(ValidatingException.class, () -> st.setGroup("КН92"));
-        assertThrows(ValidatingException.class, () -> st.setYearOfentering(2018));
+    @ParameterizedTest
+    @ValueSource(strings = {"testemail.com", "user@domain", "@ukma.edu.ua", "   "})
+    public void studentInvalidContactsValidationTest(String invalidContact) {
+        Student st = new Student();
+        assertThrows(ValidatingException.class, () -> st.setEmail(invalidContact));
+        assertThrows(ValidatingException.class, () -> st.setPhone("+38050123456")); // Твій старий приклад
+        assertThrows(ValidatingException.class, () -> st.setPhone("0991234567"));   // Без +38
+    }
 
-        assertThrows(ValidatingException.class, () -> t.setRate(2.0));
-        assertThrows(ValidatingException.class, () -> t.setDateOfentering("01.09.1990"));
-        assertThrows(ValidatingException.class, () -> t.setWorkload(-10));
+    @ParameterizedTest
+    @ValueSource(ints = {0, 7, -1, 100})
+    public void studentInvalidNumericFieldsTest(int invalidCourse) {
+        Student st = new Student();
+        assertThrows(ValidatingException.class, () -> st.setCourse(invalidCourse));
+        assertThrows(ValidatingException.class, () -> st.setYearOfentering(2018)); // Твоя логіка занадто старого року
+    }
 
-        assertThrows(ValidatingException.class, () -> f.setCode(""));
-        assertThrows(ValidatingException.class, () -> f.setName(null));
-        assertThrows(ValidatingException.class, () -> f.setShortName("   "));
-        assertThrows(ValidatingException.class, () -> f.setDean(null));
-        assertThrows(ValidatingException.class, () -> f.setContacts(""));
-
-        assertThrows(ValidatingException.class, () -> d.setCode(null));
-        assertThrows(ValidatingException.class, () -> d.setName("   "));
-        assertThrows(ValidatingException.class, () -> d.setFaculty(null));
-        assertThrows(ValidatingException.class, () -> d.setHead(null));
-        assertThrows(ValidatingException.class, () -> d.setLocation(""));
-       
-       
-       
-       
-       
+    @ParameterizedTest
+    @ValueSource(strings = {"12345678901", "АБВГД", "КН92"})
+    public void studentInvalidAcademicInfoTest(String invalidData) {
+        Student st = new Student();
+        assertThrows(ValidatingException.class, () -> st.setIdOfRecordBook(invalidData));
+        assertThrows(ValidatingException.class, () -> st.setGroup(invalidData));
     }
     @Test
     public void javaTimeApiTest() {
@@ -112,6 +118,50 @@ public class CLITest {
         assertDoesNotThrow(() -> teacher.setDateOfentering("15.08.2020"));
         assertEquals("15.08.2020", teacher.getDateOfentering());
     }
+    @ParameterizedTest
+    @ValueSource(doubles = {2.0, 3.5, -1.0, 0.0})
+    public void teacherInvalidRateTest(double invalidRate) {
+        Teacher t = new Teacher();
+        assertThrows(ValidatingException.class, () -> t.setRate(invalidRate));
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {-10, -1, 1001})
+    public void teacherInvalidWorkloadTest(int invalidWorkload) {
+        Teacher t = new Teacher();
+        assertThrows(ValidatingException.class, () -> t.setWorkload(invalidWorkload));
+    }
+    @ParameterizedTest
+    @NullAndEmptySource
+    @ValueSource(strings = {"   "}) // Додаємо перевірку на рядок, що складається лише з пробілів
+    public void facultyInvalidStringsTest(String invalidString) {
+        Faculty f = new Faculty();
+        assertThrows(ValidatingException.class, () -> f.setCode(invalidString));
+        assertThrows(ValidatingException.class, () -> f.setName(invalidString));
+        assertThrows(ValidatingException.class, () -> f.setShortName(invalidString));
+        assertThrows(ValidatingException.class, () -> f.setContacts(invalidString));
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    @ValueSource(strings = {"   "})
+    public void departmentInvalidStringsTest(String invalidString) {
+        Department d = new Department();
+        assertThrows(ValidatingException.class, () -> d.setCode(invalidString));
+        assertThrows(ValidatingException.class, () -> d.setName(invalidString));
+        assertThrows(ValidatingException.class, () -> d.setLocation(invalidString));
+    }
+
+    @Test
+    public void nullObjectReferencesTest() {
+        Faculty f = new Faculty();
+        Department d = new Department();
+
+        assertThrows(ValidatingException.class, () -> f.setDean(null));
+        assertThrows(ValidatingException.class, () -> d.setHead(null));
+        assertThrows(ValidatingException.class, () -> d.setFaculty(null));
+    }
+
 
     @Test
     public void repositoryCollectionsTest() {
@@ -142,4 +192,59 @@ public class CLITest {
         List <Student> students =f.getStudentsOfFaculty();
         assertEquals(s1.getName(), students.get(0).getName());
     }
+    @Test
+    public void sortPersonsByAlphabetTest() {
+        Reportoperations reports = new Reportoperations();
+        Student s1 = new Student(); s1.setName("Яковлєв Яків Якович");
+        Student s2 = new Student(); s2.setName("Андрієнко Андрій Андрійович");
+        Student s3 = new Student(); s3.setName("Борисенко Борис Борисович");
+
+        List<Person> unsorted = List.of(s1, s2, s3);
+        List<Person> sorted = reports.personsByAlpabhet(unsorted);
+
+        assertEquals("Андрієнко Андрій Андрійович", sorted.get(0).getName());
+        assertEquals("Борисенко Борис Борисович", sorted.get(1).getName());
+        assertEquals("Яковлєв Яків Якович", sorted.get(2).getName());
+    }
+    @Test
+    public void sortStudentsByCoursesTest() {
+        Reportoperations reports = new Reportoperations();
+        Student s1 = new Student();
+        s1.setName("Яковлєв Яків Якович");
+        Student s2 = new Student();
+        s2.setName("Андрієнко Андрій Андрійович");
+        Student s3 = new Student();
+        s3.setName("Борисенко Борис Борисович");
+        s1.setCourse(2);
+        s2.setCourse(1);
+        s3.setCourse(3);
+        List<Student> unsorted = List.of(s1, s2, s3);
+        List<Student> sorted = reports.studentByCourse(unsorted);
+
+        assertEquals("Андрієнко Андрій Андрійович", sorted.get(0).getName());
+        assertEquals("Борисенко Борис Борисович", sorted.get(2).getName());
+        assertEquals("Яковлєв Яків Якович", sorted.get(1).getName());
+    }
+    @Test
+    public void filterStudentsByCoursesTest() {
+        Reportoperations reports = new Reportoperations();
+        Student s1 = new Student();
+        s1.setName("Яковлєв Яків Якович");
+        Student s2 = new Student();
+        s2.setName("Андрієнко Андрій Андрійович");
+        Student s3 = new Student();
+        s3.setName("Борисенко Борис Борисович");
+        s1.setCourse(2);
+        s2.setCourse(1);
+        s3.setCourse(3);
+        List<Student> unsorted = List.of(s1, s2, s3);
+        List<Student> filter1 = reports.filterStudentsByCourse(unsorted,1);
+        List<Student> filter2 = reports.filterStudentsByCourse(unsorted,2);
+        List<Student> filter3 = reports.filterStudentsByCourse(unsorted,3);
+
+        assertEquals("Андрієнко Андрій Андрійович", filter1.get(0).getName());
+        assertEquals("Борисенко Борис Борисович", filter3.get(0).getName());
+        assertEquals("Яковлєв Яків Якович", filter2.get(0).getName());
+    }
+
 }

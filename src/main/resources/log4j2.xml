@@ -22,7 +22,9 @@
         <Logger name="DigiPackage" level="trace" additivity="false">
             <AppenderRef ref="File"/>
         </Logger>
-
+        <Logger name="network" level="trace" additivity="false">
+            <AppenderRef ref="File"/>
+        </Logger>
         <Logger name="saving" level="trace" additivity="false">
             <AppenderRef ref="File"/>
         </Logger>

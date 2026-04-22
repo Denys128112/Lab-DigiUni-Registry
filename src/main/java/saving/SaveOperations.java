@@ -21,10 +21,15 @@ import java.nio.file.StandardOpenOption;
 import java.util.List;
 
 public class SaveOperations {
-    private static final Path STUDENTS_SAVE = Path.of(".\\resources\\temp_Students.json");
-    private static final Path TEACHERS_SAVE = Path.of(".\\resources\\temp_Teachers.json");
-    private static final Path FACULTIES_SAVE = Path.of(".\\resources\\temp_Faculties.json");
-    private static final Path DEPARMENTS_SAVE = Path.of(".\\resources\\temp_Deparments.json");
+    private static final String PATH=".\\resources\\";
+    private static final Path STUDENTS_SAVE = Path.of(PATH+"Students.json");
+    private static final Path TEACHERS_SAVE = Path.of(PATH+"Teachers.json");
+    private static final Path FACULTIES_SAVE = Path.of(PATH+"Faculties.json");
+    private static final Path DEPARTMENTS_SAVE = Path.of(PATH+"Departments.json");
+    private static final Path STUDENTS_SAVE_TEMP = Path.of(PATH+"temp_"+"Students.json");
+    private static final Path TEACHERS_SAVE_TEMP = Path.of(PATH+"temp_"+"Teachers.json");
+    private static final Path FACULTIES_SAVE_TEMP = Path.of(PATH+"temp_"+"Faculties.json");
+    private static final Path DEPARTMENTS_SAVE_TEMP = Path.of(PATH+"temp_"+"Departments.json");
     private final ObjectMapper mapper;
     private static final Logger log = LoggerFactory.getLogger(SaveOperations.class);
     public SaveOperations() {
@@ -39,77 +44,66 @@ public class SaveOperations {
                 Files.createDirectories(TEACHERS_SAVE.getParent());
             if (Files.notExists(FACULTIES_SAVE.getParent()))
                 Files.createDirectories(FACULTIES_SAVE.getParent());
-            if (Files.notExists(DEPARMENTS_SAVE.getParent()))
-                Files.createDirectories(DEPARMENTS_SAVE.getParent());
+            if (Files.notExists(DEPARTMENTS_SAVE.getParent()))
+                Files.createDirectories(DEPARTMENTS_SAVE.getParent());
         } catch (IOException e) {
-            System.err.println("Помилка створення папки: " + e.getMessage());
+           log.error("problem with create directory{}",e.getMessage());
         }
     }
 
     public void saveTempDatabase(Repository repo, UniversityRepository uniRepo) {
         log.debug("save database");
-
         try {
-            mapper.writeValue(Files.newOutputStream(STUDENTS_SAVE,
+            mapper.writeValue(Files.newOutputStream(STUDENTS_SAVE_TEMP,
                     StandardOpenOption.CREATE,
                     StandardOpenOption.TRUNCATE_EXISTING), repo.getStudents());
-            System.out.println("Базу даних успішно збережено у " + STUDENTS_SAVE);
-            log.trace("students was saved");
+            log.trace("students was saved by thread");
         } catch (IOException e) {
-            System.err.println("Помилка запису JSON: " + e.getMessage());
             log.error("error write students to JSON: {}",e.getMessage());
         }
         try {
-            mapper.writeValue(Files.newOutputStream(TEACHERS_SAVE,
+            mapper.writeValue(Files.newOutputStream(TEACHERS_SAVE_TEMP,
                     StandardOpenOption.CREATE,
                     StandardOpenOption.TRUNCATE_EXISTING), repo.getTeachers());
-            System.out.println("Базу даних успішно збережено у " + TEACHERS_SAVE);
-            log.trace("Teachers was saved");
+            log.trace("Teachers was saved by thread");
         } catch (IOException e) {
-            System.err.println("Помилка запису JSON: " + e.getMessage());
             log.error("error write Teachers to JSON: {}",e.getMessage());
         }
         try {
-            mapper.writeValue(Files.newOutputStream(FACULTIES_SAVE,
+            mapper.writeValue(Files.newOutputStream(FACULTIES_SAVE_TEMP,
                     StandardOpenOption.CREATE,
                     StandardOpenOption.TRUNCATE_EXISTING), uniRepo.getFaculties());
-            System.out.println("Базу даних успішно збережено у " + FACULTIES_SAVE);
-            log.trace("Faculties was saved");
+            log.trace("Faculties was saved by thread");
         } catch (IOException e) {
-            System.err.println("Помилка запису JSON: " + e.getMessage());
             log.error("error write Faculties to JSON: {}",e.getMessage());
         }
         try {
-            mapper.writeValue(Files.newOutputStream(DEPARMENTS_SAVE,
+            mapper.writeValue(Files.newOutputStream(DEPARTMENTS_SAVE_TEMP,
                     StandardOpenOption.CREATE,
                     StandardOpenOption.TRUNCATE_EXISTING), uniRepo.getDepartments());
-            System.out.println("Базу даних успішно збережено у " + DEPARMENTS_SAVE);
-            log.trace("Departments was saved");
+            log.trace("Departments was saved by thread");
         } catch (IOException e) {
-            System.err.println("Помилка запису JSON: " + e.getMessage());
             log.error("error write Departments to JSON: {}",e.getMessage());
         }
         log.info("database saved");
     }
     public void commitChanges() {
-        log.info("Користувач підтвердив збереження. Починаємо перенесення тимчасових файлів...");
+        log.debug("commit changes was called by User");
         try {
-            String[] entities = {"Students", "Teachers", "Faculties", "Deparments"};
+            String[] entities = {"Students", "Teachers", "Faculties", "Departments"};
 
             for (String entity : entities) {
                 Path tempPath = Path.of(".\\resources\\temp_" + entity + ".json");
                 Path mainPath = Path.of(".\\resources\\" + entity + ".json");
-
                 if (Files.exists(tempPath)) {
                     Files.move(tempPath, mainPath, StandardCopyOption.REPLACE_EXISTING);
                     Files.deleteIfExists(tempPath);
-                    log.debug("Файл {}.json успішно оновлено з тимчасової копії", entity);
                 }
+                log.info("temp file was moved to: " + tempPath);
             }
             System.out.println("Зміни успішно застосовані до бази даних!");
         } catch (IOException e) {
-            log.error("Помилка при коміті файлів: {}", e.getMessage());
-            System.out.println("Сталася помилка при збереженні змін.");
+            log.error("error when move tmp files: {}", e.getMessage());
         }
     }
     public void loadDatabase(Repository repo, UniversityRepository uniRepo) throws IOException {
@@ -126,8 +120,8 @@ public class SaveOperations {
             Files.createFile(FACULTIES_SAVE);
             log.trace("Faculties file was created");
         }
-        if (Files.notExists(DEPARMENTS_SAVE)) {
-            Files.createFile(DEPARMENTS_SAVE);
+        if (Files.notExists(DEPARTMENTS_SAVE)) {
+            Files.createFile(DEPARTMENTS_SAVE);
             log.trace("Department file was created");
         }
         else {
@@ -136,25 +130,23 @@ public class SaveOperations {
                 for (Student s : students) {
                     repo.addStudent(s);
                 }
-                System.out.println("Дані Студентів успішно завантажено з JSON!");
                 log.trace("students loaded successfully");
                 List<Teacher> teachers = mapper.readValue(TEACHERS_SAVE.toFile(), new TypeReference<List<Teacher>>() {});
                 for (Teacher t : teachers) {
                     repo.addTeacher(t);
                 }
                 log.trace("Teachers loaded successfully");
-                System.out.println("Дані Викладачів успішно завантажено з JSON!");
+
                 List<Faculty> faculties = mapper.readValue(FACULTIES_SAVE.toFile(), new TypeReference<List<Faculty>>() {});
                 for (Faculty f : faculties) {
                     uniRepo.addFaculty(f);
                 }
                 log.trace("Faculties loaded successfully");
-                System.out.println("Дані Факультетів успішно завантажено з JSON!");
-                List<Department> deparments = mapper.readValue(DEPARMENTS_SAVE.toFile(), new TypeReference<List<Department>>() {});
+
+                List<Department> deparments = mapper.readValue(DEPARTMENTS_SAVE.toFile(), new TypeReference<List<Department>>() {});
                 for (Department d : deparments) {
                     uniRepo.addDepartment(d);
                 }
-                System.out.println("Дані Кафедр успішно завантажено з JSON!");
                 log.trace("Department loaded successfully");
                 for (Department d : uniRepo.getDepartments()) {
                     if (d.getFaculty() != null && d.getFaculty().getCode() != null) {
@@ -185,9 +177,23 @@ public class SaveOperations {
                 log.trace("Teachers loaded successfully to departments");
                 log.info("load database successfully");
             } catch (Exception e) {
-                System.err.println("Помилка читання JSON: " + e.getMessage());
                 log.error("load database error: {}",e.getMessage());
             }
+        }
+    }
+
+    public void deleteTempFiles() {
+        log.debug("commit changes was called by User");
+        try {
+            String[] entities = {"Students", "Teachers", "Faculties", "Departments"};
+
+            for (String entity : entities) {
+                Path tempPath = Path.of(".\\resources\\temp_" + entity + ".json");
+                Files.deleteIfExists(tempPath);
+                log.info("temp file was succesfuly deleted: " + tempPath);
+            }
+        } catch (IOException e) {
+            log.error("error when delete tmp files: {}", e.getMessage());
         }
     }
 }

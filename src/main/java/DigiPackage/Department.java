@@ -82,18 +82,15 @@ public class Department {
     }
 
     public List<Person> getPersonsOfDepartment() {
-        List<Person> personList=new ArrayList<>(personsOfDepartment);
-        return personList;
+        return new ArrayList<>(personsOfDepartment);
     }
 
     public List<Teacher> getTeachersOfDepartment() {
-        List<Teacher> teachersList = new ArrayList<>(teachersOfDepartment);
-        return teachersList;
+        return new ArrayList<>(teachersOfDepartment);
     }
 
     public List<Student> getStudentsOfDepartment() {
-        List<Student> students=new ArrayList<>(studentsOfDepartment);
-        return students;
+        return new ArrayList<>(studentsOfDepartment);
     }
     public void addTeacherToDepartment(Teacher t){
         if(teachersOfDepartment.contains(t))

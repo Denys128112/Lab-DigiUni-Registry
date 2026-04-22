@@ -29,6 +29,7 @@ public class ConsoleProgram {
     static SaveOperations saveOperations = new SaveOperations();
     static Server server = new Server();
     static Client client;
+    static boolean is_finished = false;
     public static void main(String[] args) {
         try {
             log.debug("Starting ConsoleProgram load repositories from JSONs");
@@ -37,7 +38,7 @@ public class ConsoleProgram {
         }
         catch (IOException e) {
             log.error("JSON missed {}",e.getMessage());
-            System.out.println("Нажаль дані з бази данних були втрачені, ми дуже вам співчуваємо, але вам треба заповнити все з самісінького початку");
+            System.out.println("Нажаль дані з бази данних були втрачені, ми дуже вам співчуваємо, але вам треба заповнити все з самісінького початку або завантижити з іншого комп'ютера");
         }
         run();
     }
@@ -46,8 +47,7 @@ public class ConsoleProgram {
         System.out.println("Вітаємо в програмі DigiUni Registry(консольна інформаційна система університету)");
         authenticate();
         backgroundSave();
-        backgroundShare();
-        while (true) {
+        while (!is_finished) {
             mainMenu();
         }
     }
@@ -60,8 +60,9 @@ public class ConsoleProgram {
                 log.error("Problem with sharing {}",e.getMessage());
             }
         });
-        dataSharer.start();
         dataSharer.setDaemon(true);
+        dataSharer.start();
+
     }
     private static void updateDatabaseFromNet() {
         Client client = new Client();
@@ -99,7 +100,7 @@ public class ConsoleProgram {
                 System.out.println("Невірний пароль. Вас авторизовано як Гостя.");
                 currentUserRole = UserRole.GUEST;
                 log.warn("incorect password was 3 times in row");
-                log.info("guest sesion started {}",currentSession.username());
+                log.info("guest sesion started");
             }
         } else {
             currentUserRole = UserRole.GUEST;
@@ -111,8 +112,8 @@ public class ConsoleProgram {
 
     private static void mainMenu() {
         log.debug("Main Menu openned");
-        System.out.println("Оберіть з чим бажаєте працювати: 1)Університет 2)Факультет 3)Кафедра 4)Викладач 5)Студент 6)Пошуки 7)Сортування 8)Збереження 9)Мережеві операції");
-        int choice = getIntInput("Оберіть операцію", 1, 8);
+        System.out.println("Оберіть з чим бажаєте працювати: 1)Університет 2)Факультет 3)Кафедра 4)Викладач 5)Студент 6)Пошуки 7)Сортування 8)Збереження 9)Мережеві операції 0) вийти");
+        int choice = getIntInput("Оберіть операцію", 0, 9);
         switch (choice) {
             case 1:
                 workWithUniversity();
@@ -140,7 +141,20 @@ public class ConsoleProgram {
                 break;
             case 9:
                 netOperations();
+            case 0:
+                askForCommitChanges();
+                is_finished = true;
+                break;
         }
+    }
+
+    private static void askForCommitChanges() {
+        int choice=getIntInput("Ви хочете зберегти дані? 1)так 2)ні", 1,2);
+        if (choice==1 ) {
+            saveOperations.commitChanges();
+            saveOperations.deleteTempFiles();
+        }
+
     }
 
     private static void netOperations() {
@@ -311,7 +325,7 @@ public class ConsoleProgram {
         List result= new ArrayList<>();
         switch (choice){
             case 1:
-                reportoperations.studentByCourse(repository.getStudents());
+                result=reportoperations.studentByCourse(repository.getStudents());
                 break;
             case 2:
                 result=reportoperations.personsByAlpabhet(repository.getStudents());
@@ -335,16 +349,17 @@ public class ConsoleProgram {
                 result=reportoperations.personsByAlpabhet(crudoperations.findDepartment().getStudentsOfDepartment());
                 break;
             case 9:
-                reportoperations.studentByCourse(crudoperations.findDepartment().getStudentsOfDepartment());
+                result=reportoperations.studentByCourse(crudoperations.findDepartment().getStudentsOfDepartment());
                 break;
             case 10:
-                reportoperations.filterStudentsByCourse(repository.getStudents());
+                result=reportoperations.filterStudentsByCourse(repository.getStudents(),getIntInput("Оберіть курс:",1,4));
                 break;
             case 11:
-                reportoperations.filterStudentsByCourse(crudoperations.findDepartment().getStudentsOfDepartment());
+                result=reportoperations.filterStudentsByCourse(crudoperations.findDepartment().getStudentsOfDepartment(),getIntInput("Оберіть курс:",1,4));
                 break;
         }
-        System.out.println(result);
+        if (!result.isEmpty())
+        result.forEach(System.out::println);
         log.info(" finish work with reports operations");
     }
 
@@ -400,7 +415,8 @@ public class ConsoleProgram {
             }
         }
         });
-        backgroundSaver.start();
         backgroundSaver.setDaemon(true);
+        backgroundSaver.start();
+
     }
 }

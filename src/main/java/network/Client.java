@@ -3,6 +3,7 @@ package network;
 import DigiPackage.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,10 +19,11 @@ import java.nio.file.StandardOpenOption;
 import java.util.List;
 
 public class Client {
-    Logger log = LoggerFactory.getLogger(Server.class);
+    Logger log = LoggerFactory.getLogger(Client.class);
     public void accept(){
+    log.debug("Start accepting of db");
     ObjectMapper mapper = new ObjectMapper();
-
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);
         try (Socket socket = new Socket("localhost", 5555);
              BufferedReader in = new BufferedReader(
                      new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8))) {
@@ -47,7 +49,7 @@ public class Client {
             mapper.writeValue(Files.newOutputStream(Path.of(".\\resources\\Departments.json"),
                     StandardOpenOption.CREATE,
                     StandardOpenOption.TRUNCATE_EXISTING), departments);
-
+            log.info("finished accepting of db");
         } catch (Exception e) {
            log.error("Error while accepting data from server {}",e.getMessage());
         }
