@@ -151,10 +151,10 @@ public class ConsoleProgram {
     private static void askForCommitChanges() {
         int choice=getIntInput("Ви хочете зберегти дані? 1)так 2)ні", 1,2);
         if (choice==1 ) {
+            saveOperations.saveTempDatabase(repository,universityRepository);
             saveOperations.commitChanges();
-            saveOperations.deleteTempFiles();
         }
-
+        saveOperations.deleteTempFiles();
     }
 
     private static void netOperations() {
