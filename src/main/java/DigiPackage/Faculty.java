@@ -74,7 +74,21 @@ public class Faculty {
 
     @Override
     public String toString() {
-        return "Faculty [" + code + "]: " + name + " (" + shortName + "), Dean: " + dean.getName()+"Contacts: "+contacts+"]";
+        String result = "Faculty [" + code + "]: " + name + " (" + shortName + "), " +
+                "Dean: " + (dean != null ? dean.getName() : "None") + ", " +
+                "Contacts: " + contacts + "]\n";
+
+        result += "Кафедри цього факультету:\n";
+
+        if (departmentsOfFaculty == null || departmentsOfFaculty.isEmpty()) {
+            result += " - (список порожній)";
+        } else {
+            for (Department dept : departmentsOfFaculty) {
+                result += " - " + dept.getName() + "\n";
+            }
+        }
+
+        return result;
     }
 
     @Override
