@@ -621,6 +621,7 @@ public class CRUDoperations {
         Department d = findDepartment();
         if (d != null && getIntInput("Видалити? 1-Так, 0-Ні", 0, 1) == 1 && universityRepository.getDepartmentMap().get(d.getCode())!=null) {
             universityRepository.removeDepartment(d);
+            d.getFaculty().removeDeparmentFromFaculty(d);
             System.out.println("Видалення Успішне!");
             log.info("Department {} has been removed", d.getCode());
         } else
