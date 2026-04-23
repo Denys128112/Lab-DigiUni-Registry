@@ -52,6 +52,7 @@ public class ConsoleProgram {
         }
     }
 
+
     private static void backgroundShare() {
         Thread dataSharer= new Thread(() -> {
             try {

@@ -143,3 +143,350 @@
 2026-04-23 12:28:52.262 INFO  [main] saving.SaveOperations - temp file was moved to: .\resources\temp_Teachers.json
 2026-04-23 12:28:52.264 INFO  [main] saving.SaveOperations - temp file was moved to: .\resources\temp_Faculties.json
 2026-04-23 12:28:52.265 INFO  [main] saving.SaveOperations - temp file was moved to: .\resources\temp_Departments.json
+2026-04-23 17:20:07.840 DEBUG [main] CLI.ConsoleProgram - Starting ConsoleProgram load repositories from JSONs
+2026-04-23 17:20:07.842 DEBUG [main] saving.SaveOperations - load database
+2026-04-23 17:20:07.884 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:20:07.885 INFO  [main] CLI.Repository - Added student with id S01
+2026-04-23 17:20:07.885 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:20:07.885 INFO  [main] CLI.Repository - Added student with id S02
+2026-04-23 17:20:07.885 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:20:07.885 INFO  [main] CLI.Repository - Added student with id S03
+2026-04-23 17:20:07.885 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:20:07.885 INFO  [main] CLI.Repository - Added student with id S04
+2026-04-23 17:20:07.885 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:20:07.885 INFO  [main] CLI.Repository - Added student with id S05
+2026-04-23 17:20:07.885 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:20:07.885 INFO  [main] CLI.Repository - Added student with id S06
+2026-04-23 17:20:07.885 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:20:07.885 INFO  [main] CLI.Repository - Added student with id S07
+2026-04-23 17:20:07.885 TRACE [main] saving.SaveOperations - students loaded successfully
+2026-04-23 17:20:07.891 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:20:07.891 INFO  [main] CLI.Repository - Added teacher with id T01
+2026-04-23 17:20:07.891 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:20:07.891 INFO  [main] CLI.Repository - Added teacher with id T02
+2026-04-23 17:20:07.891 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:20:07.891 INFO  [main] CLI.Repository - Added teacher with id T03
+2026-04-23 17:20:07.891 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:20:07.891 INFO  [main] CLI.Repository - Added teacher with id T04
+2026-04-23 17:20:07.891 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:20:07.891 INFO  [main] CLI.Repository - Added teacher with id T05
+2026-04-23 17:20:07.891 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:20:07.891 INFO  [main] CLI.Repository - Added teacher with id T06
+2026-04-23 17:20:07.891 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:20:07.891 INFO  [main] CLI.Repository - Added teacher with id T07
+2026-04-23 17:20:07.891 TRACE [main] saving.SaveOperations - Teachers loaded successfully
+2026-04-23 17:20:07.898 DEBUG [main] CLI.UniversityRepository - add Faculty Faculty [F00]: Факультет Інформатики (ФІ), Dean: Глибовець Андрій Миколайович, Contacts: https://www.fin.ukma.edu.ua/contacts]
+Кафедри цього факультету:
+ - (список порожній)
+2026-04-23 17:20:07.900 INFO  [main] CLI.UniversityRepository - faculty added Faculty [F00]: Факультет Інформатики (ФІ), Dean: Глибовець Андрій Миколайович, Contacts: https://www.fin.ukma.edu.ua/contacts]
+Кафедри цього факультету:
+ - (список порожній)
+2026-04-23 17:20:07.900 DEBUG [main] CLI.UniversityRepository - add Faculty Faculty [F01]: Факультет Гуманітарних Наук (ФГН), Dean: Ткачук Марина Леонідівна, Contacts: https://www.ukma.edu.ua/fgn]
+Кафедри цього факультету:
+ - (список порожній)
+2026-04-23 17:20:07.900 INFO  [main] CLI.UniversityRepository - faculty added Faculty [F01]: Факультет Гуманітарних Наук (ФГН), Dean: Ткачук Марина Леонідівна, Contacts: https://www.ukma.edu.ua/fgn]
+Кафедри цього факультету:
+ - (список порожній)
+2026-04-23 17:20:07.900 TRACE [main] saving.SaveOperations - Faculties loaded successfully
+2026-04-23 17:20:07.903 ERROR [main] saving.SaveOperations - load database error: Unresolved forward references for: 
+ at [Source: (File); line: 231, column: 3]Object id [T02] (for `DigiPackage.Teacher`) at [Source: (File); line: 92, column: 17], Object id [T03] (for `DigiPackage.Teacher`) at [Source: (File); line: 98, column: 17], Object id [T05] (for `DigiPackage.Teacher`) at [Source: (File); line: 217, column: 17], Object id [T06] (for `DigiPackage.Teacher`) at [Source: (File); line: 223, column: 17], Object id [T07] (for `DigiPackage.Teacher`) at [Source: (File); line: 229, column: 17].
+2026-04-23 17:20:07.903 INFO  [main] CLI.ConsoleProgram - Loading users from database successful
+2026-04-23 17:20:07.903 DEBUG [main] CLI.ConsoleProgram - Starting ConsoleProgram run
+2026-04-23 17:20:38.766 DEBUG [main] CLI.ConsoleProgram - Main Menu openned
+2026-04-23 17:20:46.609 DEBUG [main] saving.SaveOperations - commit changes was called by User
+2026-04-23 17:20:46.609 INFO  [main] saving.SaveOperations - temp file was moved to: .\resources\temp_Students.json
+2026-04-23 17:20:46.609 INFO  [main] saving.SaveOperations - temp file was moved to: .\resources\temp_Teachers.json
+2026-04-23 17:20:46.609 INFO  [main] saving.SaveOperations - temp file was moved to: .\resources\temp_Faculties.json
+2026-04-23 17:20:46.611 INFO  [main] saving.SaveOperations - temp file was moved to: .\resources\temp_Departments.json
+2026-04-23 17:20:46.611 DEBUG [main] CLI.ConsoleProgram - Main Menu openned
+2026-04-23 17:21:35.279 DEBUG [main] CLI.ConsoleProgram - Starting ConsoleProgram load repositories from JSONs
+2026-04-23 17:21:35.280 DEBUG [main] saving.SaveOperations - load database
+2026-04-23 17:21:35.328 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:21:35.328 INFO  [main] CLI.Repository - Added student with id S01
+2026-04-23 17:21:35.328 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:21:35.328 INFO  [main] CLI.Repository - Added student with id S02
+2026-04-23 17:21:35.328 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:21:35.328 INFO  [main] CLI.Repository - Added student with id S03
+2026-04-23 17:21:35.328 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:21:35.329 INFO  [main] CLI.Repository - Added student with id S04
+2026-04-23 17:21:35.329 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:21:35.329 INFO  [main] CLI.Repository - Added student with id S05
+2026-04-23 17:21:35.329 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:21:35.329 INFO  [main] CLI.Repository - Added student with id S06
+2026-04-23 17:21:35.329 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:21:35.329 INFO  [main] CLI.Repository - Added student with id S07
+2026-04-23 17:21:35.329 TRACE [main] saving.SaveOperations - students loaded successfully
+2026-04-23 17:21:35.337 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:21:35.337 INFO  [main] CLI.Repository - Added teacher with id T01
+2026-04-23 17:21:35.337 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:21:35.337 INFO  [main] CLI.Repository - Added teacher with id T02
+2026-04-23 17:21:35.337 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:21:35.337 INFO  [main] CLI.Repository - Added teacher with id T03
+2026-04-23 17:21:35.337 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:21:35.337 INFO  [main] CLI.Repository - Added teacher with id T04
+2026-04-23 17:21:35.337 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:21:35.337 INFO  [main] CLI.Repository - Added teacher with id T05
+2026-04-23 17:21:35.337 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:21:35.337 INFO  [main] CLI.Repository - Added teacher with id T06
+2026-04-23 17:21:35.337 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:21:35.337 INFO  [main] CLI.Repository - Added teacher with id T07
+2026-04-23 17:21:35.337 TRACE [main] saving.SaveOperations - Teachers loaded successfully
+2026-04-23 17:21:35.346 DEBUG [main] CLI.UniversityRepository - add Faculty Faculty [F00]: Факультет Інформатики (ФІ), Dean: Глибовець Андрій Миколайович, Contacts: https://www.fin.ukma.edu.ua/contacts]
+Кафедри цього факультету:
+ - (список порожній)
+2026-04-23 17:21:35.346 INFO  [main] CLI.UniversityRepository - faculty added Faculty [F00]: Факультет Інформатики (ФІ), Dean: Глибовець Андрій Миколайович, Contacts: https://www.fin.ukma.edu.ua/contacts]
+Кафедри цього факультету:
+ - (список порожній)
+2026-04-23 17:21:35.346 DEBUG [main] CLI.UniversityRepository - add Faculty Faculty [F01]: Факультет Гуманітарних Наук (ФГН), Dean: Ткачук Марина Леонідівна, Contacts: https://www.ukma.edu.ua/fgn]
+Кафедри цього факультету:
+ - (список порожній)
+2026-04-23 17:21:35.346 INFO  [main] CLI.UniversityRepository - faculty added Faculty [F01]: Факультет Гуманітарних Наук (ФГН), Dean: Ткачук Марина Леонідівна, Contacts: https://www.ukma.edu.ua/fgn]
+Кафедри цього факультету:
+ - (список порожній)
+2026-04-23 17:21:35.346 TRACE [main] saving.SaveOperations - Faculties loaded successfully
+2026-04-23 17:21:35.350 ERROR [main] saving.SaveOperations - load database error: Unresolved forward references for: 
+ at [Source: (File); line: 231, column: 3]Object id [T02] (for `DigiPackage.Teacher`) at [Source: (File); line: 92, column: 17], Object id [T03] (for `DigiPackage.Teacher`) at [Source: (File); line: 98, column: 17], Object id [T05] (for `DigiPackage.Teacher`) at [Source: (File); line: 217, column: 17], Object id [T06] (for `DigiPackage.Teacher`) at [Source: (File); line: 223, column: 17], Object id [T07] (for `DigiPackage.Teacher`) at [Source: (File); line: 229, column: 17].
+2026-04-23 17:21:35.350 INFO  [main] CLI.ConsoleProgram - Loading users from database successful
+2026-04-23 17:21:35.350 DEBUG [main] CLI.ConsoleProgram - Starting ConsoleProgram run
+2026-04-23 17:21:50.842 DEBUG [main] CLI.ConsoleProgram - Main Menu openned
+2026-04-23 17:21:52.686 DEBUG [main] saving.SaveOperations - commit changes was called by User
+2026-04-23 17:21:52.686 INFO  [main] saving.SaveOperations - temp file was moved to: .\resources\temp_Students.json
+2026-04-23 17:21:52.687 INFO  [main] saving.SaveOperations - temp file was moved to: .\resources\temp_Teachers.json
+2026-04-23 17:21:52.687 INFO  [main] saving.SaveOperations - temp file was moved to: .\resources\temp_Faculties.json
+2026-04-23 17:21:52.687 INFO  [main] saving.SaveOperations - temp file was moved to: .\resources\temp_Departments.json
+2026-04-23 17:21:52.687 DEBUG [main] CLI.ConsoleProgram - Main Menu openned
+2026-04-23 17:21:58.443 DEBUG [main] saving.SaveOperations - save database
+2026-04-23 17:21:58.463 TRACE [main] saving.SaveOperations - students was saved by thread
+2026-04-23 17:21:58.467 TRACE [main] saving.SaveOperations - Teachers was saved by thread
+2026-04-23 17:21:58.468 TRACE [main] saving.SaveOperations - Faculties was saved by thread
+2026-04-23 17:21:58.469 TRACE [main] saving.SaveOperations - Departments was saved by thread
+2026-04-23 17:21:58.469 INFO  [main] saving.SaveOperations - database saved
+2026-04-23 17:21:58.469 DEBUG [main] saving.SaveOperations - commit changes was called by User
+2026-04-23 17:21:58.471 INFO  [main] saving.SaveOperations - temp file was moved to: .\resources\temp_Students.json
+2026-04-23 17:21:58.471 INFO  [main] saving.SaveOperations - temp file was moved to: .\resources\temp_Teachers.json
+2026-04-23 17:21:58.472 INFO  [main] saving.SaveOperations - temp file was moved to: .\resources\temp_Faculties.json
+2026-04-23 17:21:58.473 INFO  [main] saving.SaveOperations - temp file was moved to: .\resources\temp_Departments.json
+2026-04-23 17:21:58.473 DEBUG [main] saving.SaveOperations - commit changes was called by User
+2026-04-23 17:21:58.473 INFO  [main] saving.SaveOperations - temp file was succesfuly deleted: .\resources\temp_Students.json
+2026-04-23 17:21:58.473 INFO  [main] saving.SaveOperations - temp file was succesfuly deleted: .\resources\temp_Teachers.json
+2026-04-23 17:21:58.473 INFO  [main] saving.SaveOperations - temp file was succesfuly deleted: .\resources\temp_Faculties.json
+2026-04-23 17:21:58.473 INFO  [main] saving.SaveOperations - temp file was succesfuly deleted: .\resources\temp_Departments.json
+2026-04-23 17:27:16.239 DEBUG [main] CLI.ConsoleProgram - Starting ConsoleProgram load repositories from JSONs
+2026-04-23 17:27:16.241 DEBUG [main] saving.SaveOperations - load database
+2026-04-23 17:27:16.285 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:27:16.285 INFO  [main] CLI.Repository - Added student with id S01
+2026-04-23 17:27:16.285 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:27:16.285 INFO  [main] CLI.Repository - Added student with id S02
+2026-04-23 17:27:16.285 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:27:16.285 INFO  [main] CLI.Repository - Added student with id S03
+2026-04-23 17:27:16.285 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:27:16.285 INFO  [main] CLI.Repository - Added student with id S04
+2026-04-23 17:27:16.285 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:27:16.285 INFO  [main] CLI.Repository - Added student with id S05
+2026-04-23 17:27:16.285 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:27:16.285 INFO  [main] CLI.Repository - Added student with id S06
+2026-04-23 17:27:16.285 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:27:16.285 INFO  [main] CLI.Repository - Added student with id S07
+2026-04-23 17:27:16.285 TRACE [main] saving.SaveOperations - students loaded successfully
+2026-04-23 17:27:16.291 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:27:16.291 INFO  [main] CLI.Repository - Added teacher with id T01
+2026-04-23 17:27:16.291 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:27:16.291 INFO  [main] CLI.Repository - Added teacher with id T02
+2026-04-23 17:27:16.291 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:27:16.291 INFO  [main] CLI.Repository - Added teacher with id T03
+2026-04-23 17:27:16.291 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:27:16.291 INFO  [main] CLI.Repository - Added teacher with id T04
+2026-04-23 17:27:16.291 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:27:16.291 INFO  [main] CLI.Repository - Added teacher with id T05
+2026-04-23 17:27:16.291 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:27:16.291 INFO  [main] CLI.Repository - Added teacher with id T06
+2026-04-23 17:27:16.291 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:27:16.291 INFO  [main] CLI.Repository - Added teacher with id T07
+2026-04-23 17:27:16.291 TRACE [main] saving.SaveOperations - Teachers loaded successfully
+2026-04-23 17:27:16.299 DEBUG [main] CLI.UniversityRepository - add Faculty Faculty [F00]: Факультет Інформатики (ФІ), Dean: Глибовець Андрій Миколайович, Contacts: https://www.fin.ukma.edu.ua/contacts]
+Кафедри цього факультету:
+ - (список порожній)
+2026-04-23 17:27:16.299 INFO  [main] CLI.UniversityRepository - faculty added Faculty [F00]: Факультет Інформатики (ФІ), Dean: Глибовець Андрій Миколайович, Contacts: https://www.fin.ukma.edu.ua/contacts]
+Кафедри цього факультету:
+ - (список порожній)
+2026-04-23 17:27:16.299 DEBUG [main] CLI.UniversityRepository - add Faculty Faculty [F01]: Факультет Гуманітарних Наук (ФГН), Dean: Ткачук Марина Леонідівна, Contacts: https://www.ukma.edu.ua/fgn]
+Кафедри цього факультету:
+ - (список порожній)
+2026-04-23 17:27:16.299 INFO  [main] CLI.UniversityRepository - faculty added Faculty [F01]: Факультет Гуманітарних Наук (ФГН), Dean: Ткачук Марина Леонідівна, Contacts: https://www.ukma.edu.ua/fgn]
+Кафедри цього факультету:
+ - (список порожній)
+2026-04-23 17:27:16.299 TRACE [main] saving.SaveOperations - Faculties loaded successfully
+2026-04-23 17:27:16.303 ERROR [main] saving.SaveOperations - load database error: Unresolved forward references for: 
+ at [Source: (File); line: 67, column: 3]Object id [T03] (for `DigiPackage.Teacher`) at [Source: (File); line: 28, column: 17], Object id [T05] (for `DigiPackage.Teacher`) at [Source: (File); line: 53, column: 17], Object id [T06] (for `DigiPackage.Teacher`) at [Source: (File); line: 59, column: 17], Object id [T07] (for `DigiPackage.Teacher`) at [Source: (File); line: 65, column: 17].
+2026-04-23 17:27:16.303 INFO  [main] CLI.ConsoleProgram - Loading users from database successful
+2026-04-23 17:27:16.303 DEBUG [main] CLI.ConsoleProgram - Starting ConsoleProgram run
+2026-04-23 17:27:21.875 DEBUG [main] CLI.ConsoleProgram - Main Menu openned
+2026-04-23 17:27:23.571 DEBUG [main] CLI.ConsoleProgram - Working with Department
+2026-04-23 17:27:25.472 DEBUG [main] CLI.CRUDoperations - Reading department data
+2026-04-23 17:30:24.547 DEBUG [main] CLI.ConsoleProgram - Starting ConsoleProgram load repositories from JSONs
+2026-04-23 17:30:24.549 DEBUG [main] saving.SaveOperations - load database
+2026-04-23 17:30:24.595 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:30:24.595 INFO  [main] CLI.Repository - Added student with id S01
+2026-04-23 17:30:24.595 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:30:24.595 INFO  [main] CLI.Repository - Added student with id S02
+2026-04-23 17:30:24.595 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:30:24.595 INFO  [main] CLI.Repository - Added student with id S03
+2026-04-23 17:30:24.595 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:30:24.595 INFO  [main] CLI.Repository - Added student with id S04
+2026-04-23 17:30:24.595 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:30:24.595 INFO  [main] CLI.Repository - Added student with id S05
+2026-04-23 17:30:24.595 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:30:24.596 INFO  [main] CLI.Repository - Added student with id S06
+2026-04-23 17:30:24.596 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:30:24.596 INFO  [main] CLI.Repository - Added student with id S07
+2026-04-23 17:30:24.596 TRACE [main] saving.SaveOperations - students loaded successfully
+2026-04-23 17:30:24.603 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:30:24.603 INFO  [main] CLI.Repository - Added teacher with id T01
+2026-04-23 17:30:24.603 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:30:24.603 INFO  [main] CLI.Repository - Added teacher with id T02
+2026-04-23 17:30:24.603 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:30:24.603 INFO  [main] CLI.Repository - Added teacher with id T03
+2026-04-23 17:30:24.604 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:30:24.604 INFO  [main] CLI.Repository - Added teacher with id T04
+2026-04-23 17:30:24.604 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:30:24.604 INFO  [main] CLI.Repository - Added teacher with id T05
+2026-04-23 17:30:24.604 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:30:24.604 INFO  [main] CLI.Repository - Added teacher with id T06
+2026-04-23 17:30:24.604 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:30:24.604 INFO  [main] CLI.Repository - Added teacher with id T07
+2026-04-23 17:30:24.604 TRACE [main] saving.SaveOperations - Teachers loaded successfully
+2026-04-23 17:30:24.612 DEBUG [main] CLI.UniversityRepository - add Faculty Faculty [F00]: Факультет Інформатики (ФІ), Dean: Глибовець Андрій Миколайович, Contacts: https://www.fin.ukma.edu.ua/contacts]
+Кафедри цього факультету:
+ - (список порожній)
+2026-04-23 17:30:24.623 INFO  [main] CLI.UniversityRepository - faculty added Faculty [F00]: Факультет Інформатики (ФІ), Dean: Глибовець Андрій Миколайович, Contacts: https://www.fin.ukma.edu.ua/contacts]
+Кафедри цього факультету:
+ - (список порожній)
+2026-04-23 17:30:24.623 DEBUG [main] CLI.UniversityRepository - add Faculty Faculty [F01]: Факультет Гуманітарних Наук (ФГН), Dean: Ткачук Марина Леонідівна, Contacts: https://www.ukma.edu.ua/fgn]
+Кафедри цього факультету:
+ - (список порожній)
+2026-04-23 17:30:24.623 INFO  [main] CLI.UniversityRepository - faculty added Faculty [F01]: Факультет Гуманітарних Наук (ФГН), Dean: Ткачук Марина Леонідівна, Contacts: https://www.ukma.edu.ua/fgn]
+Кафедри цього факультету:
+ - (список порожній)
+2026-04-23 17:30:24.623 TRACE [main] saving.SaveOperations - Faculties loaded successfully
+2026-04-23 17:30:24.627 ERROR [main] saving.SaveOperations - load database error: Unresolved forward references for: 
+ at [Source: (File); line: 67, column: 3]Object id [T03] (for `DigiPackage.Teacher`) at [Source: (File); line: 28, column: 17], Object id [T05] (for `DigiPackage.Teacher`) at [Source: (File); line: 53, column: 17], Object id [T06] (for `DigiPackage.Teacher`) at [Source: (File); line: 59, column: 17], Object id [T07] (for `DigiPackage.Teacher`) at [Source: (File); line: 65, column: 17].
+2026-04-23 17:30:24.627 INFO  [main] CLI.ConsoleProgram - Loading users from database successful
+2026-04-23 17:30:24.628 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:30:24.628 DEBUG [main] CLI.ConsoleProgram - Starting ConsoleProgram run
+2026-04-23 17:30:48.582 DEBUG [main] CLI.ConsoleProgram - Starting ConsoleProgram load repositories from JSONs
+2026-04-23 17:30:48.583 DEBUG [main] saving.SaveOperations - load database
+2026-04-23 17:30:48.584 TRACE [main] saving.SaveOperations - students file was created
+2026-04-23 17:30:48.584 TRACE [main] saving.SaveOperations - Teachers file was created
+2026-04-23 17:30:48.584 TRACE [main] saving.SaveOperations - Faculties file was created
+2026-04-23 17:30:48.584 TRACE [main] saving.SaveOperations - Department file was created
+2026-04-23 17:30:48.584 INFO  [main] CLI.ConsoleProgram - Loading users from database successful
+2026-04-23 17:30:48.591 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:30:48.591 INFO  [main] CLI.Repository - Added teacher with id T01
+2026-04-23 17:30:48.591 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:30:48.591 INFO  [main] CLI.Repository - Added teacher with id T02
+2026-04-23 17:30:48.591 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:30:48.591 INFO  [main] CLI.Repository - Added teacher with id T03
+2026-04-23 17:30:48.591 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:30:48.591 INFO  [main] CLI.Repository - Added teacher with id T04
+2026-04-23 17:30:48.591 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:30:48.591 INFO  [main] CLI.Repository - Added teacher with id T05
+2026-04-23 17:30:48.591 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:30:48.591 INFO  [main] CLI.Repository - Added teacher with id T06
+2026-04-23 17:30:48.591 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:30:48.591 INFO  [main] CLI.Repository - Added teacher with id T07
+2026-04-23 17:30:48.591 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:30:48.591 INFO  [main] CLI.Repository - Added teacher with id T08
+2026-04-23 17:30:48.591 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:30:48.591 INFO  [main] CLI.Repository - Added teacher with id T09
+2026-04-23 17:30:48.591 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:30:48.591 INFO  [main] CLI.Repository - Added teacher with id T10
+2026-04-23 17:30:48.591 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:30:48.591 INFO  [main] CLI.Repository - Added teacher with id T11
+2026-04-23 17:30:48.591 DEBUG [main] CLI.Repository - Adding teacher
+2026-04-23 17:30:48.591 INFO  [main] CLI.Repository - Added teacher with id T12
+2026-04-23 17:30:48.596 DEBUG [main] CLI.UniversityRepository - add Faculty Faculty [F00]: Факультет Інформатики (ФІ), Dean: Глибовець Андрій Миколайович, Contacts: https://www.fin.ukma.edu.ua/contacts]
+Кафедри цього факультету:
+ - (список порожній)
+2026-04-23 17:30:48.596 INFO  [main] CLI.UniversityRepository - faculty added Faculty [F00]: Факультет Інформатики (ФІ), Dean: Глибовець Андрій Миколайович, Contacts: https://www.fin.ukma.edu.ua/contacts]
+Кафедри цього факультету:
+ - (список порожній)
+2026-04-23 17:30:48.596 DEBUG [main] CLI.UniversityRepository - add Faculty Faculty [F01]: Факультет Гуманітарних Наук (ФГН), Dean: Ткачук Марина Леонідівна, Contacts: https://www.ukma.edu.ua/fgn]
+Кафедри цього факультету:
+ - (список порожній)
+2026-04-23 17:30:48.596 INFO  [main] CLI.UniversityRepository - faculty added Faculty [F01]: Факультет Гуманітарних Наук (ФГН), Dean: Ткачук Марина Леонідівна, Contacts: https://www.ukma.edu.ua/fgn]
+Кафедри цього факультету:
+ - (список порожній)
+2026-04-23 17:30:48.598 DEBUG [main] CLI.UniversityRepository - add Department Department: Кафедра Мережних Технологій (D00), Faculty: ФІ, Head: Малашонок Геннадій Іванович, Location: Кабінет: 1-204
+2026-04-23 17:30:48.598 INFO  [main] CLI.UniversityRepository - department added Department: Кафедра Мережних Технологій (D00), Faculty: ФІ, Head: Малашонок Геннадій Іванович, Location: Кабінет: 1-204
+2026-04-23 17:30:48.598 DEBUG [main] CLI.UniversityRepository - add Department Department: Кафедра Інженерії Програмного Забезпечення (D01), Faculty: ФІ, Head: Пєчкурова Олена Миколаївна, Location: Кабінет: 3-111
+2026-04-23 17:30:48.598 INFO  [main] CLI.UniversityRepository - department added Department: Кафедра Інженерії Програмного Забезпечення (D01), Faculty: ФІ, Head: Пєчкурова Олена Миколаївна, Location: Кабінет: 3-111
+2026-04-23 17:30:48.598 DEBUG [main] CLI.UniversityRepository - add Department Department: Кафедра історії (D02), Faculty: ФГН, Head: Тесленко Ігор Анатолійович, Location: Кабінет: 5-212
+2026-04-23 17:30:48.598 INFO  [main] CLI.UniversityRepository - department added Department: Кафедра історії (D02), Faculty: ФГН, Head: Тесленко Ігор Анатолійович, Location: Кабінет: 5-212
+2026-04-23 17:30:48.598 DEBUG [main] CLI.UniversityRepository - add Department Department: Кафедра культурології (D03), Faculty: ФГН, Head: Собуцька Марина Юріївна, Location: Кабінет: 5-115
+2026-04-23 17:30:48.598 INFO  [main] CLI.UniversityRepository - department added Department: Кафедра культурології (D03), Faculty: ФГН, Head: Собуцька Марина Юріївна, Location: Кабінет: 5-115
+2026-04-23 17:30:48.598 DEBUG [main] CLI.UniversityRepository - add Department Department: Кафедра англійської мови (D04), Faculty: ФГН, Head: Мазін Дмитро Олегович, Location: Кабінет: 1-305
+2026-04-23 17:30:48.598 INFO  [main] CLI.UniversityRepository - department added Department: Кафедра англійської мови (D04), Faculty: ФГН, Head: Мазін Дмитро Олегович, Location: Кабінет: 1-305
+2026-04-23 17:30:48.599 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:30:48.599 INFO  [main] CLI.Repository - Added student with id S01
+2026-04-23 17:30:48.599 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:30:48.599 INFO  [main] CLI.Repository - Added student with id S02
+2026-04-23 17:30:48.599 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:30:48.599 INFO  [main] CLI.Repository - Added student with id S03
+2026-04-23 17:30:48.599 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:30:48.599 INFO  [main] CLI.Repository - Added student with id S04
+2026-04-23 17:30:48.599 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:30:48.599 INFO  [main] CLI.Repository - Added student with id S05
+2026-04-23 17:30:48.599 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:30:48.599 INFO  [main] CLI.Repository - Added student with id S06
+2026-04-23 17:30:48.600 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:30:48.600 INFO  [main] CLI.Repository - Added student with id S07
+2026-04-23 17:30:48.600 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:30:48.600 INFO  [main] CLI.Repository - Added student with id S08
+2026-04-23 17:30:48.600 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:30:48.600 INFO  [main] CLI.Repository - Added student with id S09
+2026-04-23 17:30:48.600 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:30:48.600 INFO  [main] CLI.Repository - Added student with id S10
+2026-04-23 17:30:48.600 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:30:48.600 INFO  [main] CLI.Repository - Added student with id S11
+2026-04-23 17:30:48.600 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:30:48.600 INFO  [main] CLI.Repository - Added student with id S12
+2026-04-23 17:30:48.600 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:30:48.600 INFO  [main] CLI.Repository - Added student with id S13
+2026-04-23 17:30:48.600 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:30:48.600 INFO  [main] CLI.Repository - Added student with id S14
+2026-04-23 17:30:48.600 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:30:48.600 INFO  [main] CLI.Repository - Added student with id S15
+2026-04-23 17:30:48.600 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:30:48.600 INFO  [main] CLI.Repository - Added student with id S16
+2026-04-23 17:30:48.600 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:30:48.600 INFO  [main] CLI.Repository - Added student with id S17
+2026-04-23 17:30:48.600 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:30:48.600 INFO  [main] CLI.Repository - Added student with id S18
+2026-04-23 17:30:48.600 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:30:48.600 INFO  [main] CLI.Repository - Added student with id S19
+2026-04-23 17:30:48.600 DEBUG [main] CLI.Repository - Adding student
+2026-04-23 17:30:48.600 INFO  [main] CLI.Repository - Added student with id S20
+2026-04-23 17:30:48.600 DEBUG [main] CLI.ConsoleProgram - Starting ConsoleProgram run
+2026-04-23 17:30:55.591 DEBUG [main] CLI.ConsoleProgram - Main Menu openned
+2026-04-23 17:31:04.654 DEBUG [main] saving.SaveOperations - commit changes was called by User
+2026-04-23 17:31:04.654 INFO  [main] saving.SaveOperations - temp file was moved to: .\resources\temp_Students.json
+2026-04-23 17:31:04.654 INFO  [main] saving.SaveOperations - temp file was moved to: .\resources\temp_Teachers.json
+2026-04-23 17:31:04.654 INFO  [main] saving.SaveOperations - temp file was moved to: .\resources\temp_Faculties.json
+2026-04-23 17:31:04.654 INFO  [main] saving.SaveOperations - temp file was moved to: .\resources\temp_Departments.json
+2026-04-23 17:31:04.654 DEBUG [main] CLI.ConsoleProgram - Main Menu openned
+2026-04-23 17:31:09.903 DEBUG [main] saving.SaveOperations - save database
+2026-04-23 17:31:09.932 TRACE [main] saving.SaveOperations - students was saved by thread
+2026-04-23 17:31:09.937 TRACE [main] saving.SaveOperations - Teachers was saved by thread
+2026-04-23 17:31:09.938 TRACE [main] saving.SaveOperations - Faculties was saved by thread
+2026-04-23 17:31:09.940 TRACE [main] saving.SaveOperations - Departments was saved by thread
+2026-04-23 17:31:09.940 INFO  [main] saving.SaveOperations - database saved
+2026-04-23 17:31:09.940 DEBUG [main] saving.SaveOperations - commit changes was called by User
+2026-04-23 17:31:09.941 INFO  [main] saving.SaveOperations - temp file was moved to: .\resources\temp_Students.json
+2026-04-23 17:31:09.942 INFO  [main] saving.SaveOperations - temp file was moved to: .\resources\temp_Teachers.json
+2026-04-23 17:31:09.942 INFO  [main] saving.SaveOperations - temp file was moved to: .\resources\temp_Faculties.json
+2026-04-23 17:31:09.943 INFO  [main] saving.SaveOperations - temp file was moved to: .\resources\temp_Departments.json
+2026-04-23 17:31:09.943 DEBUG [main] saving.SaveOperations - commit changes was called by User
+2026-04-23 17:31:09.943 INFO  [main] saving.SaveOperations - temp file was succesfuly deleted: .\resources\temp_Students.json
+2026-04-23 17:31:09.943 INFO  [main] saving.SaveOperations - temp file was succesfuly deleted: .\resources\temp_Teachers.json
+2026-04-23 17:31:09.943 INFO  [main] saving.SaveOperations - temp file was succesfuly deleted: .\resources\temp_Faculties.json
+2026-04-23 17:31:09.943 INFO  [main] saving.SaveOperations - temp file was succesfuly deleted: .\resources\temp_Departments.json

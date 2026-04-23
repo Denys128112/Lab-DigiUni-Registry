@@ -1,6 +1,7 @@
 package DigiPackage;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import exceptions.EntityAlreadyExistsException;
 import exceptions.ValidatingException;
@@ -103,7 +104,7 @@ public class Faculty {
     public int hashCode() {
         return Objects.hashCode(code);
     }
-
+    @JsonIgnore
     public List<Student> getStudentsOfFaculty() {
         List<Student> studentsOfFaculty=new ArrayList<>();
         for(Department d: departmentsOfFaculty){
@@ -111,6 +112,7 @@ public class Faculty {
         }
         return studentsOfFaculty;
     }
+    @JsonIgnore
     public List<Teacher> getTeachersOfFaculty() {
         List<Teacher> teachersOfFaculty=new ArrayList<>();
         for(Department d: departmentsOfFaculty){
@@ -118,6 +120,7 @@ public class Faculty {
         }
         return teachersOfFaculty;
     }
+    @JsonIgnore
     public List<Person> getPersonsOfFaculty() {
         List<Person> personsOfFaculty=new ArrayList<>();
         for(Department d: departmentsOfFaculty){
