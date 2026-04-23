@@ -110,12 +110,23 @@ public class Person {
 
         }
 
-        public void setName(String name) {
-            if(verifyCorectionOfname(name))
-            this.name = name;
-            else
-                throw  new ValidatingException("Invalid name of person");
+    public void setName(String name) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new ValidatingException("ПІБ не може бути порожнім!");
         }
+
+        String[] parts = name.trim().split("\\s+");
+
+        if (parts.length != 3) {
+            throw new ValidatingException("ПІБ має складатися РІВНО з 3 слів (Прізвище Ім'я По-батькові). Ви ввели: " + parts.length);
+        }
+
+        if (!name.matches("^[a-zA-Zа-яА-ЯіІїЇєЄґҐ'\\- ]+$")) {
+            throw new ValidatingException("ПІБ містить недопустимі символи (цифри або спецзнаки)!");
+        }
+
+        this.name = String.join(" ", parts);
+    }
 
         public String getEmail() {
             return email;
