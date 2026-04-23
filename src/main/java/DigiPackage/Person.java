@@ -6,6 +6,7 @@ import exceptions.ValidatingException;
 
 import java.util.Objects;
 
+import java.time.Period;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -81,9 +82,16 @@ public class Person {
     public void setDateOfBirth(String dateOfBirth) {
         try {
             LocalDate parsedDate = LocalDate.parse(dateOfBirth, DATE_FORMATTER);
-            if (parsedDate.getYear() < 1946 || parsedDate.isAfter(LocalDate.now())) {
-                throw new ValidatingException("Invalid date of birth");
+
+            int age = Period.between(parsedDate, LocalDate.now()).getYears();
+
+            if (parsedDate.getYear() < 1946) {
+                throw new ValidatingException("Invalid date of birth (must be after 1945)");
             }
+            if (age < 16) {
+                throw new ValidatingException("Invalid date of birth: Person must be at least 16 years old!");
+            }
+
             this.dateOfBirth = parsedDate;
         } catch (DateTimeParseException e) {
             throw new ValidatingException("Invalid date format. Use dd.MM.yyyy");

@@ -109,6 +109,7 @@ public class CLITest {
 
         assertThrows(ValidatingException.class, () -> student.setDateOfBirth("01.01.2099"));
         assertThrows(ValidatingException.class, () -> student.setDateOfBirth("31.12.1945"));
+        assertThrows(ValidatingException.class, () -> student.setDateOfBirth("01.01.2020"));
         assertDoesNotThrow(() -> student.setDateOfBirth("01.01.2005"));
         assertEquals("01.01.2005", student.getDateOfBirth());
 
