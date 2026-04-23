@@ -161,6 +161,9 @@ public class Teacher extends Person{
 
     @Override
     public String toString() {
+        if (departmentCode == null) {
+    departmentCode="none";
+        }
         return "Teacher" + super.toString()+
                 "Department:" + departmentCode +
                 "position:" + PositionString() +

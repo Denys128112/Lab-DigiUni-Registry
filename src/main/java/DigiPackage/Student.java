@@ -147,6 +147,9 @@ public class Student extends Person {
 
     @Override
     public String toString() {
+        if (departmentCode == null) {
+            departmentCode="none";
+        }
         return "Student" + super.toString() +
                 "Department:" + departmentCode +
                 "idOfRecordBook:'" + idOfRecordBook + '\'' +
