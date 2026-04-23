@@ -162,6 +162,7 @@ public class Teacher extends Person{
     @Override
     public String toString() {
         return "Teacher" + super.toString()+
+                "Department:" + departmentCode +
                 "position:" + PositionString() +
                 ", scientificDegree:" + ScientificDegreeString() +
                 ", academicTitle:" + AcademicTitleString() +
