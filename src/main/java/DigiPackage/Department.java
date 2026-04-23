@@ -32,7 +32,7 @@ public class Department {
 
     public String getCode() { return code; }
     public void setCode(String code) {
-        if (code != null && !code.trim().isEmpty()) this.code = code;
+        if (code != null && !code.trim().isEmpty() && code.matches("^[A-Z]\\d{2}$")) this.code = code;
         else throw new ValidatingException("Department code cannot be empty");
     }
 
@@ -105,4 +105,12 @@ public class Department {
         personsOfDepartment.add(s);
     }
 
+    public void deleteTeacherFromDepartment(Teacher t) {
+        teachersOfDepartment.remove(t);
+        personsOfDepartment.remove(t);
+    }
+    public void deleteStudentFromDepartment(Student s){
+        studentsOfDepartment.remove(s);
+        personsOfDepartment.remove(s);
+    }
 }

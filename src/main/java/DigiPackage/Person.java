@@ -23,7 +23,7 @@ public class Person {
 
         }
         public Person(String id, String name, String dateOfBirth, String email, String phone) {
-            this.id = id;
+            setId(id);
             setName(name);
             setDateOfBirth(dateOfBirth);
             setEmail(email);
@@ -46,7 +46,9 @@ public class Person {
         }
 
     public void setId(String id) {
-        this.id = id;
+            if (id != null && !id.trim().isEmpty() && id.matches("^[A-Z]\\d{2}$")) this.id = id;
+            else throw new ValidatingException("Department code cannot be empty");
+
     }
 
 

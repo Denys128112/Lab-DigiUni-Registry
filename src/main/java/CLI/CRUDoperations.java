@@ -176,9 +176,9 @@ public class CRUDoperations {
                     case 12:
                         Department d=findDepartment();
                         if(d==null) {
-                        System.out.println("На данний момент кафедр не існує, тому вам треба її створити зараз");
-                        createDepartment();
-                        d=universityRepository.getDepartments().get(0);
+                            System.out.println("На данний момент кафедр не існує, тому вам треба її створити зараз");
+                            createDepartment();
+                            d=universityRepository.getDepartments().get(0);
                         }
                         d.addTeacherToDepartment(t);
                         t.setDepartmentCode(d.getCode());
@@ -399,13 +399,18 @@ public class CRUDoperations {
                         st.setFormOfStudy(chooseEnum("Форма Навчання", FormOfStudy.values()));
                         break;
                     case 7:
-                       Department d=findDepartment();
-                       if (d == null) {
-                           System.out.println("Неможливо додати, бо не існує кафедр, створіть спершу кафедру");
-                           log.warn("Department not found");
-                       }else
-                           d.addStudentToDepartment(st);
-                       break;
+                        Department d=findDepartment();
+                        if (d == null) {
+                            System.out.println("Неможливо додати, бо не існує кафедр, створіть спершу кафедру");
+                            log.warn("Department not found");
+                        }else {
+                            d.addStudentToDepartment(st);
+                            Optional<Department> dop=searching.getDepartmentByCode(st.getDepartmentCode(),universityRepository.getDepartmentMap());
+                            dop.ifPresent(nd->{nd.deleteStudentFromDepartment(st);
+                                st.setDepartmentCode(nd.getCode());});
+
+                        }
+                        break;
                     case 0:
                         updating = false;
                         break;
@@ -451,12 +456,17 @@ public class CRUDoperations {
                         t.setWorkload(getIntInput("Навантаження (0-1000)",0,1000));
                         break;
                     case 8:
-                            Department d=findDepartment();
-                            if(d==null) {
-                                System.out.println("Неможливо додати, бо не існує кафедр, створіть спершу кафедру");
-                                log.warn("Department not found");
-                            }else d.addTeacherToDepartment(t);
-                            break;
+                        Department d=findDepartment();
+                        if(d==null) {
+                            System.out.println("Неможливо додати, бо не існує кафедр, створіть спершу кафедру");
+                            log.warn("Department not found");
+                        }else {
+                            d.addTeacherToDepartment(t);
+                            Optional<Department> dop=searching.getDepartmentByCode(t.getDepartmentCode(),universityRepository.getDepartmentMap());
+                            dop.ifPresent(nd->{nd.deleteTeacherFromDepartment(t);
+                                t.setDepartmentCode(nd.getCode());});
+                        }
+                        break;
                     case 0:
                         updating = false;
                         break;
@@ -607,7 +617,7 @@ public class CRUDoperations {
             log.info("Department {} has been removed", d.getCode());
         } else
             System.out.println("Видалення не було");
-            log.info("Department {} hasn't been removed", d.getCode());
+        log.info("Department {} hasn't been removed", d.getCode());
     }
 
     public Student findStudent() {

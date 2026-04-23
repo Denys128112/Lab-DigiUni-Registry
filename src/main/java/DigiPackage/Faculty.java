@@ -32,7 +32,7 @@ public class Faculty {
     }
 
     public void setCode(String code) {
-        if (code != null && !code.trim().isEmpty()) this.code = code;
+        if (code != null && !code.trim().isEmpty()&&code.matches("^[A-Z]\\d{2}$")) this.code = code;
         else throw new ValidatingException("Faculty code cannot be empty");
     }
 
