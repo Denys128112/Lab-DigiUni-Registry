@@ -45,7 +45,11 @@ public class CRUDoperations {
             try {
                 switch (step) {
                     case 0:
-                        st.setId(getStringInput("Введіть id: "));
+                        String newId = getStringInput("Введіть id: ");
+                        if (repository.getStudentmap().containsKey(newId)) {
+                            throw new ValidatingException("Студент з таким ID вже існує! Введіть інший.");
+                        }
+                        st.setId(newId);
                         step++;
                         break;
                     case 1:
@@ -130,7 +134,11 @@ public class CRUDoperations {
             try {
                 switch (step) {
                     case 1:
-                        t.setId(getStringInput("Введіть ID: "));
+                        String newTeacherId = getStringInput("Введіть ID: ");
+                        if (repository.getTeachersmap().containsKey(newTeacherId)) {
+                            throw new ValidatingException("Викладач з таким ID вже існує! Введіть інший.");
+                        }
+                        t.setId(newTeacherId);
                         step++;
                         break;
                     case 2:
