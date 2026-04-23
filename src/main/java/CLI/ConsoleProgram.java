@@ -74,46 +74,46 @@ public class ConsoleProgram {
     }
 
     private static void authenticate() {
-        log.debug("Authenticating user");
         System.out.println("\n--- АВТОРИЗАЦІЯ ---");
-        System.out.println("1) Увійти як Адміністратор (повний доступ)");
-        System.out.println("2) Увійти як Менеджер (запис та читання)");
-        System.out.println("3) Увійти як Гість (тільки читання)");
+        System.out.println("1) Увійти як Адміністратор");
+        System.out.println("2) Увійти як Менеджер");
+        System.out.println("3) Увійти як Студент");
+        System.out.println("4) Увійти як Гість");
 
-        int roleChoice = getIntInput("Ваш вибір", 1, 3);
+        int roleChoice = getIntInput("Ваш вибір", 1, 4);
 
-        if (roleChoice == 1 || roleChoice == 2) {
+        if (roleChoice >= 1 && roleChoice <= 3) {
             System.out.print("Введіть пароль: ");
             String password = sc.nextLine();
 
-            if (roleChoice == 1 && password.equals("admin")) {           // JUST SIMPLE PASSWORD; CAN BE CHANGED
+            if (roleChoice == 1 && password.equals("admin")) {
                 currentUserRole = UserRole.ADMIN;
                 currentSession = new UserSession("Адміністратор", currentUserRole);
                 System.out.println("Успішно! Сесія створена для: " + currentSession.username());
-                log.info("admin sesion started {}",currentSession.username());
-            } else if (roleChoice == 2 && password.equals("manager")) {                          // JUST SIMPLE PASSWORD; CAN BE CHANGED
+            } else if (roleChoice == 2 && password.equals("manager")) {
                 currentUserRole = UserRole.MANAGER;
                 currentSession = new UserSession("Менеджер", currentUserRole);
                 System.out.println("Успішно! Сесія створена для: " + currentSession.username());
-                log.info("manager sesion started {}",currentSession.username());
+            } else if (roleChoice == 3 && password.equals("student")) {
+                currentUserRole = UserRole.STUDENT;
+                currentSession = new UserSession("Студент", currentUserRole);
+                System.out.println("Успішно! Сесія створена для: " + currentSession.username());
             } else {
                 System.out.println("Невірний пароль. Вас авторизовано як Гостя.");
                 currentUserRole = UserRole.GUEST;
-                log.warn("incorect password was 3 times in row");
-                log.info("guest sesion started");
             }
         } else {
             currentUserRole = UserRole.GUEST;
             currentSession = new UserSession("Гість", currentUserRole);
             System.out.println("Ви увійшли як Гість.");
-            log.info("guest sesion started {}",currentSession.username());
         }
     }
 
     private static void mainMenu() {
         log.debug("Main Menu openned");
-        System.out.println("Оберіть з чим бажаєте працювати: 1)Університет 2)Факультет 3)Кафедра 4)Викладач 5)Студент 6)Пошуки 7)Сортування 8)Збереження 9)Мережеві операції 0) вийти");
-        int choice = getIntInput("Оберіть операцію", 0, 9);
+        System.out.println("Оберіть з чим бажаєте працювати: 1)Університет 2)Факультет 3)Кафедра 4)Викладач 5)Студент 6)Пошуки 7)Сортування 8)Збереження 9)Мережеві операції 10)Довідка 0) вийти");
+        int choice = getIntInput("Оберіть операцію", 0, 10);
+        int mask = currentUserRole.getMask();
         switch (choice) {
             case 1:
                 workWithUniversity();
@@ -131,16 +131,32 @@ public class ConsoleProgram {
                 workWithStudent();
                 break;
             case 6:
-                search();
+                if ((mask & UserRole.STUDENT_FEATURES) != 0) {
+                    search();
+                } else {
+                    System.out.println("Помилка: Пошук доступний лише студентам та персоналу.");
+                }
                 break;
             case 7:
-                reports();
+                if ((mask & UserRole.STUDENT_FEATURES) != 0) {
+                    reports();
+                } else {
+                    System.out.println("Помилка: Звіти доступні лише студентам та персоналу.");
+                }
                 break;
             case 8:
-                saveOperations.commitChanges();
+                if ((mask & (UserRole.WRITE_PEOPLE | UserRole.WRITE_STRUCTURE)) != 0) {
+                    saveOperations.commitChanges();
+                } else {
+                    System.out.println("Помилка: У вас немає прав для збереження змін.");
+                }
                 break;
             case 9:
                 netOperations();
+                break;
+            case 10:
+                showHelpWithReflection();
+                break;
             case 0:
                 askForCommitChanges();
                 is_finished = true;
@@ -171,15 +187,14 @@ public class ConsoleProgram {
         }
     }
 
-    private static int chooseOperation() {
-
+    private static int chooseOperation(int requiredWriteMask, int requiredDeleteMask) {
         int mask = currentUserRole.getMask();
 
-        if ((mask & UserRole.CAN_WRITE) != 0) {
+        if ((mask & requiredWriteMask) != 0) {
             System.out.println("1. Створити");
             System.out.println("2. Редагувати");
         }
-        if ((mask & UserRole.CAN_DELETE) != 0) {
+        if ((mask & requiredDeleteMask) != 0) {
             System.out.println("3. Видалити");
         }
 
@@ -189,8 +204,8 @@ public class ConsoleProgram {
         while (true) {
             int choice = getIntInput("Ваш вибір", 0, 4);
 
-            boolean canWrite = (mask & UserRole.CAN_WRITE) != 0;
-            boolean canDelete = (mask & UserRole.CAN_DELETE) != 0;
+            boolean canWrite = (mask & requiredWriteMask) != 0;
+            boolean canDelete = (mask & requiredDeleteMask) != 0;
 
             if ((choice == 1 || choice == 2) && !canWrite) {
                 System.out.println("Помилка: У вас немає доступу до створення або редагування.");
@@ -202,11 +217,12 @@ public class ConsoleProgram {
         }
     }
 
+    @MenuOption(description = "Меню для створення, редагування та видалення факультетів.")
     private static void workWithTeacher() {
         log.debug("Working with Teacher");
         int choice = 1;
         while (choice != 0) {
-            choice = chooseOperation();
+            choice = chooseOperation(UserRole.WRITE_PEOPLE, UserRole.DELETE_PEOPLE);
             switch (choice) {
                 case 1:
                     crudoperations.createTeacher();
@@ -226,11 +242,12 @@ public class ConsoleProgram {
         log.info("Teacher finish work with teacher");
     }
 
+    @MenuOption(description = "Керування кафедрами університету та їхнім складом.")
     private static void workWithStudent() {
         log.debug("Working with Student");
         int choice = 1;
         while (choice != 0) {
-            choice = chooseOperation();
+            choice = chooseOperation(UserRole.WRITE_PEOPLE, UserRole.DELETE_PEOPLE);
             switch (choice) {
                 case 1:
                     crudoperations.createStudent();
@@ -250,11 +267,12 @@ public class ConsoleProgram {
         log.info(" finish work with student");
     }
 
+    @MenuOption(description = "Робота з базою викладачів: найм, звільнення, зміна посад.")
     private static void workWithFaculty() {
         log.debug("Working with Faculty");
         int choice = 1;
         while (choice != 0) {
-            choice = chooseOperation();
+            choice = chooseOperation(UserRole.WRITE_STRUCTURE, UserRole.DELETE_STRUCTURE);
             switch (choice) {
                 case 1:
                     crudoperations.createFaculty();
@@ -274,6 +292,7 @@ public class ConsoleProgram {
         log.info(" finish work with Faculty");
     }
 
+    @MenuOption(description = "Робота з базою студентів: зарахування, відрахування, переведення.")
     private static void workWithUniversity() {
         log.debug("Working with University");
         System.out.println("1) Читати");
@@ -294,7 +313,7 @@ public class ConsoleProgram {
         log.debug("Working with Department");
         int choice = 1;
         while (choice != 0) {
-            choice = chooseOperation();
+            choice = chooseOperation(UserRole.WRITE_STRUCTURE, UserRole.DELETE_STRUCTURE);
             switch (choice) {
                 case 1:
                     crudoperations.createDepartment();
@@ -419,4 +438,24 @@ public class ConsoleProgram {
         backgroundSaver.start();
 
     }
+
+    private static void showHelpWithReflection() {
+        System.out.println("\n--- АВТОМАТИЧНА ДОВІДКА ПО МЕНЮ ---");
+
+        java.lang.reflect.Method[] methods = ConsoleProgram.class.getDeclaredMethods();
+
+        boolean found = false;
+        for (java.lang.reflect.Method method : methods) {
+            if (method.isAnnotationPresent(MenuOption.class)) {
+                MenuOption annotation = method.getAnnotation(MenuOption.class);
+                System.out.println("Метод [" + method.getName() + "]: " + annotation.description());
+                found = true;
+            }
+        }
+
+        if (!found) {
+            System.out.println("На жаль, анотованих методів для довідки не знайдено.");
+        }
+    }
+
 }

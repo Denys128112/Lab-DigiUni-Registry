@@ -1,0 +1,17 @@
+2026-04-23 10:34:08.618 DEBUG [main] CLI.ConsoleProgram - Starting ConsoleProgram load repositories from JSONs
+2026-04-23 10:34:08.620 DEBUG [main] saving.SaveOperations - load database
+2026-04-23 10:34:08.620 TRACE [main] saving.SaveOperations - students file was created
+2026-04-23 10:34:08.620 TRACE [main] saving.SaveOperations - Teachers file was created
+2026-04-23 10:34:08.620 TRACE [main] saving.SaveOperations - Faculties file was created
+2026-04-23 10:34:08.621 TRACE [main] saving.SaveOperations - Department file was created
+2026-04-23 10:34:08.621 INFO  [main] CLI.ConsoleProgram - Loading users from database successful
+2026-04-23 10:34:08.621 DEBUG [main] CLI.ConsoleProgram - Starting ConsoleProgram run
+2026-04-23 10:34:18.117 DEBUG [main] CLI.ConsoleProgram - Main Menu openned
+2026-04-23 10:34:20.585 DEBUG [main] CLI.ConsoleProgram - Main Menu openned
+2026-04-23 10:37:18.130 INFO  [Thread-0] CLI.ConsoleProgram - Autosaving background saving
+2026-04-23 10:37:18.130 DEBUG [Thread-0] saving.SaveOperations - save database
+2026-04-23 10:37:18.138 TRACE [Thread-0] saving.SaveOperations - students was saved by thread
+2026-04-23 10:37:18.138 TRACE [Thread-0] saving.SaveOperations - Teachers was saved by thread
+2026-04-23 10:37:18.139 TRACE [Thread-0] saving.SaveOperations - Faculties was saved by thread
+2026-04-23 10:37:18.139 TRACE [Thread-0] saving.SaveOperations - Departments was saved by thread
+2026-04-23 10:37:18.139 INFO  [Thread-0] saving.SaveOperations - database saved
